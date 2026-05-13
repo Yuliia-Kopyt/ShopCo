@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="product.title">Product</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/styles/style.css"> 
+  <link rel="stylesheet" href="assets/styles/product.css">
+</head>
+
+<body>
+ <!-- Top Banner -->
+  <div class="top-banner">
+    <div class="banner-content">
+        <span data-i18n="banner.signup_offer">Sign up and get 20% off to your first order.</span>
+        <a href="login.html" class="sign-up-link" data-i18n="banner.signup_now">Sign Up Now</a>
+    </div>
+  </div>
+
+<!-- Header -->
+<header class="header">
+  <div class="content-wrap header-content">
+    <!-- Desktop Language Switcher -->
+    <div class="language-switcher desktop-lang">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="uk">UA</button>
+    </div>
+
+    <!-- Логотип -->
+    <div class="logo">
+      <a href="index.html">SHOP.CO</a>
+    </div>
+
+    <!-- Бургер меню для mobile -->
+    <div id="burgerMenu" class="burger-menu"> 
+      <i id="openIcon" class="fa-solid fa-bars"></i> 
+      <i id="closeIcon" class="fa-solid fa-xmark d-none"></i> 
+    </div>
+
+    <!-- Навігація -->
+    <nav id="headerNav" class="header-nav">
+      <!-- Mobile Language Switcher -->
+      <div class="language-switcher mobile-lang">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="uk">UA</button>
+      </div>
+      
+      <ul class="main-menu">
+        <li class="has-submenu">
+          <a href="shop.html" data-i18n="header.shop">
+            Shop <i class="fa-solid fa-chevron-down submenu-toggle"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="#" data-i18n="home.casual">Casual</a></li>
+            <li><a href="#" data-i18n="home.formal">Formal</a></li>
+            <li><a href="#" data-i18n="home.party">Party</a></li>
+            <li><a href="#" data-i18n="home.gym">Gym</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="index.html#on-sale" data-i18n="header.on_sale">On Sale</a>
+        </li>
+        <li>
+          <a href="index.html#new-arrivals" data-i18n="header.new_arrivals">New Arrivals</a>
+        </li>
+        <li>
+          <a href="index.html#brands" data-i18n="header.brands">Brands</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Поле пошуку для desktop -->
+    <div class="search-wrapper">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" data-i18n="header.search_placeholder" placeholder="Search for products..." class="header-search">
+    </div>
+
+    <!-- Іконки -->
+    <div class="header-icons">
+      <!-- Іконка лупи для мобільної версії -->
+      <a href="search.html" class="icon-link search-icon">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </a>
+      
+      <!-- Кошик -->
+      <a href="cart.html" class="icon-link cart-icon-animation">
+        <div class="cart-icon-wrapper">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="cart-count"></span>
+        </div>
+      </a>
+      
+      <!-- Користувач -->
+      <a href="login.html" class="icon-link">
+        <i class="fa-solid fa-circle-user"></i>
+      </a>
+    </div>
+  </div>
+</header>
+
+  <div class="page">
+    <main class="product-view container">
+      <a class="back-btn" href="shop.html" data-i18n="product.back_to_shop">← Back to shop</a>
+      <div id="product-page"></div>
+    </main>
+  </div>
+
+  <!-- Додаємо секцію з табами -->
+  <div class="reviews-tabs-section">
+    <!-- Навігація по всій ширині -->
+    <div class="tabs-navigation-full">
+      <div class="tabs-container">
+        <button class="tab-button active" data-tab="details" data-i18n="product.tab_details">Product Details</button>
+        <button class="tab-button" data-tab="reviews" data-i18n="product.tab_reviews">Rating & Reviews</button>
+        <button class="tab-button" data-tab="faqs" data-i18n="product.tab_faqs">FAQs</button>
+      </div>
+    </div>
+
+    <!-- Контент табів -->
+    <div class="tabs-content-container">
+      <!-- Таб Product Details -->
+      <div class="tab-content active" id="details-content">
+        <div class="tab-content-inner">
+          <p data-i18n="product.details_content">Product details content will be here...</p>
+        </div>
+      </div>
+
+      <!-- Таб Rating & Reviews -->
+      <div class="tab-content" id="reviews-content">
+        <div class="tab-content-inner">
+          <!-- Заголовок All Reviews під сірою лінією -->
+          <div class="reviews-header">
+            <h2 class="all-reviews-title" data-i18n="product.all_reviews">All Reviews (45)</h2>
+            <div class="reviews-filter">
+              <select class="filter-select">
+                <option value="latest" data-i18n="product.filter_latest">Latest</option>
+                <option value="highest" data-i18n="product.filter_highest">Highest Rating</option>
+                <option value="lowest" data-i18n="product.filter_lowest">Lowest Rating</option>
+              </select>
+            </div>
+          </div>
+          <div class="product-reviews"></div>
+          <!-- Кнопка Load More (ТІЛЬКИ для Reviews) -->
+          <div class="load-more-container">
+            <button class="load-more-reviews" data-i18n="product.load_more_reviews">Load More Reviews</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Таб FAQs -->
+      <div class="tab-content" id="faqs-content">
+        <div class="tab-content-inner">
+          <h2 class="faqs-title" data-i18n="product.faqs_title">Frequently Asked Questions</h2>
+          <div class="faqs-container">
+            <p data-i18n="product.faqs_content">FAQs content will be here...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBSCRIBE SECTION -->
+  <section class="subscribe">
+    <div class="h2">
+      <h2 class="uppercase" data-i18n="subscribe.title">Stay upto date about our latest offers</h2>
+    </div>
+    <div class="forms">
+      <div class="form-container">
+        <form>
+          <div class="input-group">
+            <span class="icon"><i class="fa-regular fa-envelope"></i></span>
+            <input type="email" data-i18n="subscribe.email_placeholder" placeholder="Enter your email address" />
+          </div>
+        </form>
+      </div>
+      <button class="btn2" data-i18n="subscribe.button">Subscribe to Newsletter</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-cont">
+      <div class="footer-div">
+        <!-- ЛОГО + ОПИС -->
+        <div class="footer-logo">
+          <p class="logo"><a href="#">SHOP.CO</a></p>
+          <p data-i18n="footer.description">We have clothes that suits your style and which you're proud to wear. From women to men.</p>
+          <div class="soc-media">
+            <div class="circle"><i class="fa-brands fa-twitter"></i></div>
+            <div class="fb"><i class="fa-brands fa-facebook-f"></i></div>
+            <div class="circle"><i class="fa-brands fa-instagram"></i></div>
+            <div class="circle"><i class="fa-brands fa-github"></i></div>
+          </div>
+        </div>
+
+        <!-- КОЛОНКИ НАВІГАЦІЇ -->
+        <div class="footer-nav">
+          <h6 class="uppercase" data-i18n="footer.company">Company</h6>
+          <ul>
+            <li><a href="#" data-i18n="footer.about">About</a></li>
+            <li><a href="#" data-i18n="footer.features">Features</a></li>
+            <li><a href="#" data-i18n="footer.works">Works</a></li>
+            <li><a href="#" data-i18n="footer.career">Career</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-nav">
+          <h6 class="uppercase" data-i18n="footer.help">Help</h6>
+          <ul>
+            <li><a href="#" data-i18n="footer.customer_support">Customer Support</a></li>
+            <li><a href="#" data-i18n="footer.delivery_details">Delivery Details</a></li>
+            <li><a href="#" data-i18n="footer.terms">Terms & Conditions</a></li>
+            <li><a href="#" data-i18n="footer.privacy_policy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-nav">
+          <h6 class="uppercase" data-i18n="footer.faq">FAQ</h6>
+          <ul>
+            <li><a href="#" data-i18n="footer.account">Account</a></li>
+            <li><a href="#" data-i18n="footer.manage_deliveries">Manage Deliveries</a></li>
+            <li><a href="#" data-i18n="footer.orders">Orders</a></li>
+            <li><a href="#" data-i18n="footer.payments">Payments</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-nav">
+          <h6 class="uppercase" data-i18n="footer.resources">Resources</h6>
+          <ul>
+            <li><a href="#" data-i18n="footer.free_ebooks">Free eBooks</a></li>
+            <li><a href="#" data-i18n="footer.development_tutorial">Development Tutorial</a></li>
+            <li><a href="#" data-i18n="footer.how_to_blog">How to - Blog</a></li>
+            <li><a href="#" data-i18n="footer.youtube_playlist">Youtube Playlist</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ЛІНІЯ -->
+      <div class="line"></div>
+
+      <!-- КОПІРАЙТ + ОПЛАТА -->
+      <div class="end-div">
+        <p data-i18n="footer.copyright">Shop.co © 2000-2023, All Rights Reserved</p>
+        <div class="payment">
+          <div class="rectangle"><img src="assets/images/visa.png" alt="visa"></div>
+          <div class="rectangle"><img src="assets/images/mastercard.png" alt="mastercard"></div>
+          <div class="rectangle"><img src="assets/images/paypal.png" alt="paypal"></div>
+          <div class="rectangle"><img src="assets/images/applepay.png" alt="applepay"></div>
+          <div class="rectangle"><img src="assets/images/gpay.png" alt="google pay"></div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<!-- Модальне вікно для логіну/реєстрації -->
+<div id="authModal" class="auth-modal">
+  <div class="auth-modal-content">
+    <span class="auth-close-btn">&times;</span>
+    
+    <!-- Форма логіну -->
+    <div id="loginForm" class="auth-form active">
+      <h2 data-i18n="auth.welcome_back">Welcome Back</h2>
+      <p class="auth-subtitle" data-i18n="auth.sign_in_subtitle">Sign in to your account</p>
+      
+      <form class="auth-form-content">
+        <div class="form-group">
+          <label for="loginEmail" data-i18n="auth.email_address">Email Address</label>
+          <input type="email" id="loginEmail" data-i18n="auth.enter_email" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="loginPassword" data-i18n="auth.password">Password</label>
+          <input type="password" id="loginPassword" data-i18n="auth.enter_password" placeholder="Enter your password" required>
+        </div>
+        
+        <div class="form-options">
+          <label class="checkbox-container">
+            <input type="checkbox" id="rememberMe">
+            <span class="checkmark"></span>
+            <span data-i18n="auth.remember_me">Remember me</span>
+          </label>
+          <a href="#" class="forgot-password" data-i18n="auth.forgot_password">Forgot password?</a>
+        </div>
+        
+        <button type="submit" class="auth-btn" data-i18n="auth.sign_in">Sign In</button>
+      </form>
+      
+      <div class="auth-switch">
+        <p data-i18n="auth.no_account">Don't have an account? <a href="#" class="switch-to-register" data-i18n="auth.sign_up">Sign Up</a></p>
+      </div>
+    </div>
+    
+    <!-- Форма реєстрації -->
+    <div id="registerForm" class="auth-form">
+      <h2 data-i18n="auth.create_account">Create Account</h2>
+      <p class="auth-subtitle" data-i18n="auth.join_us">Join us and start shopping</p>
+      
+      <form class="auth-form-content">
+        <div class="form-group">
+          <label for="registerName" data-i18n="auth.full_name">Full Name</label>
+          <input type="text" id="registerName" data-i18n="auth.enter_full_name" placeholder="Enter your full name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="registerEmail" data-i18n="auth.email_address">Email Address</label>
+          <input type="email" id="registerEmail" data-i18n="auth.enter_email" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="registerPassword" data-i18n="auth.password">Password</label>
+          <input type="password" id="registerPassword" data-i18n="auth.create_password" placeholder="Create a password" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="registerConfirmPassword" data-i18n="auth.confirm_password">Confirm Password</label>
+          <input type="password" id="registerConfirmPassword" data-i18n="auth.confirm_password_placeholder" placeholder="Confirm your password" required>
+        </div>
+        
+        <div class="form-options">
+          <label class="checkbox-container">
+            <input type="checkbox" id="acceptTerms" required>
+            <span class="checkmark"></span>
+            <span data-i18n="auth.accept_terms">I agree to the <a href="#" data-i18n="auth.terms_of_service">Terms of Service</a> and <a href="#" data-i18n="auth.privacy_policy">Privacy Policy</a></span>
+          </label>
+        </div>
+        
+        <button type="submit" class="auth-btn" data-i18n="auth.create_account_button">Create Account</button>
+      </form>
+      
+      <div class="auth-switch">
+        <p data-i18n="auth.have_account">Already have an account? <a href="#" class="switch-to-login" data-i18n="auth.sign_in_link">Sign In</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/language.js"></script>
+<script src="assets/js/cart.js"></script>
+<script src="assets/js/scripts.js"></script>
+<script src="assets/js/product.js"></script>
+<script src="assets/js/shop.js"></script>
+</body>
+</html>

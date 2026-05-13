@@ -1,0 +1,186 @@
+{
+  "en": {
+    "products": {
+      "1": {
+        "title": "Gradient Graphic T-shirt",
+        "description": "This graphic t-shirt which is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style."
+      },
+      "2": {
+        "title": "Polo with Tipping Details",
+        "description": "A stylish polo with clean contrast lines that create a neat, minimalistic look. Lightweight, comfortable to wear, and perfect for everyday casual outfits — looks refined without trying too hard."
+      },
+      "3": {
+        "title": "Black Striped T-shirt",
+        "description": "A black striped T-shirt inspired by a sporty, gym-style aesthetic. Made from breathable, lightweight fabric that works equally well for workouts and active everyday looks."
+      },
+      "4": {
+        "title": "Skinny Fit Jeans",
+        "description": "Modern skinny-fit jeans with a sleek, tapered silhouette. Comfortable, stretchy, and stylish — a perfect match for casual outfits and daily wear."
+      },
+      "5": {
+        "title": "Checkered Shirt",
+        "description": "A classic checkered shirt in a timeless casual style. Soft fabric and a universal cut make it suitable for everyday looks as well as semi-formal occasions."
+      },
+      "6": {
+        "title": "Sleeve Striped T-shirt",
+        "description": "A T-shirt with contrasting sleeve stripes — minimalistic with a subtle, stylish accent. Ideal for clean everyday casual outfits."
+      },
+      "7": {
+        "title": "Vertical Striped Shirt",
+        "description": "A vertical striped shirt designed to visually elongate the silhouette. Lightweight, stylish, and highly versatile — a top pick for modern casual looks."
+      },
+      "8": {
+        "title": "Courage Graphic T-shirt",
+        "description": "A graphic T-shirt featuring a bold, standout print in casual style. Comfortable, modern, and perfect for adding individuality and confidence to any outfit."
+      },
+      "9": {
+        "title": "Loose Fit Bermuda Shorts",
+        "description": "Relaxed-fit bermuda shorts with a party-inspired vibe. Lightweight, comfortable, and perfect for summer nights out, casual walks, and laid-back warm-weather looks."
+      },
+      "10": {
+        "title": "Leather Wallet",
+        "description": "A sleek leather wallet in a casual yet refined format. Compact, practical, and durable — designed for everyday use while maintaining an elegant, quality appearance."
+      },
+      "11": {
+        "title": "Formal Shoes",
+        "description": "Classic formal shoes with a smooth finish. Their clean silhouette and premium materials make them ideal for business outfits and evening occasions."
+      },
+      "12": {
+        "title": "Hiking Backpack",
+        "description": "A spacious backpack built for active lifestyles. Lightweight, durable, and comfortable — perfect for hiking, travelling, or everyday commuting."
+      },
+      "13": {
+        "title": "T-Shirt with tape details",
+        "description": "A stylish T-shirt featuring decorative tape accents in a subtle party aesthetic. Minimalistic yet eye-catching — ideal for night outs and modern trend-focused looks."
+      }
+    },
+    "categories": {
+      "T-shirts": "T-shirts",
+      "Jeans": "Jeans", 
+      "Shirts": "Shirts",
+      "Shorts": "Shorts",
+      "Accessories": "Accessories",
+      "Shoes": "Shoes",
+      "Bags": "Bags"
+    },
+    "styles": {
+      "Casual": "Casual",
+      "Gym": "Gym",
+      "Party": "Party",
+      "Formal": "Formal"
+    },
+    "colors": {
+      "white": "White",
+      "pink": "Pink",
+      "black": "Black",
+      "blue": "Blue",
+      "red": "Red",
+      "orange": "Orange",
+      "green": "Green",
+      "brown": "Brown"
+    },
+    "sizes": {
+      "XX-Small": "XX-Small",
+      "X-Small": "X-Small",
+      "Small": "Small",
+      "Medium": "Medium",
+      "Large": "Large",
+      "X-Large": "X-Large",
+      "XX-Large": "XX-Large",
+      "3X-Large": "3X-Large",
+      "4X-Large": "4X-Large"
+    }
+  },
+  "uk": {
+    "products": {
+      "1": {
+        "title": "Графічна футболка з градієнтом",
+        "description": "Ця графічна футболка, яка ідеально підходить для будь-якої нагоди. Виготовлена з м'якої та дихаючої тканини, вона забезпечує неперевершений комфорт і стиль."
+      },
+      "2": {
+        "title": "Поло з контрастними деталями",
+        "description": "Стильна поло з чистими контрастними лініями, що створює акуратний, мінімалістичний вигляд. Легка, зручна для носіння та ідеальна для повсякденних кежуал-образів — виглядає витончено без зайвих зусиль."
+      },
+      "3": {
+        "title": "Чорна смугаста футболка",
+        "description": "Чорна смугаста футболка, натхненна спортивною, тренажерною естетикою. Виготовлена з дихаючої, легкої тканини, яка однаково добре підходить для тренувань та активних повсякденних образів."
+      },
+      "4": {
+        "title": "Джинси скінні фіт",
+        "description": "Сучасні джинси скінні фіт з витонченим, звуженим силуетом. Зручні, еластичні та стильні — ідеальна пара для кежуал-образів та повсякденного носіння."
+      },
+      "5": {
+        "title": "Сорочка у кліточку",
+        "description": "Класична клетчата сорочка у вічному кежуал-стилі. М'яка тканина та універсальний крій роблять її придатною як для повсякденних образів, так і для напівформальних заходів."
+      },
+      "6": {
+        "title": "Футболка з смугастими рукавами",
+        "description": "Футболка з контрастними смугами на рукавах — мінімалістична з тонким, стильним акцентом. Ідеальна для чистих повсякденних кежуал-образів."
+      },
+      "7": {
+        "title": "Сорочка з вертикальними смугами",
+        "description": "Сорочка з вертикальними смугами, розроблена для візуального подовження силуету. Легка, стильна та дуже універсальна — топовий вибір для сучасних кежуал-образів."
+      },
+      "8": {
+        "title": "Графічна футболка 'Сміливість'",
+        "description": "Графічна футболка з сміливим, помітним принтом у кежуал-стилі. Зручна, сучасна та ідеальна для додавання індивідуальності та впевненості будь-якому образу."
+      },
+      "9": {
+        "title": "Бермуди вільного крою",
+        "description": "Бермуди вільного крою з вечірньою атмосферою. Легкі, зручні та ідеальні для літніх вечорів на місті, невимушених прогулянок та розслаблених теплових образів."
+      },
+      "10": {
+        "title": "Шкіряний гаманець",
+        "description": "Витончений шкіряний гаманець у кежуальному, але вишуканому форматі. Компактний, практичний та довговічний — розроблений для повсякденного використання зі збереженням елегантного, якісного вигляду."
+      },
+      "11": {
+        "title": "Класичні туфлі",
+        "description": "Класичні туфлі з гладким покриттям. Їхній чистий силует та преміальні матеріали роблять їх ідеальними для ділових образів та вечірніх заходів."
+      },
+      "12": {
+        "title": "Туристичний рюкзак",
+        "description": "Місткий рюкзак, створений для активного способу життя. Легкий, міцний та зручний — ідеальний для походів, подорожей або щоденних поїздок на роботу."
+      },
+      "13": {
+        "title": "Футболка з стрічковими деталями",
+        "description": "Стильна футболка з декоративними стрічковими акцентами у тонкій вечірній естетиці. Мінімалістична, але привертає увагу — ідеальна для нічних виходів та сучасних трендових образів."
+      }
+    },
+    "categories": {
+      "T-shirts": "Футболки",
+      "Jeans": "Джинси",
+      "Shirts": "Сорочки", 
+      "Shorts": "Шорти",
+      "Accessories": "Аксесуари",
+      "Shoes": "Взуття",
+      "Bags": "Сумки"
+    },
+    "styles": {
+      "Casual": "Повсякденний",
+      "Gym": "Спортивний", 
+      "Party": "Вечірній",
+      "Formal": "Діловий"
+    },
+    "colors": {
+      "white": "Білий",
+      "pink": "Рожевий",
+      "black": "Чорний",
+      "blue": "Синій",
+      "red": "Червоний",
+      "orange": "Помаранчевий",
+      "green": "Зелений",
+      "brown": "Коричневий"
+    },
+    "sizes": {
+      "XX-Small": "XXS",
+      "X-Small": "XS", 
+      "Small": "S",
+      "Medium": "M",
+      "Large": "L",
+      "X-Large": "XL",
+      "XX-Large": "XXL",
+      "3X-Large": "3XL",
+      "4X-Large": "4XL"
+    }
+  }
+}

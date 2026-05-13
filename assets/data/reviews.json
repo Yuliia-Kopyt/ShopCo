@@ -1,0 +1,302 @@
+{
+  "global": [
+    {
+      "name": "Sarah M.",
+      "rating": 5,
+      "text": "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations.",
+      "verified": true
+    },
+    {
+      "name": "Alex K.",
+      "rating": 5,
+      "text": "Finding clothes that align with my personal style used to be a challenge until I discovered Shop.co. The range of options they offer is truly remarkable, catering to a variety of tastes and occasions.",
+      "verified": true
+    },
+    {
+      "name": "James L.",
+      "rating": 4.5,
+      "text": "As someone who's always on the lookout for unique fashion pieces, I'm thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.",
+      "verified": true
+    },
+    {
+      "name": "Max F.",
+      "rating": 5,
+      "text": "I recently ordered a wallet and it didn't arrive very quickly. However, it was good quality and would have lasted a long time if my dog hadn't chewed it up.",
+      "verified": true
+    },
+    {
+      "name": "Oleg H.",
+      "rating": 4.5,
+      "text": "My favorite online shop. Here you find everything for you and your family and you don't have to go out with your annoying wife and visit the 100000 shops. Very comfortable",
+      "verified": true
+    },
+    {
+      "name": "Sofie N.",
+      "rating": 5,
+      "text": "Here you always find something for your style, delivery is always quick, prices are fine, good quality.",
+      "verified": true
+    }
+  ],
+
+  "products": [
+    {
+      "productId": 1,
+      "reviews": [
+        {
+          "name": "Lisa Y.",
+          "rating": 5,
+          "text": "I bought this T-shirt last week and I'm genuinely impressed. The fabric is soft but still feels durable, and the fit is exactly as described. The color didn't fade after the first wash, which is a big plus. Overall, great quality for the price — I'd definitely shop here again!",
+          "verified": true,
+          "date": "2023-08-16"
+        },
+        {
+          "name": "Alex K.",
+          "rating": 5,
+          "text": "Love this t-shirt, fits perfectly.",
+          "verified": true,
+          "date": "2024-10-11"
+        },
+        {
+          "name": "Kristin A.",
+          "rating": 2,
+          "text": "I don't like the colour. The fabric and quality is very good. The colour is actually the same as in the photo, but it doesn't suit to my favourite jeans. I look like a dog.",
+          "verified": true,
+          "date": "2023-08-16"
+        }
+      ]
+    },
+
+    {
+      "productId": 2,
+      "reviews": [
+        {
+          "name": "James L.",
+          "rating": 4.5,
+          "text": "Very stylish, great texture.",
+          "verified": true,
+          "date": "2024-01-10"
+        }
+      ]
+    },
+
+    {
+      "productId": 3,
+      "reviews": [
+        {
+          "name": "Emma R.",
+          "rating": 4.5,
+          "text": "Comfortable T-shirt, warm and soft inside. The fit is slightly oversized, which I personally love. After two washes the color still looks the same. Definitely worth it.",
+          "verified": true,
+          "date": "2024-04-22"
+        },
+        {
+          "name": "Daniel P.",
+          "rating": 5,
+          "text": "Amazing quality for the price. The fabric feels premium and the stitching is clean. Would buy again.",
+          "verified": true,
+          "date": "2024-09-15"
+        }
+      ]
+    },
+
+    {
+      "productId": 4,
+      "reviews": [
+        {
+          "name": "Maria S.",
+          "rating": 4,
+          "text": "The jeans fit well and the material is stretchy but durable. Slightly long for me, but easy to fix. Overall great purchase.",
+          "verified": true,
+          "date": "2023-11-02"
+        },
+        {
+          "name": "Kevin B.",
+          "rating": 4.5,
+          "text": "Very comfortable and stylish. The color is exactly as in the photos. Would recommend.",
+          "verified": true,
+          "date": "2024-06-30"
+        }
+      ]
+    },
+
+    {
+      "productId": 5,
+      "reviews": [
+        {
+          "name": "Hanna T.",
+          "rating": 5,
+          "text": "Super soft shirt, perfect for cooler days. Fits true to size. Love it!",
+          "verified": true,
+          "date": "2024-03-14"
+        },
+        {
+          "name": "Oliver D.",
+          "rating": 4.5,
+          "text": "Good material, doesn't itch, and keeps warm. Slightly pricey but worth it.",
+          "verified": true,
+          "date": "2024-09-19"
+        }
+      ]
+    },
+
+    {
+      "productId": 6,
+      "reviews": [
+        {
+          "name": "Sophie M.",
+          "rating": 4,
+          "text": "Nice summer T-Shirt, very light and airy. The print is beautiful. A bit loose on the waist but still looks great.",
+          "verified": true,
+          "date": "2023-07-25"
+        },
+        {
+          "name": "Julia N.",
+          "rating": 5,
+          "text": "Exactly what I wanted. Comfortable, stylish and high quality. Compliments guaranteed!",
+          "verified": true,
+          "date": "2024-05-17"
+        }
+      ]
+    },
+
+    {
+      "productId": 7,
+      "reviews": [
+        {
+          "name": "Mark R.",
+          "rating": 4.5,
+          "text": "Great shirt for autumn. Not too heavy, not too light. It feels solid and the pockets are roomy.",
+          "verified": true,
+          "date": "2024-02-10"
+        },
+        {
+          "name": "Ella W.",
+          "rating": 5,
+          "text": "Perfect everyday shirt. Matches almost everything in my wardrobe. Super happy with it.",
+          "verified": true,
+          "date": "2024-10-01"
+        }
+      ]
+    },
+
+    {
+      "productId": 8,
+      "reviews": [
+        {
+          "name": "Chris A.",
+          "rating": 4,
+          "text": "Simple but very good quality T-shirt. The fabric breathes well. Would prefer more color options.",
+          "verified": true,
+          "date": "2024-08-04"
+        },
+        {
+          "name": "Nina G.",
+          "rating": 5,
+          "text": "Fits perfectly and looks very clean and modern. Great basic piece!",
+          "verified": true,
+          "date": "2024-03-29"
+        }
+      ]
+    },
+
+    {
+      "productId": 9,
+      "reviews": [
+        {
+          "name": "Patrick L.",
+          "rating": 5,
+          "text": "These shorts are super comfy! The sole is soft and doesn't slip. Great for everyday walks.",
+          "verified": true,
+          "date": "2023-09-14"
+        },
+        {
+          "name": "Sophia B.",
+          "rating": 4.5,
+          "text": "Look exactly like the photos, lightweight and stylish. Slightly tight at first but after a day they fit perfectly.",
+          "verified": true,
+          "date": "2024-06-05"
+        }
+      ]
+    },
+
+    {
+      "productId": 10,
+      "reviews": [
+        {
+          "name": "Adrian J.",
+          "rating": 4.5,
+          "text": "The perfect wallet for a real men, looks very high quality and rich. I fell like a businessman!",
+          "verified": true,
+          "date": "2024-01-06"
+        },
+        {
+          "name": "Lara C.",
+          "rating": 5,
+          "text": "Love it! Adjustable and stylish. Bought it for my man. He was happy.",
+          "verified": true,
+          "date": "2024-10-03"
+        }
+      ]
+    },
+
+    {
+      "productId": 11,
+      "reviews": [
+        {
+          "name": "Ben F.",
+          "rating": 4,
+          "text": "I'm a director in a huge office in Germany. I always have to look good during the meetings.With this shoes that is no problem but i feel like everyone is jealous. That's why I give 4.",
+          "verified": true,
+          "date": "2024-07-11"
+        },
+        {
+          "name": "Konrad B.",
+          "rating": 4.5,
+          "text": "Nice color. Would buy again.",
+          "verified": true,
+          "date": "2023-08-29"
+        }
+      ]
+    },
+
+    {
+      "productId": 12,
+      "reviews": [
+        {
+          "name": "Tom C.",
+          "rating": 5,
+          "text": "One of the best backpacks I’ve owned. Plenty of space, sturdy zippers, and comfortable straps.",
+          "verified": true,
+          "date": "2024-02-19"
+        },
+        {
+          "name": "Elena S.",
+          "rating": 4.5,
+          "text": "Good everyday backpack. Could use one more inner pocket, but overall very high quality.",
+          "verified": true,
+          "date": "2024-08-22"
+        }
+      ]
+    },
+
+    {
+      "productId": 13,
+      "reviews": [
+        {
+          "name": "Victor H.",
+          "rating": 4,
+          "text": "Comfortable T-Shirt, soft fabric, sits nicely. Color was slightly brighter than expected but still nice.",
+          "verified": true,
+          "date": "2023-12-03"
+        },
+        {
+          "name": "Anna D.",
+          "rating": 5,
+          "text": "Absolutely love it! Modern, stylish — perfect for summer.",
+          "verified": true,
+          "date": "2024-10-09"
+        }
+      ]
+    }
+  ]
+}

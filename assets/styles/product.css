@@ -1,0 +1,1334 @@
+@import url("https://fonts.cdnfonts.com/css/satoshi");
+
+@font-face {
+  font-family: 'Integral CF';
+  src: url('../fonts/Fontspring-DEMO-integralcf-bold.woff2') format('woff2'),
+       url('../fonts/Fontspring-DEMO-integralcf-bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* ДОДАЙТЕ ЦЕЙ НОВИЙ FONT-FACE ДЛЯ FALLBACK */
+@font-face {
+  font-family: 'FallbackForHyphen';
+  src: local('Arial'), local('Helvetica');
+  unicode-range: U+002D; /* Тільки для дефісу */
+}
+
+:root {
+  --bg:#7b8794;
+  --panel:#ffffff;
+  --muted:#7b8794;
+  --accent:#111827;
+  --primary:#111827;
+  --accent-cta:#ff5a5f;
+  --shadow: 0 6px 20px rgba(16,24,40,0.08);
+  --radius:18px;
+  --gap:20px;
+  font-family: 'Satoshi';
+}
+
+/* RESET */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #ffffff;
+  color: #000000;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+    padding-top: 25px; /* Додає відступ зверху */
+}
+/* CONTAINER */
+.product-view {
+  width: 100%;
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  display: inline-block;
+  margin-bottom: 18px;
+  font-size: 15px;
+  color: #00000099 !important;
+  text-decoration: none;
+}
+
+/* PRODUCT BLOCK */
+.product-card {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* IMAGE */
+.product-image {
+  width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #f2f3f5;
+}
+
+.product-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* INFO SECTION - ВИПРАВЛЕНО */
+.product-info h1 {
+  font-family: 'Integral CF', 'FallbackForHyphen', sans-serif; /* Додано fallback */
+  font-size: 40px; /* Ви залишили 40px, але для mobile це багато */
+  margin: 0 0 10px 0;
+  font-weight: 700;
+  color: #000;
+}
+
+/* ВИДАЛІТЬ ЦІ НЕПРАВИЛЬНІ ПРАВИЛА: */
+/* .product-title::before {
+  font-family: 'Satoshi', sans-serif !important;
+} */
+
+/* RATING */
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 18px;
+  color: #ffc633;
+  margin-bottom: 10px;
+}
+
+.rating .count {
+  color: #000;
+  font-size: 14px;
+  margin-left: 4px;
+}
+
+/* PRICING BLOCK */
+.pricing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  justify-content: flex-start;
+  font-family: 'Satoshi';
+}
+
+.current-price {
+  font-size: 24px;
+  font-weight: 700;
+  color: #000;
+}
+
+.old-price {
+  font-size: 18px;
+  font-weight: 600;
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.discount {
+  background: rgba(255, 51, 51, 0.1);
+  color: #ff3333;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* DESCRIPTION */
+.description {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #4b5563;
+  margin-bottom: 14px;
+}
+
+/* OPTIONS (COLOR + SIZE) */
+.options-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: 'Satoshi';
+}
+
+/* COLOR SELECTOR */
+.color-options {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.color-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.color-swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  cursor: pointer;
+}
+
+.color-swatch.selected {
+  outline: 3px solid #111827;
+}
+
+/* SIZE SELECTOR */
+.size-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.size-pill {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: rgba(0,0,0,0.6);
+  cursor: pointer;
+}
+
+.size-pill.selected {
+  background: #111827;
+  color: #fff;
+}
+
+.option-title {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 20px 0 8px;
+  color: #00000099;
+}
+
+.line {
+  width: 100%;
+  height: 1px;
+  background: #e5e5e5;
+  margin: 5px 0;
+}
+
+/* ADD TO CART BUTTON */
+.add-to-cart {
+  width: 100%;
+  padding: 14px 0;
+  border-radius: 50px;
+  background: #111827;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 6px 16px rgba(2,6,23,0.2);
+}
+
+/* Контейнер нижнього ряду */
+.bottom-row {
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Світло-сіра капсула */
+.qty-box {
+  display: flex;
+  align-items: center;
+  background: #f2f2f2;
+  padding: 8px 14px;
+  border-radius: 30px;
+  gap: 14px;
+}
+
+/* Кнопки - і + */
+.qty-box button {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 6px;
+}
+
+.qty-value {
+  width: 22px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 18px;
+  color: #000;
+}
+
+/* ============================
+   REVIEWS SECTION — PRODUCT PAGE - MOBILE FIRST
+   ============================ */
+
+/* Контейнер з відгуками - MOBILE FIRST */
+.product-reviews {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+/* Картка одного відгуку - MOBILE FIRST */
+.review-card {
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 20px;
+  padding: 18px;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Контейнер для зірочок */
+.review-stars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.review-stars i {
+  font-size: 16px;
+  color: #ffc633;
+}
+
+/* Текст відгуку */
+.review-text {
+  margin: 0 0 12px 0;
+  font-family: "Satoshi", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #000;
+  font-style: italic;
+}
+
+/* Ім'я автора відгуку */
+.review-author {
+  font-family: "Satoshi", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #000;
+  margin: 0 0 8px 0;
+}
+
+/* Дата відгуку */
+.review-date {
+  font-family: "Satoshi", sans-serif;
+  font-size: 14px;
+  color: rgba(0,0,0,0.5);
+  margin: 0;
+}
+
+/* ============================
+   REVIEWS TABS SECTION - MOBILE FIRST
+   ============================ */
+
+.reviews-tabs-section {
+  width: 100%;
+}
+
+/* Навігація - MOBILE FIRST */
+.tabs-navigation-full {
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.tabs-container {
+  display: flex;
+  width: 100%;
+  padding: 0 16px;
+  overflow-x: auto;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  padding: 15px 20px;
+  position: relative;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tab-button.active {
+  color: #000;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #000;
+}
+
+/* Контейнер для контенту табів - MOBILE FIRST */
+.tabs-content-container {
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.tab-content-inner {
+  padding: 20px 0;
+}
+
+/* Заголовок All Reviews - MOBILE FIRST */
+.reviews-header {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start;
+  padding: 15px 0;
+  margin-bottom: 20px;
+}
+
+.all-reviews-title {
+  font-family: "Integral CF", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #000;
+  margin: 0;
+}
+
+.reviews-filter {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.filter-select {
+  padding: 10px 15px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  width: 100%;
+  max-width: 200px;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.faqs-title {
+  font-family: "Integral CF", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  margin: 0 0 20px 0;
+  color: #000;
+}
+
+/* DESKTOP STYLES */
+@media (min-width: 768px) {
+  /* Відгуки на десктопі */
+  .product-reviews {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 0 16px;
+  }
+  
+  .review-card {
+    padding: 25px;
+    min-height: 180px;
+  }
+  
+  /* Таби на десктопі */
+  .tabs-navigation-full {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+  }
+  
+  .tabs-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+    justify-content: space-between;
+    overflow-x: visible;
+  }
+  
+  .tab-button {
+    padding: 20px 30px;
+    font-size: 18px;
+    flex: 1;
+    text-align: center;
+  }
+  
+  /* Контейнер контенту на десктопі */
+  .tabs-content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+  
+  .tab-content-inner {
+    padding: 30px 0;
+  }
+  
+  /* Заголовок All Reviews на десктопі */
+  .reviews-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    margin-bottom: 30px;
+  }
+  
+  .all-reviews-title {
+    font-size: 24px;
+  }
+  
+  .reviews-filter {
+    width: auto;
+  }
+  
+  .filter-select {
+    width: auto;
+    min-width: 150px;
+  }
+  
+  .faqs-title {
+    font-size: 28px;
+  }
+}
+
+/* Для дуже широких екранів */
+@media (min-width: 1200px) {
+  .tabs-container {
+    padding: 0 50px;
+  }
+  
+  .tabs-content-container {
+    padding: 0 50px;
+  }
+  
+  .product-reviews {
+    gap: 25px;
+    padding: 0 50px;
+  }
+  
+  .review-card {
+    padding: 30px;
+    min-height: 190px;
+  }
+}
+/* ============================
+   REVIEWS SECTION — PRODUCT PAGE - MOBILE FIRST
+   ============================ */
+
+/* Контейнер з відгуками - MOBILE FIRST */
+.product-reviews {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+/* Картка одного відгуку - MOBILE FIRST */
+.review-card {
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 20px;
+  padding: 18px;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Контейнер для зірочок */
+.review-stars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.review-stars i {
+  font-size: 16px;
+  color: #ffc633;
+}
+
+/* Текст відгуку */
+.review-text {
+  margin: 0 0 12px 0;
+  font-family: "Satoshi", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #000;
+  font-style: italic;
+}
+
+/* Ім'я автора відгуку */
+.review-author {
+  font-family: "Satoshi", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #000;
+  margin: 0 0 8px 0;
+}
+
+/* Дата відгуку */
+.review-date {
+  font-family: "Satoshi", sans-serif;
+  font-size: 14px;
+  color: rgba(0,0,0,0.5);
+  margin: 0;
+}
+
+/* Повідомлення про відсутність відгуків */
+.no-reviews {
+  text-align: center;
+  font-family: "Satoshi", sans-serif;
+  font-size: 16px;
+  color: rgba(0,0,0,0.5);
+  padding: 30px 20px;
+}
+
+/* ============================
+   PRODUCT PAGE - MOBILE FIRST
+   ============================ */
+
+/* Контейнер продукту - MOBILE FIRST */
+.product-view {
+  width: 100%;
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.back-btn {
+  display: inline-block;
+  margin-bottom: 18px;
+  font-size: 15px;
+  color: #00000099 !important;
+  text-decoration: none;
+}
+
+/* Картка продукту - MOBILE FIRST (вертикально) */
+.product-card {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Зображення продукту */
+.product-image {
+  width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #f2f3f5;
+}
+
+.product-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Інформація про продукт */
+.product-info {
+  width: 100%;
+}
+
+.product-info h1 {
+  font-family: 'Integral CF', 'FallbackForHyphen', sans-serif;
+  font-size: 24px;
+  margin: 0 0 10px 0;
+  font-weight: 700;
+  color: #000;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 16px;
+  color: #ffc633;
+  margin-bottom: 10px;
+}
+
+.rating .count {
+  color: #000;
+  font-size: 14px;
+  margin-left: 4px;
+}
+
+.pricing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  justify-content: flex-start;
+  font-family: 'Satoshi';
+}
+
+.current-price {
+  font-size: 22px;
+  font-weight: 700;
+  color: #000;
+}
+
+.old-price {
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.discount {
+  background: rgba(255, 51, 51, 0.1);
+  color: #ff3333;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.description {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #4b5563;
+  margin-bottom: 14px;
+}
+
+.options-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: 'Satoshi';
+}
+
+/* COLOR OPTIONS - вирівнювання в ряд */
+.color-options {
+    display: flex;
+    gap: 12px;
+    margin: 10px 0;
+}
+
+.color-swatch {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.color-swatch:hover {
+    transform: scale(1.1);
+}
+
+.color-swatch.selected {
+    outline: 3px solid #111827;
+    transform: scale(1.1);
+}
+
+/* Прибрати заголовок "Color:" */
+.option-title {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 20px 0 8px;
+    color: #00000099;
+}
+
+/* Сховати заголовок для кольорів */
+.option-title:contains("Select color") {
+    display: none;
+}
+
+.size-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.size-pill {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: rgba(0,0,0,0.6);
+  cursor: pointer;
+}
+
+.size-pill.selected {
+  background: #111827;
+  color: #fff;
+}
+
+.option-title {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 20px 0 8px;
+  color: #00000099;
+}
+
+.line {
+  width: 100%;
+  height: 1px;
+  background: #e5e5e5;
+  margin: 5px 0;
+}
+
+.add-to-cart {
+  width: 100%;
+  padding: 14px 0;
+  border-radius: 50px;
+  background: #111827;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 6px 16px rgba(2,6,23,0.2);
+}
+
+.bottom-row {
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.qty-box {
+  display: flex;
+  align-items: center;
+  background: #f2f2f2;
+  padding: 8px 14px;
+  border-radius: 30px;
+  gap: 14px;
+}
+
+.qty-box button {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 6px;
+}
+
+.qty-value {
+  width: 22px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 18px;
+  color: #000;
+}
+
+/* ============================
+   REVIEWS SECTION - MOBILE FIRST
+   ============================ */
+
+.product-reviews {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.review-card {
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 20px;
+  padding: 18px;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.review-stars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.review-stars i {
+  font-size: 16px;
+  color: #ffc633;
+}
+
+.review-text {
+  margin: 0 0 12px 0;
+  font-family: "Satoshi";
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(0,0,0,0.5);
+  font-style: normal; 
+}
+
+.review-author {
+  font-family: "Satoshi", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #000;
+  margin: 0 0 8px 0;
+}
+
+.review-date {
+  font-family: "Satoshi", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #00000099;
+  margin: 0;
+}
+
+.no-reviews {
+  text-align: center;
+  font-family: "Satoshi", sans-serif;
+  font-size: 16px;
+  color: rgba(0,0,0,0.5);
+  padding: 30px 20px;
+}
+
+/* ============================
+   TABS SECTION - MOBILE FIRST
+   ============================ */
+
+.reviews-tabs-section {
+  width: 100%;
+  margin-top: 40px;
+}
+
+.tabs-navigation-full {
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.tabs-container {
+  display: flex;
+  width: 100%;
+  padding: 0 16px;
+  overflow-x: auto;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  padding: 15px 20px;
+  position: relative;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tab-button.active {
+  color: #000;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #000;
+}
+
+.tabs-content-container {
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.tab-content-inner {
+  padding: 20px 0;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.reviews-header {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start;
+  padding: 15px 0;
+  margin-bottom: 20px;
+}
+
+.all-reviews-title {
+  font-family: 'Satoshi';
+  font-weight: 700;
+  font-size: 20px;
+  color: #000;
+  margin: 0;
+}
+
+.reviews-filter {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.filter-select {
+  padding: 10px 15px;
+  border: 1px solid #e5e5e5;
+  border-radius: 30px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 14px;
+  background: #F0F0F0;
+  cursor: pointer;
+  width: 100%;
+  max-width: 200px;
+}
+
+.faqs-title {
+  font-family: "Integral CF", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  margin: 0 0 20px 0;
+  color: #000;
+  text-align: center;
+}
+
+.faqs-container {
+  padding: 20px 0;
+}
+
+/* ============================
+   LOAD MORE BUTTON
+   ============================ */
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+  width: 100%;
+}
+
+.load-more-reviews {
+  background: #ffffff;
+  border: 1px solid #0000001A;
+  border-radius: 50px;
+  padding: 14px 40px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.load-more-reviews:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* Стилі для сповіщення про додавання до кошика */
+.cart-notification-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    z-index: 10;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.cart-notification-overlay.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.cart-notification-content {
+    text-align: center;
+    font-family: 'Satoshi', sans-serif;
+}
+
+.cart-notification-icon {
+    font-size: 32px;
+    color: #22c55e;
+    margin-bottom: 8px;
+}
+
+.cart-notification-text {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.cart-notification-quantity {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* Контейнер для кнопки додавання в кошик - додаємо позиціювання */
+.add-to-cart-container {
+    position: relative;
+    margin-top: 10px;
+}
+
+/* Анімація для кнопки при додаванні */
+.add-to-cart.added {
+    background: #22c55e;
+    transform: scale(0.95);
+    transition: all 0.3s ease;
+}
+
+/* Анімації для іконки кошика */
+.cart-icon-wrapper {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #FF3333; /* Червоний за замовчуванням */
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    transform: scale(1);
+}
+
+.cart-count.has-items {
+    background: #22C55E; /* Зелений коли є товари */
+    transform: scale(1.1); /* Трошки збільшується */
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
+
+/* Анімація пульсації при додаванні товару */
+.cart-count.pulse {
+    animation: cartPulse 0.6s ease-in-out;
+}
+
+@keyframes cartPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.3);
+    }
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .load-more-container {
+    margin: 30px 0;
+  }
+  
+  .load-more-reviews {
+    padding: 12px 30px;
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 768px) {
+  /* ПРОДУКТ - ФОТО ЗЛІВА, ІНФО СПРАВА */
+  .product-card {
+    flex-direction: row;
+    gap: 40px;
+    align-items: flex-start;
+  }
+
+  .product-image {
+    max-width: 500px;
+    flex: 1;
+  }
+
+  .product-info {
+    flex: 1;
+    padding: 10px 0;
+  }
+
+  .product-info h1 {
+    font-size: 28px;
+  }
+
+  .current-price {
+    font-size: 24px;
+  }
+
+  .bottom-row {
+    gap: 25px;
+  }
+
+  .qty-box {
+    padding: 10px 18px;
+    gap: 18px;
+  }
+
+  .qty-box button {
+    font-size: 22px;
+  }
+
+  /* ВІДГУКИ - 2 В РЯД */
+  .product-reviews {
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    padding: 0 16px;
+  }
+  
+  .review-card {
+    padding: 25px;
+    min-height: 180px;
+  }
+  
+  .review-text {
+    font-size: 17px;
+  }
+  
+  .review-stars i {
+    font-size: 17px;
+  }
+
+  /* ТАБИ */
+  .tabs-navigation-full {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+  }
+  
+  .tabs-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+    justify-content: space-between;
+    overflow-x: visible;
+  }
+  
+  .tab-button {
+    padding: 20px 30px;
+    font-size: 18px;
+    flex: 1;
+    text-align: center;
+  }
+  
+  .tabs-content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+  
+  .tab-content-inner {
+    padding: 30px 0;
+  }
+  
+  .reviews-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    margin-bottom: 30px;
+  }
+  
+  .all-reviews-title {
+    font-size: 24px;
+  }
+  
+  .reviews-filter {
+    width: auto;
+  }
+  
+  .filter-select {
+    width: auto;
+    min-width: 150px;
+  }
+  
+  .faqs-title {
+    font-size: 28px;
+    text-align: left;
+  }
+}
+
+@media (min-width: 1200px) {
+  .product-card {
+    gap: 60px;
+  }
+
+  .product-image {
+    max-width: 550px;
+  }
+
+  .product-info h1 {
+    font-size: 32px;
+  }
+
+  .current-price {
+    font-size: 26px;
+  }
+
+  .tabs-container {
+    padding: 0 50px;
+  }
+  
+  .tabs-content-container {
+    padding: 0 50px;
+  }
+  
+  .product-reviews {
+    gap: 30px;
+    padding: 0 50px;
+  }
+  
+  .review-card {
+    padding: 30px;
+    min-height: 190px;
+  }
+  
+  .review-text {
+    font-size: 18px;
+  }
+}

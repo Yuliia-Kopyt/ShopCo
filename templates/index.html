@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="header.shop">Shop.co</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <link rel="stylesheet" href="assets/styles/style.css">
+  <link rel="stylesheet" href="assets/styles/shop.css">
+</head>
+<body>
+
+<div id="megaDealPopup" class="megadeal-popup">
+    <div class="megadeal-container">
+        <div class="megadeal-header" data-i18n="mega_deal.black_friday">BLACK FRIDAY</div>
+        <div class="megadeal-offer" data-i18n="mega_deal.offer">UP TO 70% OFF</div>
+        
+        <div class="megadeal-counter">
+            <div class="megadeal-unit">
+                <span class="megadeal-digit" id="megaDays">00</span>
+                <span class="megadeal-text" data-i18n="mega_deal.days">DAYS</span>
+            </div>
+            <div class="megadeal-unit">
+                <span class="megadeal-digit" id="megaHours">00</span>
+                <span class="megadeal-text" data-i18n="mega_deal.hours">HOURS</span>
+            </div>
+            <div class="megadeal-unit">
+                <span class="megadeal-digit" id="megaMins">00</span>
+                <span class="megadeal-text" data-i18n="mega_deal.minutes">MINS</span>
+            </div>
+            <div class="megadeal-unit">
+                <span class="megadeal-digit" id="megaSecs">00</span>
+                <span class="megadeal-text" data-i18n="mega_deal.seconds">SECS</span>
+            </div>
+        </div>
+        
+        <button class="megadeal-cta" onclick="closeMegaDeal()" data-i18n="mega_deal.shop_now">SHOP NOW</button>
+    </div>
+</div>
+
+  <!-- Top Banner -->
+  <div class="top-banner">
+    <div class="banner-content">
+        <span data-i18n="banner.signup_offer">Sign up and get 20% off to your first order.</span>
+        <a href="login.html" class="sign-up-link" data-i18n="banner.signup_now">Sign Up Now</a>
+    </div>
+  </div>
+
+<!-- Header -->
+<header class="header">
+  <div class="content-wrap header-content">
+    <!-- Desktop Language Switcher -->
+    <div class="language-switcher desktop-lang">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="uk">UA</button>
+    </div>
+
+    <!-- Логотип -->
+    <div class="logo">
+      <a href="index.html">SHOP.CO</a>
+    </div>
+
+    <!-- Бургер меню для mobile -->
+    <div id="burgerMenu" class="burger-menu"> 
+      <i id="openIcon" class="fa-solid fa-bars"></i> 
+      <i id="closeIcon" class="fa-solid fa-xmark d-none"></i> 
+    </div>
+
+    <!-- Навігація -->
+    <nav id="headerNav" class="header-nav">
+      <!-- Mobile Language Switcher -->
+      <div class="language-switcher mobile-lang">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="uk">UA</button>
+      </div>
+      
+      <ul class="main-menu">
+        <li class="has-submenu">
+          <a href="shop.html" data-i18n="header.shop">
+            Shop <i class="fa-solid fa-chevron-down submenu-toggle"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="#" data-i18n="home.casual">Casual</a></li>
+            <li><a href="#" data-i18n="home.formal">Formal</a></li>
+            <li><a href="#" data-i18n="home.party">Party</a></li>
+            <li><a href="#" data-i18n="home.gym">Gym</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="index.html#on-sale" data-i18n="header.on_sale">On Sale</a>
+        </li>
+        <li>
+          <a href="index.html#new-arrivals" data-i18n="header.new_arrivals">New Arrivals</a>
+        </li>
+        <li>
+          <a href="index.html#brands" data-i18n="header.brands">Brands</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Поле пошуку для desktop -->
+    <div class="search-wrapper">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" data-i18n="header.search_placeholder" placeholder="Search for products..." class="header-search">
+    </div>
+
+    <!-- Іконки -->
+    <div class="header-icons">
+      <!-- Іконка лупи для мобільної версії -->
+      <a href="search.html" class="icon-link search-icon">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </a>
+      
+      <!-- Кошик -->
+      <a href="cart.html" class="icon-link cart-icon-animation">
+        <div class="cart-icon-wrapper">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="cart-count"></span>
+        </div>
+      </a>
+      
+      <!-- Користувач -->
+      <a href="login.html" class="icon-link">
+        <i class="fa-solid fa-circle-user"></i>
+      </a>
+    </div>
+  </div>
+</header>
+
+  <!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-container">
+    <div class="content-wrap hero-content">
+      <h1 class="uppercase" data-i18n="home.hero_title">
+        Find clothes that matches your style
+      </h1>
+      <p data-i18n="home.hero_description">Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style.</p>
+      <a href="shop.html" class="shop-now-btn" data-i18n="home.shop_now">Shop Now</a>
+
+      <!-- Stats -->
+      <div class="stats-container">
+        <div class="stat-item">
+          <div class="stat-number">200+</div>
+          <div class="stat-label" data-i18n="home.stats.brands">International Brands</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">2,000+</div>
+          <div class="stat-label" data-i18n="home.stats.products">High-Quality Products</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">30,000+</div>
+          <div class="stat-label" data-i18n="home.stats.customers">Happy Customers</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Image -->
+    <div class="hero-image">
+      <img src="assets/images/modelshero.png" alt="Models">
+    </div>
+  </div>
+
+    <!-- Brands Section -->
+    <div class="brands-section" id="brands">
+      <div class="brands-container">
+          <a href="https://www.versace.com" target="_blank" rel="noopener noreferrer">
+              <img src="assets/images/Group.png" alt="Versace">
+          </a>
+          <a href="https://www.zara.com" target="_blank" rel="noopener noreferrer">
+              <img src="assets/images/zara-logo-1 1.png" alt="Zara">
+          </a>
+          <a href="https://www.gucci.com" target="_blank" rel="noopener noreferrer">
+              <img src="assets/images/gucci-logo-1 1.png" alt="Gucci">
+          </a>
+          <a href="https://www.prada.com" target="_blank" rel="noopener noreferrer">
+              <img src="assets/images/prada-logo-1 1.png" alt="Prada">
+          </a>
+          <a href="https://www.calvinklein.us" target="_blank" rel="noopener noreferrer">
+              <img src="assets/images/Group (1).png" alt="Calvin Klein">
+          </a>
+      </div>
+    </div>
+  </section>
+  
+<!-- New arrivals div -->
+<section class="new-arrivals" id="new-arrivals">
+  <div class="content">
+    <h2 class="uppercase" data-i18n="home.new_arrivals">New arrivals</h2>
+
+    <div class="shop" id="new-arrivals-container">
+      <!-- Продукти будуть завантажені динамічно -->
+    </div>
+
+    <button class="btn" data-i18n="home.view_all">View All</button>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Top Selling Section -->
+<section class="top-selling" id="on-sale">
+  <div class="content">
+    <h2 class="uppercase" data-i18n="home.top_selling">Top Selling</h2>
+
+    <div class="shop" id="top-selling-container">
+    </div>
+
+    <button class="btn" data-i18n="home.view_all">View All</button>
+  </div>
+</section>
+
+<!-- grid div -->
+<section class="grid-div">
+  <h2 class="uppercase" data-i18n="home.dress_style">Browse by dress style</h2>
+
+  <div class="grid-container">
+    <div class="box-grid">
+      <img src="assets/images/casual.png" alt="Casual style">
+      <h4 data-i18n="home.casual">Casual</h4>
+    </div>
+
+    <div class="box-grid">
+      <img src="assets/images/formal.png" alt="Formal style">
+      <h4 data-i18n="home.formal">Formal</h4>
+    </div>
+
+    <div class="box-grid">
+      <img src="assets/images/party.png" alt="Party style">
+      <h4 data-i18n="home.party">Party</h4>
+    </div>
+
+    <div class="box-grid">
+      <img src="assets/images/gym.png" alt="Gym style">
+      <h4 data-i18n="home.gym">Gym</h4>
+    </div>
+  </div>
+</section>
+
+<section class="feedback-section">
+  <div class="flex-row">
+    <h2 class="our" data-i18n="home.happy_customers">OUR HAPPY CUSTOMERS</h2>
+
+    <div class="arrow">
+      <button class="arrow-left"><i class="fa-solid fa-arrow-left"></i></button>
+      <button class="arrow-right"><i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+
+    <div class="feedback-container"></div>
+  </div>
+</section>
+
+<!-- SUBSCRIBE SECTION -->
+<section class="subscribe">
+  <div class="h2">
+    <h2 class="uppercase" data-i18n="subscribe.title">Stay upto date about our latest offers</h2>
+  </div>
+  <div class="forms">
+    <div class="form-container">
+      <form>
+        <div class="input-group">
+          <span class="icon"><i class="fa-regular fa-envelope"></i></span>
+          <input type="email" data-i18n="subscribe.email_placeholder" placeholder="Enter your email address" />
+        </div>
+      </form>
+    </div>
+    <button class="btn2" data-i18n="subscribe.button">Subscribe to Newsletter</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-cont">
+    <div class="footer-div">
+      <!-- ЛОГО + ОПИС -->
+      <div class="footer-logo">
+        <p class="logo"><a href="#">SHOP.CO</a></p>
+        <p data-i18n="footer.description">We have clothes that suits your style and which you're proud to wear. From women to men.</p>
+        <div class="soc-media">
+          <div class="circle"><i class="fa-brands fa-twitter"></i></div>
+          <div class="fb"><i class="fa-brands fa-facebook-f"></i></div>
+          <div class="circle"><i class="fa-brands fa-instagram"></i></div>
+          <div class="circle"><i class="fa-brands fa-github"></i></div>
+        </div>
+      </div>
+
+      <!-- КОЛОНКИ НАВІГАЦІЇ -->
+      <div class="footer-nav">
+        <h6 class="uppercase" data-i18n="footer.company">Company</h6>
+        <ul>
+          <li><a href="#" data-i18n="footer.about">About</a></li>
+          <li><a href="#" data-i18n="footer.features">Features</a></li>
+          <li><a href="#" data-i18n="footer.works">Works</a></li>
+          <li><a href="#" data-i18n="footer.career">Career</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-nav">
+        <h6 class="uppercase" data-i18n="footer.help">Help</h6>
+        <ul>
+          <li><a href="#" data-i18n="footer.customer_support">Customer Support</a></li>
+          <li><a href="#" data-i18n="footer.delivery_details">Delivery Details</a></li>
+          <li><a href="#" data-i18n="footer.terms">Terms & Conditions</a></li>
+          <li><a href="#" data-i18n="footer.privacy_policy">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-nav">
+        <h6 class="uppercase" data-i18n="footer.faq">FAQ</h6>
+        <ul>
+          <li><a href="#" data-i18n="footer.account">Account</a></li>
+          <li><a href="#" data-i18n="footer.manage_deliveries">Manage Deliveries</a></li>
+          <li><a href="#" data-i18n="footer.orders">Orders</a></li>
+          <li><a href="#" data-i18n="footer.payments">Payments</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-nav">
+        <h6 class="uppercase" data-i18n="footer.resources">Resources</h6>
+        <ul>
+          <li><a href="#" data-i18n="footer.free_ebooks">Free eBooks</a></li>
+          <li><a href="#" data-i18n="footer.development_tutorial">Development Tutorial</a></li>
+          <li><a href="#" data-i18n="footer.how_to_blog">How to - Blog</a></li>
+          <li><a href="#" data-i18n="footer.youtube_playlist">Youtube Playlist</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ЛІНІЯ -->
+    <div class="line"></div>
+
+    <!-- КОПІРАЙТ + ОПЛАТА -->
+    <div class="end-div">
+      <p data-i18n="footer.copyright">Shop.co © 2000-2023, All Rights Reserved</p>
+      <div class="payment">
+        <div class="rectangle"><img src="assets/images/visa.png" alt="visa"></div>
+        <div class="rectangle"><img src="assets/images/mastercard.png" alt="mastercard"></div>
+        <div class="rectangle"><img src="assets/images/paypal.png" alt="paypal"></div>
+        <div class="rectangle"><img src="assets/images/applepay.png" alt="applepay"></div>
+        <div class="rectangle"><img src="assets/images/gpay.png" alt="google pay"></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Модальне вікно для логіну/реєстрації -->
+<div id="authModal" class="auth-modal">
+  <div class="auth-modal-content">
+    <span class="auth-close-btn">&times;</span>
+    
+    <!-- Форма логіну -->
+    <div id="loginForm" class="auth-form active">
+      <h2 data-i18n="auth.welcome_back">Welcome Back</h2>
+      <p class="auth-subtitle" data-i18n="auth.sign_in_subtitle">Sign in to your account</p>
+      
+      <form class="auth-form-content">
+        <div class="form-group">
+          <label for="loginEmail" data-i18n="auth.email_address">Email Address</label>
+          <input type="email" id="loginEmail" data-i18n="auth.enter_email" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="loginPassword" data-i18n="auth.password">Password</label>
+          <input type="password" id="loginPassword" data-i18n="auth.enter_password" placeholder="Enter your password" required>
+        </div>
+        
+        <div class="form-options">
+          <label class="checkbox-container">
+            <input type="checkbox" id="rememberMe">
+            <span class="checkmark"></span>
+            <span data-i18n="auth.remember_me">Remember me</span>
+          </label>
+          <a href="#" class="forgot-password" data-i18n="auth.forgot_password">Forgot password?</a>
+        </div>
+        
+        <button type="submit" class="auth-btn" data-i18n="auth.sign_in">Sign In</button>
+      </form>
+      
+      <div class="auth-switch">
+        <p data-i18n="auth.no_account">Don't have an account? <a href="#" class="switch-to-register" data-i18n="auth.sign_up">Sign Up</a></p>
+      </div>
+    </div>
+    
+    <!-- Форма реєстрації -->
+    <div id="registerForm" class="auth-form">
+      <h2 data-i18n="auth.create_account">Create Account</h2>
+      <p class="auth-subtitle" data-i18n="auth.join_us">Join us and start shopping</p>
+      
+      <form class="auth-form-content">
+        <div class="form-group">
+          <label for="registerName" data-i18n="auth.full_name">Full Name</label>
+          <input type="text" id="registerName" data-i18n="auth.enter_full_name" placeholder="Enter your full name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="registerEmail" data-i18n="auth.email_address">Email Address</label>
+          <input type="email" id="registerEmail" data-i18n="auth.enter_email" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="registerPassword" data-i18n="auth.password">Password</label>
+          <input type="password" id="registerPassword" data-i18n="auth.create_password" placeholder="Create a password" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="registerConfirmPassword" data-i18n="auth.confirm_password">Confirm Password</label>
+          <input type="password" id="registerConfirmPassword" data-i18n="auth.confirm_password_placeholder" placeholder="Confirm your password" required>
+        </div>
+        
+        <div class="form-options">
+          <label class="checkbox-container">
+            <input type="checkbox" id="acceptTerms" required>
+            <span class="checkmark"></span>
+            <span data-i18n="auth.accept_terms">I agree to the <a href="#" data-i18n="auth.terms_of_service">Terms of Service</a> and <a href="#" data-i18n="auth.privacy_policy">Privacy Policy</a></span>
+          </label>
+        </div>
+        
+        <button type="submit" class="auth-btn" data-i18n="auth.create_account_button">Create Account</button>
+      </form>
+      
+      <div class="auth-switch">
+        <p data-i18n="auth.have_account">Already have an account? <a href="#" class="switch-to-login" data-i18n="auth.sign_in">Sign In</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script id="reviews-json" type="application/json" src="assets/data/reviews.json"></script>
+<script src="assets/js/language.js"></script>
+<script src="assets/js/scripts.js"></script>
+
+</body>
+</html>
