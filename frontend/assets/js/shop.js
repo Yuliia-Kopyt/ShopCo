@@ -316,8 +316,14 @@ function applySort(items){
   if(state.sort === "price-asc") arr.sort((a, b) => a.price - b.price);
   else if(state.sort === "price-desc") arr.sort((a, b) => b.price - a.price);
   else if(state.sort === "rating-desc") arr.sort((a, b) => b.rating - a.rating);
-  else if(state.sort === "name-asc") arr.sort((a, b) => a.title.localeCompare(b.title));
+  else if(state.sort === "name-asc") {
+      arr.sort((a, b) => {
+          const titleA = getProductTitle(a) || "";
+          const titleB = getProductTitle(b) || "";
 
+          return titleA.localeCompare(titleB);
+      });
+  }
   return arr;
 }
 
@@ -488,13 +494,24 @@ function escapeHtml(s){
 // -------------------------------
 // ПОЧАТОК ЗАВАНТАЖЕННЯ ТА ОБРОБКА МОВИ
 // -------------------------------
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+
+    // Чекаємо languageManager
+    while (
+        !window.languageManager ||
+        !window.languageManager.isInitialized
+    ) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+
+    // Тільки потім вантажимо продукти
     loadProducts();
-    
+
     // Слухаємо зміни мови
     window.addEventListener('languageChanged', function(e) {
         updateShopTranslations();
     });
+
 });
 
 // Додаємо функцію для глобального доступу

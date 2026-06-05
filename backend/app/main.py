@@ -4,9 +4,9 @@ from app.database.base import Base
 from app.database.database import engine
 
 from app.api.auth import router as auth_router
+from app.api.products import router as products_router
 
 import app.models
-
 
 Base.metadata.create_all(bind=engine)
 
@@ -16,8 +16,11 @@ app = FastAPI(
 )
 
 app.include_router(auth_router)
+app.include_router(products_router)
 
 
 @app.get("/")
 def root():
-    return {"message": "ShopCo API is running"}
+    return {
+        "message": "ShopCo API is running"
+    }

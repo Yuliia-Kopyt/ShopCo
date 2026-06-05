@@ -1028,6 +1028,23 @@ body {
   padding: 20px 0;
 }
 
+#product-details-container {
+    padding: 0 40px;
+    line-height: 1.7;
+}
+
+#product-details-container p {
+    margin-bottom: 16px;
+}
+
+#product-details-container ul {
+    padding-left: 24px;
+    margin-bottom: 16px;
+}
+
+#product-details-container li {
+    margin-bottom: 8px;
+}
 /* ============================
    LOAD MORE BUTTON
    ============================ */

@@ -41,16 +41,6 @@ class Product(Base):
         primary_key=True
     )
 
-    title: Mapped[str] = mapped_column(
-        String(255),
-        nullable=False
-    )
-
-    description: Mapped[str] = mapped_column(
-        Text,
-        nullable=False
-    )
-
     price: Mapped[float] = mapped_column(
         Float,
         nullable=False
@@ -98,4 +88,45 @@ class Product(Base):
 
     category: Mapped["Category"] = relationship(
         back_populates="products"
+    )
+
+    translations: Mapped[list["ProductTranslation"]] = relationship(
+        back_populates="product",
+        cascade="all, delete-orphan"
+    )
+
+
+class ProductTranslation(Base):
+    __tablename__ = "product_translations"
+
+    id: Mapped[int] = mapped_column(
+        primary_key=True
+    )
+
+    product_id: Mapped[int] = mapped_column(
+        ForeignKey("products.id")
+    )
+
+    language: Mapped[str] = mapped_column(
+        String(10),
+        nullable=False
+    )
+
+    title: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False
+    )
+
+    description: Mapped[str] = mapped_column(
+        Text,
+        nullable=False
+    )
+
+    details: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True
+    )
+
+    product: Mapped["Product"] = relationship(
+        back_populates="translations"
     )

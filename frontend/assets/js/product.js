@@ -100,6 +100,16 @@ function getFallbackProducts() {
     ];
 }
 
+function getProductDetails(product) {
+    if (!window.languageManager || !window.languageManager.isInitialized) {
+        return product.details || "";
+    }
+
+    const translated = window.languageManager.getProductTranslation(product.id, 'details');
+
+    return translated || product.details || "";
+}
+
 // ---------------------------
 // GET PRODUCT ID FROM URL
 // ---------------------------
@@ -310,6 +320,15 @@ function renderProduct(product, container) {
     `;
 
     container.innerHTML = html;
+
+    // Render product details markdown
+const detailsContainer = document.getElementById('product-details-container');
+
+if (detailsContainer) {
+    const translatedDetails = getProductDetails(product);
+
+    detailsContainer.innerHTML = marked.parse(translatedDetails);
+}
     
     // Fix hyphens in title
     setTimeout(fixHyphensInTitle, 200);
