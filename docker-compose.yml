@@ -15,9 +15,14 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shopco_user -d shopco_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   backend:
     build: ./backend
-
     container_name: shopco_backend
 
     ports:
@@ -29,6 +34,9 @@ services:
     env_file:
       - ./backend/.env
 
+    volumes:
+      - ./backend:/app
+      - ./frontend:/app/frontend
   pgadmin:
     image: dpage/pgadmin4
     container_name: shopco_pgadmin

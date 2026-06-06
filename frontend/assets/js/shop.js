@@ -53,35 +53,81 @@ const filtersPanel = document.getElementById("filtersPanel");
 const filtersOverlay = document.getElementById("filtersOverlay");
 
 // -------------------------------
-// ЗАВАНТАЖЕННЯ ПРОДУКТІВ З JSON
+// LOAD PRODUCTS FROM BACKEND API
 // -------------------------------
 async function loadProducts() {
     try {
-        const response = await fetch('./assets/data/product.json');
-        
+
+        const response = await fetch(
+            'http://localhost:8000/products/'
+        );
+
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(
+                `HTTP error! status: ${response.status}`
+            );
         }
-        
+
         SHOP_PRODUCTS = await response.json();
-        
-        // Оновлюємо списки для фільтрів
+        console.log("PRODUCTS:", SHOP_PRODUCTS);
+
         updateFilterLists();
-        
-        // Ініціалізуємо сторінку
+        console.log("CATS:", ALL_CATS);
+        console.log("COLORS:", ALL_COLORS);
+        console.log("SIZES:", ALL_SIZES);
+        console.log("STYLES:", ALL_STYLES);
+        console.log("render()");
+        console.log("products:", SHOP_PRODUCTS.length);
+        console.log("productGrid:", productGrid);
+
         init();
-        
+
     } catch (error) {
-        // Просто показуємо повідомлення про помилку
-        productGrid.innerHTML = "<div class='card'><em>Помилка завантаження продуктів. Спробуйте оновити сторінку.</em></div>";
+
+        console.error(
+            '❌ Error loading products:',
+            error
+        );
+
+        productGrid.innerHTML = `
+            <div class='card'>
+                <em>
+                    Помилка завантаження продуктів.
+                </em>
+            </div>
+        `;
     }
 }
 
 function updateFilterLists() {
-    ALL_CATS = Array.from(new Set(SHOP_PRODUCTS.map(p => p.category)));
-    ALL_COLORS = Array.from(new Set(SHOP_PRODUCTS.flatMap(p => p.colors)));
-    ALL_SIZES = Array.from(new Set(SHOP_PRODUCTS.flatMap(p => p.sizes))).filter(Boolean);
-    ALL_STYLES = Array.from(new Set(SHOP_PRODUCTS.map(p => p.style)));
+
+    ALL_CATS = Array.from(
+        new Set(
+            SHOP_PRODUCTS.map(p => p.category).filter(Boolean)
+        )
+    );
+
+    ALL_COLORS = Array.from(
+        new Set(
+            SHOP_PRODUCTS.flatMap(
+                p => p.colors || []
+            )
+        )
+    );
+
+    ALL_SIZES = Array.from(
+        new Set(
+            SHOP_PRODUCTS.flatMap(
+                p => p.sizes || []
+            )
+        )
+    ).filter(Boolean);
+
+    ALL_STYLES = Array.from(
+        new Set(
+            SHOP_PRODUCTS.map(p => p.style).filter(Boolean)
+        )
+    );
 }
 
 // -------------------------------
@@ -114,12 +160,19 @@ function init(){
   }
 
   // price range bounds
-  const maxPrice = Math.max(...SHOP_PRODUCTS.map(p => p.price)) + 50;
-  priceRange.max = maxPrice;
-  priceRange.value = maxPrice;
-  priceMinInput.value = 0;
-  priceMaxInput.value = maxPrice;
-  state.priceMax = maxPrice;
+  const prices = SHOP_PRODUCTS.map(
+    p => Number(p.price) || 0
+    );
+
+    const maxPrice = Math.max(...prices) + 50;
+
+    priceRange.max = maxPrice;
+    priceRange.value = maxPrice;
+
+    priceMinInput.value = 0;
+    priceMaxInput.value = maxPrice;
+
+    state.priceMax = maxPrice;
 
   // categories
   categoryList.innerHTML = '';
@@ -299,13 +352,37 @@ function clearFilters(){
 
 function applyFilters(items){
   return items.filter(p => {
-    if(state.category && p.category !== state.category) return false;
-    if(p.price < (state.priceMin || 0)) return false;
-    if(state.priceMax && p.price > state.priceMax) return false;
-    if(state.inStockOnly && !p.inStock) return false;
-    if(state.colors.size > 0 && !p.colors.some(c => state.colors.has(c))) return false;
-    if(state.sizes.size > 0 && !p.sizes.some(s => state.sizes.has(s))) return false;
-    if(state.styles.size > 0 && !state.styles.has(p.style)) return false;
+
+    if(state.category && p.category !== state.category)
+      return false;
+
+    if(p.price < (state.priceMin || 0))
+      return false;
+
+    if(state.priceMax && p.price > state.priceMax)
+      return false;
+
+    if(state.inStockOnly && !p.in_stock)
+      return false;
+
+    if(
+      state.colors.size > 0 &&
+      !(p.colors || []).some(c => state.colors.has(c))
+    )
+      return false;
+
+    if(
+      state.sizes.size > 0 &&
+      !(p.sizes || []).some(s => state.sizes.has(s))
+    )
+      return false;
+
+    if(
+      state.styles.size > 0 &&
+      !state.styles.has(p.style)
+    )
+      return false;
+
     return true;
   });
 }
@@ -359,35 +436,71 @@ function render(){
     return;
   }
 
-  pageItems.forEach(p => {
+console.log("pageItems:", pageItems);
+
+pageItems.forEach(p => {
+
     const card = document.createElement("article");
     card.className = "card";
 
-    const translatedTitle = getProductTitle(p);
-    const translatedDescription = getProductDescription(p);
+    const translatedTitle =
+        getProductTitle(p);
+
+    const translatedDescription =
+        getProductDescription(p);
+
+    const rating =
+        Number(p.rating) || 0;
 
     card.innerHTML = `
       <div class="img-wrap">
-        <img src="${p.image}" alt="${escapeHtml(translatedTitle)}" loading="lazy">
+        <img
+          src="${p.image}"
+          alt="${escapeHtml(translatedTitle)}"
+          loading="lazy"
+        >
       </div>
 
       <div class="texts">
-        <h4>${escapeHtml(translatedTitle)}</h4>
+
+        <h4>
+          ${escapeHtml(translatedTitle)}
+        </h4>
+
         <div class="rating">
-          ${renderStars(p.rating)} <span class="muted">${p.rating.toFixed(1)}/5</span>
+          ${renderStars(rating)}
+
+          <span class="muted">
+            ${rating.toFixed(1)}/5
+          </span>
         </div>
 
         ${
-          p.oldPrice 
-            ? `<div class="pricing">
-                 <p class="current-price">${formatPrice(p.price)}</p>
-                 <p class="old-price">${formatPrice(p.oldPrice)}</p>
-                 <span class="discount">-${p.discount}%</span>
-               </div>`
-            : `<div class="pricing no-discount">
-                 <p class="current-price">${formatPrice(p.price)}</p>
-               </div>`
+          p.old_price
+            ? `
+              <div class="pricing">
+                <p class="current-price">
+                  ${formatPrice(p.price)}
+                </p>
+
+                <p class="old-price">
+                  ${formatPrice(p.old_price)}
+                </p>
+
+                <span class="discount">
+                  -${p.discount}%
+                </span>
+              </div>
+            `
+            : `
+              <div class="pricing no-discount">
+                <p class="current-price">
+                  ${formatPrice(p.price)}
+                </p>
+              </div>
+            `
         }
+
       </div>
     `;
 
@@ -407,15 +520,32 @@ function render(){
 // ФУНКЦІЇ ПЕРЕКЛАДУ ПРОДУКТІВ
 // -------------------------------
 function getProductTitle(product) {
-  return window.languageManager ? 
-    window.languageManager.getProductTranslation(product.id, 'title') || product.title : 
-    product.title;
+
+    const currentLang =
+        localStorage.getItem('language') || 'en';
+
+    const translation =
+        product.translations?.find(
+            t => t.language === currentLang
+        );
+
+    return translation?.title || product.title;
 }
 
 function getProductDescription(product) {
-  return window.languageManager ? 
-    window.languageManager.getProductTranslation(product.id, 'description') || product.description : 
-    product.description;
+
+    const currentLang =
+        localStorage.getItem('language') || 'en';
+
+    const translation =
+        product.translations?.find(
+            t => t.language === currentLang
+        );
+
+    return (
+        translation?.description ||
+        product.description
+    );
 }
 
 function getCategoryTranslation(category) {

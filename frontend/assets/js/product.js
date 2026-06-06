@@ -5,32 +5,27 @@ let PRODUCTS_DATA = [];
 
 async function loadProductsData() {
     try {
-        const [productsResponse, translationsResponse] = await Promise.all([
-            fetch('assets/data/product.json'),
-            fetch('assets/data/producttranslation.json')
-        ]);
-        
+
+        const productsResponse = await fetch(
+            'http://localhost:8000/products/'
+        );
+
         if (!productsResponse.ok) {
-            throw new Error(`HTTP error! status: ${productsResponse.status}`);
+            throw new Error(
+                `HTTP error! status: ${productsResponse.status}`
+            );
         }
-        
+
         PRODUCTS_DATA = await productsResponse.json();
-        
-        // Завантажуємо переклади в languageManager
-        if (translationsResponse.ok) {
-            const productTranslations = await translationsResponse.json();
-            if (window.languageManager) {
-                window.languageManager.productTranslations = productTranslations;
-                console.log('✅ Product translations loaded into languageManager');
-            }
-        }
-        
+
         initializeProductPage();
-        
+
     } catch (error) {
+
         console.error('❌ Error loading products:', error);
-        // Використовуємо тестові дані як fallback
+
         PRODUCTS_DATA = getFallbackProducts();
+
         initializeProductPage();
     }
 }
@@ -41,14 +36,14 @@ function getFallbackProducts() {
             id: 1,
             title: "T-Shirt with tape details",
             price: 240,
-            oldPrice: null,
+            old_price: null,
             category: "T-Shirts",
             image: "assets/images/blacktshirt.png",
             rating: 4.5,
             colors: ["black", "white"],
-            sizes: ["Small", "Medium", "Large"],
+            sizes: ["s", "m", "l"],
             style: "Casual",
-            inStock: true,
+            in_stock: true,
             discount: null,
             description: "This comfortable t-shirt features unique tape details for a modern look."
         },
@@ -56,14 +51,14 @@ function getFallbackProducts() {
             id: 2,
             title: "Skinny Fit Jeans",
             price: 240,
-            oldPrice: 260,
+            old_price: 260,
             category: "Jeans",
             image: "assets/images/blackjeans.png",
             rating: 3.5,
             colors: ["blue", "black"],
-            sizes: ["Small", "Medium", "Large"],
+            sizes: ["s", "m", "l"],
             style: "Casual",
-            inStock: true,
+            in_stock: true,
             discount: 20,
             description: "Classic skinny fit jeans with comfortable stretch fabric."
         },
@@ -71,14 +66,14 @@ function getFallbackProducts() {
             id: 3,
             title: "Checkered Shirt",
             price: 180,
-            oldPrice: null,
+            old_price: null,
             category: "Shirts",
             image: "assets/images/chekeredshirt.png",
             rating: 4.5,
             colors: ["red", "blue"],
-            sizes: ["Small", "Medium", "Large"],
+            sizes: ["s", "m", "l"],
             style: "Casual",
-            inStock: true,
+            in_stock: true,
             discount: null,
             description: "Stylish checkered shirt perfect for casual occasions."
         },
@@ -86,29 +81,20 @@ function getFallbackProducts() {
             id: 4,
             title: "Sleeve Striped T-shirt",
             price: 130,
-            oldPrice: 160,
+            old_price: 160,
             category: "T-shirts",
             image: "assets/images/stripedtshirt.png",
             rating: 4.5,
             colors: ["orange", "black"],
-            sizes: ["Medium", "Large"],
+            sizes: ["m", "l"],
             style: "Casual",
-            inStock: true,
+            in_stock: true,
             discount: 30,
             description: "Striped t-shirt with comfortable sleeve design."
         }
     ];
 }
 
-function getProductDetails(product) {
-    if (!window.languageManager || !window.languageManager.isInitialized) {
-        return product.details || "";
-    }
-
-    const translated = window.languageManager.getProductTranslation(product.id, 'details');
-
-    return translated || product.details || "";
-}
 
 // ---------------------------
 // GET PRODUCT ID FROM URL
@@ -151,27 +137,39 @@ function showError(message) {
 // ФУНКЦІЇ ПЕРЕКЛАДУ ПРОДУКТІВ
 // ---------------------------
 function getProductTitle(product) {
-    if (!window.languageManager || !window.languageManager.isInitialized) {
-        console.log('⚠️ LanguageManager not ready, using default title');
-        return product.title;
-    }
-    
-    const translated = window.languageManager.getProductTranslation(product.id, 'title');
-    console.log(`🔍 Product page translation for product ${product.id}:`, { 
-        original: product.title, 
-        translated: translated 
-    });
-    
-    return translated || product.title;
+
+    const currentLang =
+        localStorage.getItem('language') || 'en';
+
+    const translation = product.translations?.find(
+        t => t.language === currentLang
+    );
+
+    return translation?.title || product.title || "No title";
 }
 
 function getProductDescription(product) {
-    if (!window.languageManager || !window.languageManager.isInitialized) {
-        return product.description;
-    }
-    
-    const translated = window.languageManager.getProductTranslation(product.id, 'description');
-    return translated || product.description;
+
+    const currentLang =
+        localStorage.getItem('language') || 'en';
+
+    const translation = product.translations?.find(
+        t => t.language === currentLang
+    );
+
+    return translation?.description || product.description || "";
+}
+
+function getProductDetails(product) {
+
+    const currentLang =
+        localStorage.getItem('language') || 'en';
+
+    const translation = product.translations?.find(
+        t => t.language === currentLang
+    );
+
+    return translation?.details || product.details || "";
 }
 
 function getColorTranslation(color) {
@@ -259,13 +257,6 @@ function renderSizes(sizes = []) {
 function renderProduct(product, container) {
     const translatedTitle = getProductTitle(product);
     const translatedDescription = getProductDescription(product);
-    
-    console.log(`🎨 Rendering product ${product.id}:`, {
-        originalTitle: product.title,
-        translatedTitle: translatedTitle,
-        originalDescription: product.description,
-        translatedDescription: translatedDescription
-    });
 
     const html = `
         <div class="product-card">
@@ -283,7 +274,7 @@ function renderProduct(product, container) {
 
                 <div class="pricing">
                     <div class="current-price">${formatPrice(product.price)}</div>
-                    ${product.oldPrice ? `<div class="old-price">${formatPrice(product.oldPrice)}</div>` : ""}
+                    ${product.old_price ? `<div class="old-price">${formatPrice(product.old_price)}</div>` : ""}
                     ${product.discount ? `<div class="discount">-${product.discount}%</div>` : ""}
                 </div>
 
@@ -310,8 +301,8 @@ function renderProduct(product, container) {
                         <button type="button" class="qty-plus">+</button>
                     </div>
 
-                    <button class="add-to-cart" ${!product.inStock ? 'disabled style="opacity:0.6; cursor:not-allowed;"' : ''}>
-                        ${product.inStock ? 'Add to cart' : 'Out of stock'}
+                    <button class="add-to-cart" ${!product.in_stock ? 'disabled style="opacity:0.6; cursor:not-allowed;"' : ''}>
+                        ${product.in_stock ? 'Add to cart' : 'Out of stock'}
                     </button>
                 </div>
 
@@ -395,12 +386,9 @@ function setupProductInteractions(container, product) {
             return;
         }
 
-        // Додаємо товар до кошика - ВИКОРИСТОВУЄМО ГЛОБАЛЬНИЙ cart
         if (window.cart && typeof window.cart.addItem === 'function') {
             window.cart.addItem(product, selectedSize, selectedColor, qty);
-            // Сповищення більше не показуємо - тільки анімація іконки
         } else {
-            // Fallback якщо кошик не завантажений
             console.log('Cart item:', { product, size: selectedSize, color: selectedColor, quantity: qty });
         }
     });
