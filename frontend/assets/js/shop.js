@@ -423,8 +423,13 @@ function render(){
   const start = (state.page - 1) * state.perPage;
   const pageItems = filtered.slice(start, start + state.perPage);
 
-  resultCount.textContent = total;
-  pageInfo.textContent = `${state.page} / ${totalPages}`;
+  if (resultCount) {
+      resultCount.textContent = total;
+  }
+
+  if (pageInfo) {
+      pageInfo.textContent = `${state.page} / ${totalPages}`;
+  }
 
   productGrid.innerHTML = "";
 
@@ -522,7 +527,7 @@ pageItems.forEach(p => {
 function getProductTitle(product) {
 
     const currentLang =
-        localStorage.getItem('language') || 'en';
+        localStorage.getItem('preferredLanguage') || 'en';
 
     const translation =
         product.translations?.find(
@@ -535,7 +540,7 @@ function getProductTitle(product) {
 function getProductDescription(product) {
 
     const currentLang =
-        localStorage.getItem('language') || 'en';
+        localStorage.getItem('preferredLanguage') || 'en';
 
     const translation =
         product.translations?.find(
@@ -545,6 +550,22 @@ function getProductDescription(product) {
     return (
         translation?.description ||
         product.description
+    );
+}
+
+function getProductDetails(product) {
+
+    const currentLang =
+        localStorage.getItem('preferredLanguage') || 'en';
+
+    const translation =
+        product.translations?.find(
+            t => t.language === currentLang
+        );
+
+    return (
+        translation?.details ||
+        product.details
     );
 }
 
@@ -637,10 +658,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Тільки потім вантажимо продукти
     loadProducts();
 
-    // Слухаємо зміни мови
-    window.addEventListener('languageChanged', function(e) {
-        updateShopTranslations();
-    });
+    
 
 });
 
