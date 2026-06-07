@@ -5,3 +5,10 @@ from app.models.product import (
     ProductTranslation,
     Category
 )
+
+from .translations import (
+    CategoryTranslation,
+    StyleTranslation,
+    ColorTranslation,
+    SizeTranslation
+)

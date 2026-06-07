@@ -15,6 +15,14 @@ class ProductTranslationResponse(ProductTranslationBase):
         from_attributes = True
 
 
+class CategoryResponse(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        from_attributes = True
+
+
 class ProductBase(BaseModel):
     price: float
     old_price: float | None = None
@@ -38,6 +46,7 @@ class ProductUpdate(ProductBase):
 
 class ProductResponse(ProductBase):
     id: int
+    category: CategoryResponse
     translations: list[ProductTranslationResponse]
 
     class Config:

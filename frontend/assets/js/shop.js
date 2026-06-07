@@ -103,7 +103,7 @@ function updateFilterLists() {
 
     ALL_CATS = Array.from(
         new Set(
-            SHOP_PRODUCTS.map(p => p.category).filter(Boolean)
+            SHOP_PRODUCTS.map(p => p.category?.name).filter(Boolean)
         )
     );
 
@@ -353,7 +353,7 @@ function clearFilters(){
 function applyFilters(items){
   return items.filter(p => {
 
-    if(state.category && p.category !== state.category)
+    if(state.category && p.category?.name !== state.category)
       return false;
 
     if(p.price < (state.priceMin || 0))

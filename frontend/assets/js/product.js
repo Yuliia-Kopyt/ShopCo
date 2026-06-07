@@ -17,6 +17,12 @@ async function loadProductsData() {
         }
 
         PRODUCTS_DATA = await productsResponse.json();
+        console.log("PRODUCTS_DATA", PRODUCTS_DATA);
+        console.log("FIRST PRODUCT", PRODUCTS_DATA[0]);
+        console.log(
+            "FIRST PRODUCT TRANSLATIONS",
+            PRODUCTS_DATA[0]?.translations
+        );
 
         initializeProductPage();
 
@@ -139,7 +145,7 @@ function showError(message) {
 function getProductTitle(product) {
 
     const currentLang =
-        localStorage.getItem('language') || 'en';
+        localStorage.getItem('preferredLanguage') || 'en';
 
     const translation = product.translations?.find(
         t => t.language === currentLang
@@ -148,10 +154,27 @@ function getProductTitle(product) {
     return translation?.title || product.title || "No title";
 }
 
+function getProductTitle(product) {
+
+    const currentLang =
+        localStorage.getItem('preferredLanguage') || 'en';
+
+    console.log("LANG =", currentLang);
+
+    const translation =
+        product.translations?.find(
+            t => t.language === currentLang
+        );
+
+    console.log("TRANSLATION =", translation);
+
+    return translation?.title || product.title;
+}
+
 function getProductDescription(product) {
 
     const currentLang =
-        localStorage.getItem('language') || 'en';
+        localStorage.getItem('preferredLanguage') || 'en';
 
     const translation = product.translations?.find(
         t => t.language === currentLang
@@ -163,7 +186,7 @@ function getProductDescription(product) {
 function getProductDetails(product) {
 
     const currentLang =
-        localStorage.getItem('language') || 'en';
+        localStorage.getItem('preferredLanguage') || 'en';
 
     const translation = product.translations?.find(
         t => t.language === currentLang

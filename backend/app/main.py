@@ -9,6 +9,8 @@ from app.api.products import router as products_router
 import app.models
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.translations import router as translations_router
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -18,6 +20,7 @@ app = FastAPI(
 
 app.include_router(auth_router)
 app.include_router(products_router)
+app.include_router(translations_router)
 
 app.add_middleware(
     CORSMiddleware,

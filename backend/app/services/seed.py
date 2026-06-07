@@ -8,6 +8,12 @@ from app.models.product import (
     Category
 )
 
+from app.models.translations import (
+    CategoryTranslation,
+    StyleTranslation,
+    ColorTranslation,
+    SizeTranslation
+)
 
 def load_json():
     with open("/app/frontend/assets/data/product.json", encoding="utf-8") as f:
@@ -38,6 +44,49 @@ def get_category_id(db: Session, category_name: str):
 
     return new_category.id
 
+def seed_translations(db, translations_data):
+
+    for lang in ["en", "uk"]:
+
+        # categories
+        for key, value in translations_data[lang]["categories"].items():
+            db.add(
+                CategoryTranslation(
+                    category_key=key,
+                    language=lang,
+                    value=value
+                )
+            )
+
+        # styles
+        for key, value in translations_data[lang]["styles"].items():
+            db.add(
+                StyleTranslation(
+                    style_key=key,
+                    language=lang,
+                    value=value
+                )
+            )
+
+        # colors
+        for key, value in translations_data[lang]["colors"].items():
+            db.add(
+                ColorTranslation(
+                    color_key=key,
+                    language=lang,
+                    value=value
+                )
+            )
+
+        # sizes
+        for key, value in translations_data[lang]["sizes"].items():
+            db.add(
+                SizeTranslation(
+                    size_key=key,
+                    language=lang,
+                    value=value
+                )
+            )
 
 def run_seed():
     db = SessionLocal()
@@ -90,6 +139,10 @@ def run_seed():
             details=uk["details"]
         ))
 
+    seed_translations(
+    db,
+    translations_data
+    )
     db.commit()
     db.close()
 
