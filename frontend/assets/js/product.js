@@ -495,7 +495,18 @@ function updateProductTranslations() {
         const originalSize = pill.dataset.size;
         pill.textContent = getSizeTranslation(originalSize);
     });
-    
+        // Оновлюємо details
+    const detailsContainer =
+        document.getElementById('product-details-container');
+
+    if (detailsContainer) {
+
+        const translatedDetails =
+            getProductDetails(product);
+
+        detailsContainer.innerHTML =
+            marked.parse(translatedDetails);
+    }
     // Fix hyphens again after translation
     setTimeout(fixHyphensInTitle, 200);
 }

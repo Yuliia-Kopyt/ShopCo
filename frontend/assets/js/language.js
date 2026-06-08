@@ -5,26 +5,26 @@
 class LanguageManager {
     constructor() {
         this.currentLang = localStorage.getItem('preferredLanguage') || 'en';
-        this.translations = {};
-        this.isInitialized = false;
 
-        console.log('🌍 LanguageManager init, lang:', this.currentLang);
+        this.translations = {};
+        this.shopTranslations = {};
+
+        this.isInitialized = false;
 
         this.init();
     }
 
     async init() {
-        console.log('🔄 Language init...');
 
         await this.loadAllTranslations();
+        await this.loadShopTranslations();
 
         this.isInitialized = true;
 
         this.applyLanguage(this.currentLang);
+
         this.setupLanguageSwitcher();
         this.setupDynamicContentHandlers();
-
-        console.log('✅ LanguageManager ready');
     }
 
     // ---------------------------------------
@@ -56,6 +56,39 @@ class LanguageManager {
                 }
             };
         }
+    }
+
+    async loadShopTranslations() {
+
+    try {
+
+        const [en, uk] = await Promise.all([
+            fetch('http://localhost:8000/translations/en')
+                .then(r => r.json()),
+
+            fetch('http://localhost:8000/translations/uk')
+                .then(r => r.json())
+        ]);
+
+        this.shopTranslations = {
+            en,
+            uk
+        };
+
+        console.log('✅ shop translations loaded');
+
+    } catch (error) {
+
+        console.error(
+            '❌ failed loading shop translations',
+            error
+        );
+
+        this.shopTranslations = {
+            en: {},
+            uk: {}
+        };
+      }
     }
 
     // ---------------------------------------
@@ -239,6 +272,54 @@ class LanguageManager {
         return this.translations?.[this.currentLang]?.styles?.[style]
             || style;
     }
+
+        // -----------------------------
+    // SHOP TRANSLATIONS HELPERS
+    // -----------------------------
+
+        getCategoryTranslation(category) {
+
+        const item =
+            this.shopTranslations?.[this.currentLang]
+                ?.categories
+                ?.find(c => c.key === category);
+
+        return item?.value || category;
+    }
+
+
+    getStyleTranslation(style) {
+
+        const item =
+            this.shopTranslations?.[this.currentLang]
+                ?.styles
+                ?.find(s => s.key === style);
+
+        return item?.value || style;
+    }
+
+
+    getColorTranslation(color) {
+
+        const item =
+            this.shopTranslations?.[this.currentLang]
+                ?.colors
+                ?.find(c => c.key === color);
+
+        return item?.value || color;
+    }
+
+
+    getSizeTranslation(size) {
+
+        const item =
+            this.shopTranslations?.[this.currentLang]
+                ?.sizes
+                ?.find(s => s.key === size);
+
+        return item?.value || size;
+    }
+
 }
 
 // =======================================

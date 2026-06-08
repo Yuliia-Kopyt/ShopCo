@@ -217,6 +217,7 @@ function init(){
   ALL_SIZES.forEach(s => {
     const pill = document.createElement("div");
     pill.className = "size-pill";
+    pill.dataset.size = s;
     pill.textContent = getSizeTranslation(s);
 
     pill.addEventListener("click", () => {
@@ -234,6 +235,7 @@ function init(){
   ALL_STYLES.forEach(st => {
     const it = document.createElement("div");
     it.className = "style-item";
+    it.dataset.style = st;
     it.textContent = getStyleTranslation(st);
 
     it.addEventListener("click", () => {
@@ -605,18 +607,18 @@ function updateShopTranslations() {
     sw.title = getColorTranslation(originalColor);
   });
 
-  document.querySelectorAll(".size-pill").forEach(pill => {
-    const originalSize = pill.textContent;
-    // Знаходимо оригінальний розмір по перекладеному значенню
-    const sizeKey = ALL_SIZES.find(size => getSizeTranslation(size) === originalSize) || originalSize;
-    pill.textContent = getSizeTranslation(sizeKey);
+    document.querySelectorAll(".size-pill").forEach(pill => {
+      pill.textContent =
+          getSizeTranslation(
+              pill.dataset.size
+          );
   });
 
   document.querySelectorAll(".style-item").forEach(item => {
-    const originalStyle = item.textContent;
-    // Знаходимо оригінальний стиль по перекладеному значенню
-    const styleKey = ALL_STYLES.find(style => getStyleTranslation(style) === originalStyle) || originalStyle;
-    item.textContent = getStyleTranslation(styleKey);
+      item.textContent =
+          getStyleTranslation(
+              item.dataset.style
+          );
   });
 
   // Оновлюємо продукти
@@ -657,11 +659,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Тільки потім вантажимо продукти
     loadProducts();
-
-    
-
 });
-
+window.addEventListener('languageChanged', function() {
+    console.log('🌍 Language changed on shop page');
+    updateShopTranslations();
+});
 // Додаємо функцію для глобального доступу
 window.updateProductsContent = function(lang) {
     updateShopTranslations();
