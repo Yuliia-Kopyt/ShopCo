@@ -1,45 +1,56 @@
-// Complete Language Manager with Product Translations
+// =======================================
+// Language Manager (STABLE VERSION)
+// =======================================
+
 class LanguageManager {
     constructor() {
         this.currentLang = localStorage.getItem('preferredLanguage') || 'en';
         this.translations = {};
-        this.productTranslations = null; // Змінимо на null для кращого відстеження
         this.isInitialized = false;
-        console.log('🌍 LanguageManager initialized, current lang:', this.currentLang);
+
+        console.log('🌍 LanguageManager init, lang:', this.currentLang);
+
         this.init();
     }
 
     async init() {
-        console.log('🔄 Starting initialization...');
+        console.log('🔄 Language init...');
+
         await this.loadAllTranslations();
-        await this.loadProductTranslations();
+
         this.isInitialized = true;
+
         this.applyLanguage(this.currentLang);
         this.setupLanguageSwitcher();
         this.setupDynamicContentHandlers();
+
+        console.log('✅ LanguageManager ready');
     }
 
+    // ---------------------------------------
+    // LOAD TRANSLATIONS
+    // ---------------------------------------
     async loadAllTranslations() {
         try {
-            console.log('📥 Loading translations from: ./assets/data/translation.json');
             const response = await fetch('./assets/data/translation.json');
-            
+
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP ${response.status}`);
             }
-            
+
             this.translations = await response.json();
-            console.log('✅ Main translations loaded successfully');
-            
+
+            console.log('✅ translations loaded');
         } catch (error) {
-            console.error('❌ ERROR loading translations:', error);
-            // Create minimal fallback translations
+            console.error('❌ translations failed:', error);
+
+            // SAFE FALLBACK
             this.translations = {
-                en: { 
+                en: {
                     header: { shop: "Shop" },
-                    home: { hero_title: "Find clothes that matches your style" }
+                    home: { hero_title: "Find clothes that match your style" }
                 },
-                uk: { 
+                uk: {
                     header: { shop: "Магазин" },
                     home: { hero_title: "Знайдіть одяг який відповідає вашому стилю" }
                 }
@@ -47,370 +58,201 @@ class LanguageManager {
         }
     }
 
-    async loadProductTranslations() {
-        try {
-            console.log('📥 Loading product translations from: ./assets/data/producttranslation.json');
-            const response = await fetch('./assets/data/producttranslation.json');
-            
-            if (response.ok) {
-                this.productTranslations = await response.json();
-                console.log('✅ Product translations loaded successfully:', this.productTranslations);
-            } else {
-                console.warn('⚠️ Product translations file not found, using fallback');
-                this.productTranslations = { en: {}, uk: {} };
-            }
-        } catch (error) {
-            console.error('❌ ERROR loading product translations:', error);
-            this.productTranslations = { en: {}, uk: {} };
-        }
-    }
-
+    // ---------------------------------------
+    // SWITCH LANGUAGE
+    // ---------------------------------------
     async switchLanguage(lang) {
-        console.log('🔄 Switching to language:', lang);
-        
-        if (this.currentLang === lang) {
-            console.log('✅ Same language, skipping');
-            return;
-        }
-        
+        if (this.currentLang === lang) return;
+
         this.currentLang = lang;
         localStorage.setItem('preferredLanguage', lang);
-        
+
         this.applyLanguage(lang);
         this.updateLanguageSwitcher(lang);
-        
-        // Trigger product translation updates
-        this.updateProductTranslations();
-        
-        // Dispatch custom event for other scripts
-        window.dispatchEvent(new CustomEvent('languageChanged', { 
-            detail: { language: lang } 
+
+        window.dispatchEvent(new CustomEvent('languageChanged', {
+            detail: { language: lang }
         }));
+
+        console.log('🔄 language switched:', lang);
     }
 
+    // ---------------------------------------
+    // APPLY TRANSLATIONS
+    // ---------------------------------------
     applyLanguage(lang) {
-        console.log('🎯 Applying language:', lang);
-        
-        if (!this.translations[lang]) {
-            console.warn('⚠️ No translations for language:', lang);
-            return;
-        }
+        if (!this.translations[lang]) return;
 
         const elements = document.querySelectorAll('[data-i18n]');
-        console.log(`📝 Found ${elements.length} elements to translate`);
 
-        let updatedCount = 0;
-        let missingCount = 0;
+        let updated = 0;
 
-        elements.forEach(element => {
-            const key = element.getAttribute('data-i18n');
-            const translation = this.getTranslation(key, lang);
-            
-            if (translation) {
-                if (element.tagName === 'INPUT' && (element.type === 'text' || element.type === 'email')) {
-                    element.placeholder = translation;
-                } else if (element.tagName === 'TITLE') {
-                    element.textContent = translation;
-                } else {
-                    element.textContent = translation;
-                }
-                updatedCount++;
+        elements.forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            const value = this.getTranslation(key, lang);
+
+            if (!value) return;
+
+            if (el.tagName === 'INPUT') {
+                el.placeholder = value;
             } else {
-                console.warn(`❌ No translation for: ${key}`);
-                missingCount++;
+                el.textContent = value;
             }
+
+            updated++;
         });
 
-        // Update HTML lang attribute
         document.documentElement.lang = lang;
-        
-        console.log(`✅ Language ${lang} applied: ${updatedCount} updated, ${missingCount} missing`);
+
+        console.log(`🎯 applied ${lang}: ${updated} elements`);
     }
 
+    // ---------------------------------------
+    // GET TRANSLATION
+    // ---------------------------------------
     getTranslation(key, lang = this.currentLang) {
-        if (!this.translations[lang]) {
-            return null;
-        }
+        const data = this.translations[lang];
+        if (!data) return null;
 
-        try {
-            const keys = key.split('.');
-            let value = this.translations[lang];
-            
-            for (const k of keys) {
-                if (value && typeof value === 'object' && k in value) {
-                    value = value[k];
-                } else {
-                    return null;
-                }
-            }
-            return value;
-        } catch (error) {
-            console.warn(`Error getting translation for ${key}:`, error);
-            return null;
-        }
+        return key.split('.').reduce((obj, k) => obj?.[k], data) || null;
     }
 
-    // Product translation methods - ВИПРАВЛЕНІ
-    getProductTranslation(productId, field, lang = this.currentLang) {
-        // Перевіряємо, чи завантажені переклади
-        if (!this.productTranslations || !this.productTranslations[lang]) {
-            console.warn(`❌ Product translations not loaded for language: ${lang}`, {
-                hasProductTranslations: !!this.productTranslations,
-                currentLang: lang,
-                availableLangs: this.productTranslations ? Object.keys(this.productTranslations) : 'none'
-            });
-            return null;
-        }
-        
-        try {
-            // Конвертуємо productId в рядок для безпеки
-            const idStr = String(productId);
-            const products = this.productTranslations[lang].products;
-            
-            if (!products || !products[idStr]) {
-                console.warn(`❌ No translation found for product ${idStr}, field: ${field}`);
-                return null;
-            }
-            
-            const translation = products[idStr][field];
-            console.log(`✅ Product translation found:`, { 
-                productId: idStr, 
-                field, 
-                translation,
-                availableProducts: Object.keys(products)
-            });
-            
-            return translation || null;
-        } catch (error) {
-            console.warn(`Error getting product translation for ${productId}.${field}:`, error);
-            return null;
-        }
-    }
-
-    getCategoryTranslation(category, lang = this.currentLang) {
-        if (!this.productTranslations || !this.productTranslations[lang]) {
-            console.warn('❌ Product translations not loaded for category');
-            return category;
-        }
-        
-        const translation = this.productTranslations[lang]?.categories?.[category];
-        console.log(`🏷️ Category translation:`, { category, translation });
-        return translation || category;
-    }
-
-    getStyleTranslation(style, lang = this.currentLang) {
-        if (!this.productTranslations || !this.productTranslations[lang]) {
-            console.warn('❌ Product translations not loaded for style');
-            return style;
-        }
-        
-        const translation = this.productTranslations[lang]?.styles?.[style];
-        console.log(`🎨 Style translation:`, { style, translation });
-        return translation || style;
-    }
-
-    getColorTranslation(color, lang = this.currentLang) {
-        if (!this.productTranslations || !this.productTranslations[lang]) {
-            console.warn('❌ Product translations not loaded for color');
-            return color;
-        }
-        
-        const translation = this.productTranslations[lang]?.colors?.[color];
-        console.log(`🎨 Color translation:`, { color, translation });
-        return translation || color;
-    }
-
-    getSizeTranslation(size, lang = this.currentLang) {
-        if (!this.productTranslations || !this.productTranslations[lang]) {
-            console.warn('❌ Product translations not loaded for size');
-            return size;
-        }
-        
-        const translation = this.productTranslations[lang]?.sizes?.[size];
-        console.log(`📏 Size translation:`, { size, translation });
-        return translation || size;
-    }
-
-    updateProductTranslations() {
-        console.log('🔄 Updating product translations across the site...');
-        
-        // This will be called by product.js and shop.js to update product content
-        if (typeof window.updateProductContent === 'function') {
-            console.log('📞 Calling updateProductContent');
-            window.updateProductContent(this.currentLang);
-        }
-        if (typeof window.updateProductsContent === 'function') {
-            console.log('📞 Calling updateProductsContent');
-            window.updateProductsContent(this.currentLang);
-        }
-        
-        // Update cart content if on cart page
-        if (typeof window.cart !== 'undefined' && typeof window.cart.updateCartTranslations === 'function') {
-            console.log('📞 Calling cart.updateCartTranslations');
-            window.cart.updateCartTranslations(this.currentLang);
-        }
-        
-        // Direct DOM updates for product elements
-        this.updateProductElements();
-    }
-
-    updateProductElements() {
-        // Оновлюємо елементи продуктів, які вже є в DOM
-        const productElements = document.querySelectorAll('[data-product-id]');
-        console.log(`🔄 Updating ${productElements.length} product elements`);
-        
-        productElements.forEach(element => {
-            const productId = element.getAttribute('data-product-id');
-            const titleElement = element.querySelector('[data-product-title]');
-            const descriptionElement = element.querySelector('[data-product-description]');
-            
-            if (titleElement) {
-                const translatedTitle = this.getProductTranslation(productId, 'title');
-                if (translatedTitle) {
-                    titleElement.textContent = translatedTitle;
-                }
-            }
-            
-            if (descriptionElement) {
-                const translatedDescription = this.getProductTranslation(productId, 'description');
-                if (translatedDescription) {
-                    descriptionElement.textContent = translatedDescription;
-                }
-            }
-        });
-    }
-
+    // ---------------------------------------
+    // SWITCHER UI
+    // ---------------------------------------
     setupLanguageSwitcher() {
-        console.log('🔧 Setting up language switcher...');
-        
         const buttons = document.querySelectorAll('.lang-btn');
-        console.log(`🔘 Found ${buttons.length} language buttons`);
-        
+
         buttons.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                const lang = btn.getAttribute('data-lang');
-                console.log('👆 Button clicked, language:', lang);
+
+                const lang = btn.dataset.lang;
                 this.switchLanguage(lang);
             });
         });
 
         this.updateLanguageSwitcher(this.currentLang);
-        console.log('✅ Language switcher ready');
     }
 
-    updateLanguageSwitcher(activeLang) {
+    updateLanguageSwitcher(lang) {
         document.querySelectorAll('.lang-btn').forEach(btn => {
-            const btnLang = btn.getAttribute('data-lang');
-            if (btnLang === activeLang) {
-                btn.classList.add('active');
-                btn.style.pointerEvents = 'none';
-            } else {
-                btn.classList.remove('active');
-                btn.style.pointerEvents = 'auto';
+            const isActive = btn.dataset.lang === lang;
+
+            btn.classList.toggle('active', isActive);
+            btn.style.pointerEvents = isActive ? 'none' : 'auto';
+        });
+    }
+
+    // ---------------------------------------
+    // DYNAMIC DOM HANDLER
+    // ---------------------------------------
+    setupDynamicContentHandlers() {
+        const observer = new MutationObserver((mutations) => {
+            for (const m of mutations) {
+                for (const node of m.addedNodes) {
+                    if (node.nodeType !== 1) continue;
+
+                    if (node.matches?.('[data-i18n]')) {
+                        this.translateElement(node);
+                    }
+
+                    node.querySelectorAll?.('[data-i18n]')
+                        .forEach(el => this.translateElement(el));
+                }
             }
         });
-    }
 
-    setupDynamicContentHandlers() {
-        // Handle dynamic content that might be added later
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.type === 'childList') {
-                    mutation.addedNodes.forEach((node) => {
-                        if (node.nodeType === 1) { // Element node
-                            // Check if added node has data-i18n attributes
-                            if (node.hasAttribute && node.hasAttribute('data-i18n')) {
-                                const key = node.getAttribute('data-i18n');
-                                const translation = this.getTranslation(key);
-                                if (translation) {
-                                    node.textContent = translation;
-                                }
-                            }
-                            
-                            // Check children of added node
-                            if (node.querySelectorAll) {
-                                node.querySelectorAll('[data-i18n]').forEach(element => {
-                                    const key = element.getAttribute('data-i18n');
-                                    const translation = this.getTranslation(key);
-                                    if (translation) {
-                                        if (element.tagName === 'INPUT' && (element.type === 'text' || element.type === 'email')) {
-                                            element.placeholder = translation;
-                                        } else {
-                                            element.textContent = translation;
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
-            });
-        });
-
-        // Start observing the document body for changes
         observer.observe(document.body, {
             childList: true,
             subtree: true
         });
     }
 
-    // Helper method to get translation in other scripts
+    translateElement(el) {
+        const key = el.getAttribute('data-i18n');
+        const value = this.getTranslation(key);
+
+        if (!value) return;
+
+        if (el.tagName === 'INPUT') {
+            el.placeholder = value;
+        } else {
+            el.textContent = value;
+        }
+    }
+
+    // ---------------------------------------
+    // PUBLIC API
+    // ---------------------------------------
     t(key) {
         return this.getTranslation(key) || key;
     }
 
-    // Method to refresh translations (useful if JSON files change)
     async refreshTranslations() {
         await this.loadAllTranslations();
-        await this.loadProductTranslations();
         this.applyLanguage(this.currentLang);
-        this.updateProductTranslations();
     }
 
-    // Додатковий метод для перевірки стану
     getStatus() {
         return {
             currentLang: this.currentLang,
             isInitialized: this.isInitialized,
-            hasTranslations: !!this.translations[this.currentLang],
-            hasProductTranslations: !!this.productTranslations,
-            productTranslations: this.productTranslations,
-            translationKeys: this.translations[this.currentLang] ? Object.keys(this.translations[this.currentLang]) : [],
-            productTranslationKeys: this.productTranslations && this.productTranslations[this.currentLang] ? 
-                Object.keys(this.productTranslations[this.currentLang]) : []
+            hasTranslations: !!this.translations?.[this.currentLang]
         };
     }
 
-    // Метод для очікування ініціалізації
     waitForInitialization() {
-        return new Promise((resolve) => {
-            const checkInit = () => {
-                if (this.isInitialized) {
-                    resolve(true);
-                } else {
-                    setTimeout(checkInit, 100);
-                }
+        return new Promise(resolve => {
+            const check = () => {
+                if (this.isInitialized) resolve(true);
+                else setTimeout(check, 100);
             };
-            checkInit();
+            check();
         });
+    }
+
+    // =======================================
+// SHOP COMPATIBILITY METHODS
+// =======================================
+
+    // category translation
+    getCategoryTranslation(category) {
+        return this.translations?.[this.currentLang]?.categories?.[category]
+            || category;
+    }
+
+    // color translation
+    getColorTranslation(color) {
+        return this.translations?.[this.currentLang]?.colors?.[color]
+            || color;
+    }
+
+    // size translation
+    getSizeTranslation(size) {
+        return this.translations?.[this.currentLang]?.sizes?.[size]
+            || size;
+    }
+
+    // style translation
+    getStyleTranslation(style) {
+        return this.translations?.[this.currentLang]?.styles?.[style]
+            || style;
     }
 }
 
-// Initialize language manager when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 DOM loaded, initializing LanguageManager...');
+// =======================================
+// INIT
+// =======================================
+document.addEventListener('DOMContentLoaded', () => {
     window.languageManager = new LanguageManager();
-    
-    // Додаємо глобальну функцію для дебагу
-    window.getLanguageStatus = function() {
-        return window.languageManager ? window.languageManager.getStatus() : 'LanguageManager not initialized';
-    };
+
+    window.getLanguageStatus = () =>
+        window.languageManager?.getStatus() || 'not ready';
 });
 
-// Fallback initialization in case DOM is already loaded
-if (document.readyState === 'interactive' || document.readyState === 'complete') {
-    console.log('📄 DOM already ready, initializing LanguageManager...');
+// fallback init
+if (document.readyState !== 'loading') {
     setTimeout(() => {
         if (!window.languageManager) {
             window.languageManager = new LanguageManager();
@@ -418,7 +260,8 @@ if (document.readyState === 'interactive' || document.readyState === 'complete')
     }, 100);
 }
 
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
+// export (optional)
+if (typeof module !== 'undefined') {
     module.exports = LanguageManager;
 }
+
