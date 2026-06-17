@@ -3,41 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="header.shop">Shop.co</title>
+  <title>My Profile - Shop.co</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
   <link rel="stylesheet" href="assets/styles/style.css">
   <link rel="stylesheet" href="assets/styles/shop.css">
 </head>
-<body>
-
-<div id="megaDealPopup" class="megadeal-popup">
-    <div class="megadeal-container">
-        <div class="megadeal-header" data-i18n="mega_deal.black_friday">BLACK FRIDAY</div>
-        <div class="megadeal-offer" data-i18n="mega_deal.offer">UP TO 70% OFF</div>
-        
-        <div class="megadeal-counter">
-            <div class="megadeal-unit">
-                <span class="megadeal-digit" id="megaDays">00</span>
-                <span class="megadeal-text" data-i18n="mega_deal.days">DAYS</span>
-            </div>
-            <div class="megadeal-unit">
-                <span class="megadeal-digit" id="megaHours">00</span>
-                <span class="megadeal-text" data-i18n="mega_deal.hours">HOURS</span>
-            </div>
-            <div class="megadeal-unit">
-                <span class="megadeal-digit" id="megaMins">00</span>
-                <span class="megadeal-text" data-i18n="mega_deal.minutes">MINS</span>
-            </div>
-            <div class="megadeal-unit">
-                <span class="megadeal-digit" id="megaSecs">00</span>
-                <span class="megadeal-text" data-i18n="mega_deal.seconds">SECS</span>
-            </div>
-        </div>
-        
-        <button class="megadeal-cta" onclick="closeMegaDeal()" data-i18n="mega_deal.shop_now">SHOP NOW</button>
-    </div>
-</div>
-
+<body class="profile-page">
   <!-- Top Banner -->
   <div class="top-banner">
     <div class="banner-content">
@@ -127,145 +98,36 @@
   </div>
 </header>
 
-  <!-- Hero Section -->
-<section class="hero-section">
-  <div class="hero-container">
-    <div class="content-wrap hero-content">
-      <h1 class="uppercase" data-i18n="home.hero_title">
-        Find clothes that matches your style
-      </h1>
-      <p data-i18n="home.hero_description">Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style.</p>
-      <a href="shop.html" class="shop-now-btn" data-i18n="home.shop_now">Shop Now</a>
-
-      <!-- Stats -->
-      <div class="stats-container">
-        <div class="stat-item">
-          <div class="stat-number">200+</div>
-          <div class="stat-label" data-i18n="home.stats.brands">International Brands</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">2,000+</div>
-          <div class="stat-label" data-i18n="home.stats.products">High-Quality Products</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">30,000+</div>
-          <div class="stat-label" data-i18n="home.stats.customers">Happy Customers</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Hero Image -->
-    <div class="hero-image">
-      <img src="assets/images/modelshero.png" alt="Models">
-    </div>
-  </div>
-
-    <!-- Brands Section -->
-    <div class="brands-section" id="brands">
-      <div class="brands-container">
-          <a href="https://www.versace.com" target="_blank" rel="noopener noreferrer">
-              <img src="assets/images/Group.png" alt="Versace">
-          </a>
-          <a href="https://www.zara.com" target="_blank" rel="noopener noreferrer">
-              <img src="assets/images/zara-logo-1 1.png" alt="Zara">
-          </a>
-          <a href="https://www.gucci.com" target="_blank" rel="noopener noreferrer">
-              <img src="assets/images/gucci-logo-1 1.png" alt="Gucci">
-          </a>
-          <a href="https://www.prada.com" target="_blank" rel="noopener noreferrer">
-              <img src="assets/images/prada-logo-1 1.png" alt="Prada">
-          </a>
-          <a href="https://www.calvinklein.us" target="_blank" rel="noopener noreferrer">
-              <img src="assets/images/Group (1).png" alt="Calvin Klein">
-          </a>
-      </div>
-    </div>
-  </section>
+<div class="profile-card">
+  <h1 class="profile-title" data-i18n="profile.my_account">My Account</h1>
+  <p class="profile-subtitle" data-i18n="profile.manage_info">Manage your profile information</p>
   
-<!-- New arrivals div -->
-<section class="new-arrivals" id="new-arrivals">
-  <div class="content">
-    <h2 class="uppercase" data-i18n="home.new_arrivals">New arrivals</h2>
-
-    <div class="shop" id="new-arrivals-container">
-      <!-- Продукти будуть завантажені динамічно -->
-    </div>
-
-    <button class="btn" data-i18n="home.view_all">View All</button>
+  <div class="info-item">
+    <div class="info-label" data-i18n="profile.first_name">First Name / Name</div>
+    <div id="profFirstName" class="info-value">Loading...</div>
   </div>
-</section>
 
-<hr class="divider">
-
-<!-- Top Selling Section -->
-<section class="top-selling" id="on-sale">
-  <div class="content">
-    <h2 class="uppercase" data-i18n="home.top_selling">Top Selling</h2>
-
-    <div class="shop" id="top-selling-container">
-    </div>
-
-    <button class="btn" data-i18n="home.view_all">View All</button>
+  <div class="info-item">
+    <div class="info-label" data-i18n="profile.last_name">Last Name</div>
+    <div id="profLastName" class="info-value">Loading...</div>
   </div>
-</section>
 
-<!-- grid div -->
-<section class="grid-div">
-  <h2 class="uppercase" data-i18n="home.dress_style">Browse by dress style</h2>
-
-  <div class="grid-container">
-    <div class="box-grid">
-      <img src="assets/images/casual.png" alt="Casual style">
-      <h4 data-i18n="home.casual">Casual</h4>
-    </div>
-
-    <div class="box-grid">
-      <img src="assets/images/formal.png" alt="Formal style">
-      <h4 data-i18n="home.formal">Formal</h4>
-    </div>
-
-    <div class="box-grid">
-      <img src="assets/images/party.png" alt="Party style">
-      <h4 data-i18n="home.party">Party</h4>
-    </div>
-
-    <div class="box-grid">
-      <img src="assets/images/gym.png" alt="Gym style">
-      <h4 data-i18n="home.gym">Gym</h4>
-    </div>
+  <div class="info-item">
+    <div class="info-label" data-i18n="profile.email_address">Email Address</div>
+    <div id="profEmail" class="info-value">Loading...</div>
   </div>
-</section>
 
-<section class="feedback-section">
-  <div class="flex-row">
-    <h2 class="our" data-i18n="home.happy_customers">OUR HAPPY CUSTOMERS</h2>
+  <button id="logoutBtn" class="btn-logout" data-i18n="profile.logout">LOG OUT</button>
+  
+  <a href="index.html" class="back-link" data-i18n="profile.back_to_shop">← Back to Shop.co</a>
+</div>
 
-    <div class="arrow">
-      <button class="arrow-left"><i class="fa-solid fa-arrow-left"></i></button>
-      <button class="arrow-right"><i class="fa-solid fa-arrow-right"></i></button>
+<div class="orders-section">
+    <h2 class="orders-title" data-i18n="profile.my_orders">Мої замовлення</h2>
+    <div id="ordersContainer">
+        <p class="muted" data-i18n="profile.loading_orders">Завантаження історії замовлень...</p>
     </div>
-
-    <div class="feedback-container"></div>
-  </div>
-</section>
-
-<!-- SUBSCRIBE SECTION -->
-<section class="subscribe">
-  <div class="h2">
-    <h2 class="uppercase" data-i18n="subscribe.title">Stay upto date about our latest offers</h2>
-  </div>
-  <div class="forms">
-    <div class="form-container">
-      <form>
-        <div class="input-group">
-          <span class="icon"><i class="fa-regular fa-envelope"></i></span>
-          <input type="email" data-i18n="subscribe.email_placeholder" placeholder="Enter your email address" />
-        </div>
-      </form>
-    </div>
-    <button class="btn2" data-i18n="subscribe.button">Subscribe to Newsletter</button>
-  </div>
-</section>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -342,10 +204,8 @@
   </div>
 </footer>
 
-
-<script id="reviews-json" type="application/json" src="assets/data/reviews.json"></script>
+<script src="assets/js/profile.js"></script>
 <script src="assets/js/language.js"></script>
 <script src="assets/js/scripts.js"></script>
-
 </body>
 </html>

@@ -40,8 +40,10 @@ def register(
     hashed = get_password_hash(user.password)
 
     new_user = User(
-        email=user.email,
-        password_hash=hashed
+    first_name=user.first_name,
+    last_name=user.last_name,
+    email=user.email,
+    password_hash=hashed
     )
 
     db.add(new_user)

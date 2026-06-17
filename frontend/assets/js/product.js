@@ -394,9 +394,18 @@ function setupProductInteractions(container, product) {
         qtyValue.textContent = qty;
     });
 
-    // Add to cart - ВИКОРИСТОВУЄМО ГЛОБАЛЬНИЙ ОБ'ЄКТ cart
+    // Add to cart - З ЗАХИСТОМ ВІД ГОСТЕЙ ТА ВИКОРИСТОВУЄМО ГЛОБАЛЬНИЙ ОБ'ЄКТ cart
     const addBtn = container.querySelector(".add-to-cart");
     addBtn.addEventListener("click", () => {
+        // --- НАШ БЛОКПОСТ ДЛЯ НЕАВТОРЫЗОВАНИХ КОРИСТУВАЧІВ ---
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Будь ласка, увійдіть в акаунт або зареєструйтеся, щоб додати цей товар у кошик!");
+            window.location.href = "login.html"; // Перенаправляємо на сторінку входу
+            return; // Зупиняємо виконання, товар НЕ додається в кошик
+        }
+        // ----------------------------------------------------
+
         const selectedColorEl = container.querySelector(".color-swatch.selected");
         const selectedSizeEl = container.querySelector(".size-pill.selected");
 
@@ -411,6 +420,7 @@ function setupProductInteractions(container, product) {
 
         if (window.cart && typeof window.cart.addItem === 'function') {
             window.cart.addItem(product, selectedSize, selectedColor, qty);
+            alert("Товар успішно додано до кошика!");
         } else {
             console.log('Cart item:', { product, size: selectedSize, color: selectedColor, quantity: qty });
         }
@@ -645,3 +655,36 @@ window.updateProductContent = function(lang) {
     console.log('🔄 Global updateProductContent called with lang:', lang);
     updateProductTranslations();
 };
+
+// Перевірка авторизації для фарбування іконки в шапці сторінки продукту
+document.addEventListener("DOMContentLoaded", async () => {
+    const userLink = document.getElementById("userAuthLink");
+    const token = localStorage.getItem("token");
+
+    if (!token) return;
+
+    try {
+        const response = await fetch("http://localhost:8000/auth/me", {
+            method: "GET",
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            const user = await response.json();
+            if (userLink) {
+                userLink.href = "profile.html";
+                const icon = userLink.querySelector('i');
+                if (icon) {
+                    icon.style.color = "#00c853"; // Фарбуємо в зелений колір
+                } else {
+                    userLink.style.color = "#00c853";
+                }
+                userLink.title = `Профіль: ${user.first_name || 'Користувач'}`;
+            }
+        } else {
+            localStorage.removeItem("token");
+        }
+    } catch (error) {
+        console.error("Помилка перевірки авторизації на сторінці продукту:", error);
+    }
+});

@@ -1,0 +1,1 @@
+from .order import Order, OrderItem # <--- ДОДАЙ ЦЕЙ РЯДОК

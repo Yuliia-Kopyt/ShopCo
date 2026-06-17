@@ -378,7 +378,7 @@ function goBack() {
     window.history.back();
 }
 
-function goToCheckout() {
+async function goToCheckout() {
     if (cart.items.length === 0) {
         const message = window.languageManager ? 
             window.languageManager.t('cart_dynamic.empty_cart') + '. Add some items before checkout.' : 
@@ -387,9 +387,58 @@ function goToCheckout() {
         return;
     }
     
-    // For now, just show an alert. You can implement actual checkout later.
-    alert('Proceeding to checkout...');
-    // window.location.href = 'checkout.html';
+    const token = localStorage.getItem("token");
+    if (!token) {
+        alert(window.languageManager ? "Будь ласка, авторизуйтесь для оформлення замовлення!" : "Please log in to place an order!");
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // Розраховуємо фінальну суму
+    const totals = cart.calculateTotals();
+
+    // Формуємо дані для відправки на бекенд
+    const orderData = {
+        total_price: totals.total,
+        // Передаємо список товарів (id, кількість, розмір, колір)
+        items: cart.items.map(item => ({
+            product_id: item.id,
+            quantity: item.quantity,
+            size: item.size,
+            color: item.color,
+            price: item.price
+        }))
+    };
+
+    try {
+        // Відправляємо замовлення на бекенд
+        const response = await fetch("http://localhost:8000/orders/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(orderData)
+        });
+
+        if (response.ok) {
+            const successMessage = window.languageManager ? 
+                "Дякуємо! Замовлення успішно оформлено та збережено в базі." : 
+                "Thank you! Your order has been successfully placed and saved.";
+            
+            alert(successMessage);
+            
+            // Очищаємо кошик і перенаправляємо в профіль, щоб юзер побачив замовлення
+            cart.clearCart(); 
+            window.location.href = 'profile.html'; 
+        } else {
+            const errorData = await response.json().catch(() => ({}));
+            alert(`Помилка оформлення: ${errorData.detail || response.statusText}`);
+        }
+    } catch (error) {
+        console.error("Критична помилка відправки замовлення:", error);
+        alert("Не вдалося зв'язатися з сервером. Перевірте з'єднання.");
+    }
 }
 
 // Ініціалізація кошика
@@ -462,3 +511,39 @@ window.updateCartContent = function(lang) {
         window.cart.updateCartTranslations(lang);
     }
 };
+
+// Безпечна перевірка авторизації для сторінки кошика
+document.addEventListener("DOMContentLoaded", async () => {
+    const userLink = document.getElementById("userAuthLink");
+    const token = localStorage.getItem("token");
+
+    if (!token) return;
+
+    try {
+        const response = await fetch("http://localhost:8000/auth/me", {
+            method: "GET",
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            const user = await response.json();
+            if (userLink) {
+                userLink.href = "profile.html";
+                const icon = userLink.querySelector('i');
+                if (icon) {
+                    icon.style.color = "#00c853";
+                } else {
+                    userLink.style.color = "#00c853";
+                }
+                userLink.title = `Профіль: ${user.first_name || 'Користувач'}`;
+            }
+        } else if (response.status === 401 || response.status === 403) {
+            console.warn("🔒 Сесія застаріла. Видаляємо токен.");
+            localStorage.removeItem("token");
+        } else {
+            console.warn(`⚠️ Тимчасова помилка сервера (${response.status}). Токен збережено.`);
+        }
+    } catch (error) {
+        console.error("Помилка мережі при перевірці авторизації в кошику:", error);
+    }
+});

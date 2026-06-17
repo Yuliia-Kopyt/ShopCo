@@ -1797,3 +1797,282 @@ footer {
         }
     }
 }
+
+/* REGISTER PAGE */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background: #f8f8f8;
+}
+
+.auth-page-content {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+}
+
+.profile-main-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;          
+  padding: 20px 15px;        
+  background-color: #fbfbfb;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 100%;           
+  background: #ffffff;
+  padding: 24px 20px;        
+  margin-top: 30px;
+  margin-bottom: 40px;
+  border-radius: 16px;       
+  border: 1px solid #eeeeee;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  font-family: sans-serif;
+  box-sizing: border-box;    
+}
+
+.profile-title {
+  font-size: 22px;           
+  margin-top: 0;
+  margin-bottom: 4px; 
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.profile-subtitle {
+  color: #666666; 
+  font-size: 14px;
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+.info-item {
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.info-label {
+  font-size: 11px;
+  color: #999999;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 16px;
+  color: #000000;
+  margin-top: 4px;
+  word-break: break-all;     
+}
+
+.btn-logout {
+  background: #000000;
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  width: 100%;
+  border-radius: 62px;       
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.3s;
+}
+
+.btn-logout:hover {
+  background: #333333;
+}
+
+.back-link {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  color: #666666;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+
+
+@media (min-width: 768px) {
+  .profile-main-container {
+    min-height: auto;        /* 🌟 ЗАМІСТЬ 65vh */
+    padding: 40px 20px 0 20px; /* Трохи притиснемо картку, звільнивши місце внизу */
+  }
+
+  .profile-card {
+    max-width: 1800px;
+    padding: 40px;           
+    /* Зменшимо гігантський маргін, щоб він не виштовхував замовлення під футер */
+    margin: 40px auto 20px auto !important; 
+    border-radius: 20px;
+  }
+
+  .profile-title {
+    font-size: 28px;
+  }
+
+  .info-item {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+  }
+
+  .info-value {
+    font-size: 18px;
+  }
+
+  .btn-logout {
+    max-width: 500px;
+    width: 100%;                  /* Додайте це, щоб кнопка могла розтягуватися ДО 500px, якщо екран менший */
+    padding: 16px;
+    font-size: 16px;
+    margin: 30px auto 0 auto;     /* 30px зверху, auto справа, 0 знизу, auto зліва */
+    display: flex;                
+    justify-content: center;      
+    align-items: center; 
+  }
+}
+
+/* Секція замовлень у профілі */
+.orders-section {
+    margin: 0 30px;
+}
+
+.orders-title {
+    font-family: 'Integral CF', sans-serif;
+    margin-bottom: 20px;
+    margin-left: 10px;
+}
+
+.orders-empty-message {
+    color: #777;
+    font-style: italic;
+}
+
+/* Картка замовлення */
+.order-card {
+    background: #F0F0F0;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.order-info .order-number {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.order-info .order-date {
+    font-size: 0.85rem;
+    color: #777;
+    margin-top: 4px;
+}
+
+.order-status {
+    background: #FFC107;
+    color: #000;
+    padding: 6px 15px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* Список товарів всередині замовлення */
+.order-items {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.item-details .item-name {
+    font-weight: 500;
+}
+
+.item-details .item-meta {
+    font-size: 0.8rem;
+    color: #777;
+    margin-left: 10px;
+}
+
+.item-price-info {
+    font-weight: bold;
+}
+
+/* Фінал */
+.order-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.order-total-price {
+    color: #000;
+    margin-left: 10px;
+}
+
+.profile-page footer {
+    margin-top: 0 !important;
+    padding-top: 60px; /* Робимо верхній внутрішній відступ меншим, бо мінусового маргіну вже немає */
+}
+
+/* Нові стилі для товарів у замовленні */
+.item-main-info {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Відступ між картинкою та текстом */
+}
+
+.order-item-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover; /* Щоб картинка не розтягувалася, а красиво вписувалася */
+    border-radius: 8px; /* Округлені куточки для фото товару */
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+}
+
+/* Оновлюємо існуючий .order-item, щоб фотка і ціна стояли гарно по боках */
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}

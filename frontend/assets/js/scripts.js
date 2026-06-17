@@ -384,138 +384,61 @@ function initAnchorLinks() {
     }
 }
 
-// МОДАЛЬНЕ ВІКНО 
-class AuthModal {
-    constructor() {
-        this.modal = document.getElementById('authModal');
-        this.loginForm = document.getElementById('loginForm');
-        this.registerForm = document.getElementById('registerForm');
-        this.closeBtn = document.querySelector('.auth-close-btn');
-        this.switchToRegisterLinks = document.querySelectorAll('.switch-to-register');
-        this.switchToLoginLinks = document.querySelectorAll('.switch-to-login');
-        
-        if (this.modal) this.init();
-    }
+// --- ДІАГНОСТИКА ТА КЕРУВАННЯ АВТОРИЗАЦІЄЮ ---
+document.addEventListener("DOMContentLoaded", async () => {
+    console.log("=== Скрипт перевірки статусу запустився! ===");
     
-    init() {
-        this.setupUserIcons();
-        this.closeBtn?.addEventListener('click', () => this.closeModal());
-        this.modal?.addEventListener('click', (e) => {
-            if (e.target === this.modal) this.closeModal();
+    const userLink = document.getElementById("userAuthLink");
+    console.log("Шукаємо іконку користувача (userAuthLink):", userLink);
+
+    const token = localStorage.getItem("token");
+    console.log("Значення токена в пам'яті браузера:", token);
+
+    if (!token) {
+        console.log("Токена немає. Користувач вважається неавторизованим.");
+        return;
+    }
+
+    try {
+        console.log("Токен є! Відправляємо запит на бекенд http://localhost:8000/auth/me ...");
+        const response = await fetch("http://localhost:8000/auth/me", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         });
 
-        this.switchToRegisterLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.switchToRegister();
-            });
-        });
-        
-        this.switchToLoginLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.switchToLogin();
-            });
-        });
-        
-        this.setupFormHandlers();
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.modal?.style.display === 'block') {
-                this.closeModal();
+        console.log("Статус відповіді від бекенду:", response.status);
+
+        if (response.ok) {
+            const user = await response.json();
+            console.log("Успіх! Дані користувача отримано:", user);
+            
+            if (userLink) {
+                console.log("Міняємо посилання іконки на profile.html та фарбуємо її");
+                userLink.href = "profile.html";
+                
+                // Перевіряємо, чи є іконка всередині посилання, і фарбуємо її
+                const icon = userLink.querySelector('i');
+                if (icon) {
+                    icon.style.color = "#00c853";
+                    console.log("Іконку успішно пофарбовано в зелений колір!");
+                } else {
+                    userLink.style.color = "#00c853";
+                    console.log("Тег іконки не знайдено, пофарбовано саме посилання.");
+                }
+                userLink.title = `Профіль: ${user.first_name || 'Користувач'}`;
+            } else {
+                console.error("КРИТИЧНО: Елемент з id='userAuthLink' не знайдено на сторінці!");
             }
-        });
-    }
-  
-    setupUserIcons() {
-        const userIcons = document.querySelectorAll('a.icon-link .fa-circle-user, a.icon-link .fa-user');
-        userIcons.forEach(icon => {
-            const link = icon.closest('a.icon-link');
-            if (link) {
-                link.href = '#';
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    this.openModal('login');
-                });
-            }
-        });
-        
-        const loginLinks = document.querySelectorAll('a[href="login.html"]');
-        loginLinks.forEach(link => {
-            link.href = '#';
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.openModal('login');
-            });
-        });
-    }
-  
-    openModal(formType = 'login') {
-        if (!this.modal) return;
-        this.modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-        formType === 'login' ? this.switchToLogin() : this.switchToRegister();
-    }
-  
-    closeModal() {
-        if (!this.modal) return;
-        this.modal.style.display = 'none';
-        document.body.style.overflow = '';
-    }
-  
-    switchToLogin() {
-        this.registerForm?.classList.remove('active');
-        this.loginForm?.classList.add('active');
-    }
-  
-    switchToRegister() {
-        this.loginForm?.classList.remove('active');
-        this.registerForm?.classList.add('active');
-    }
-  
-    setupFormHandlers() {
-        const loginForm = this.loginForm?.querySelector('form');
-        const registerForm = this.registerForm?.querySelector('form');
-        
-        loginForm?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.handleLogin();
-        });
-        
-        registerForm?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.handleRegister();
-        });
-    }
-  
-    handleLogin() {
-        const email = document.getElementById('loginEmail')?.value;
-        const password = document.getElementById('loginPassword')?.value;
-        console.log('Login attempt:', { email, password });
-        this.showMessage('Successfully signed in!', 'success');
-        this.closeModal();
-    }
-  
-    handleRegister() {
-        const name = document.getElementById('registerName')?.value;
-        const email = document.getElementById('registerEmail')?.value;
-        const password = document.getElementById('registerPassword')?.value;
-        const confirmPassword = document.getElementById('registerConfirmPassword')?.value;
-        
-        if (password !== confirmPassword) {
-            this.showMessage('Passwords do not match!', 'error');
-            return;
+        } else {
+            console.log("Бекенд відхилив токен (можливо, він застарів). Очищаємо пам'ять.");
+            localStorage.removeItem("token");
         }
-        
-        console.log('Registration attempt:', { name, email, password });
-        this.showMessage('Account created successfully!', 'success');
-        this.switchToLogin();
+    } catch (error) {
+        console.error("Помилка зв'язку з бекендом під час fetch:", error);
     }
-  
-    showMessage(message, type = 'info') {
-        alert(message);
-    }
-}
+});
 
 // ОНОВЛЕННЯ ПЕРЕКЛАДІВ НА ГОЛОВНІЙ СТОРІНЦІ 
 function updateHomePageContent() {
@@ -542,7 +465,6 @@ function updateHomePageContent() {
 document.addEventListener('DOMContentLoaded', async function() {
     // Ініціалізація всіх модулів
     window.productLoader = new ProductLoader();
-    new AuthModal();
     updateCartCount();
     initAnchorLinks();
     initFeedbackSlider();
@@ -605,12 +527,28 @@ window.animateCartIcon = animateCartIcon;
 window.showNotification = showNotification;
 window.updateHomePageContent = updateHomePageContent;
 
-// Mega Deal Countdown
+// =========================================================================
+// MEGA DEAL COUNTDOWN & POPUP LOGIC (WITH SESSION PROTECTION)
+// =========================================================================
 document.addEventListener('DOMContentLoaded', function() {
     const popup = document.getElementById('megaDealPopup');
+    
     if (popup) {
-        popup.style.display = 'flex';
-        startMegaCountdown();
+        // Перевіряємо, чи це внутрішній перехід або чи користувач уже закривав поп-ап
+        const isInternalNavigation = sessionStorage.getItem('navigationSource') === 'internal';
+        const hasSeenPopup = sessionStorage.getItem('hasSeenMegaDeal') === 'true';
+
+        if (isInternalNavigation || hasSeenPopup) {
+            // Якщо так — ховаємо вікно
+            popup.style.display = 'none';
+        } else {
+            // Якщо ні (перший захід) — показуємо
+            popup.style.display = 'flex';
+            startMegaCountdown();
+        }
+        
+        // Очищаємо прапорець внутрішньої навігації для наступних прямих заходів
+        sessionStorage.removeItem('navigationSource');
     }
 });
 
@@ -629,10 +567,15 @@ function startMegaCountdown() {
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
         
-        document.getElementById('megaDays').textContent = days.toString().padStart(2, '0');
-        document.getElementById('megaHours').textContent = hours.toString().padStart(2, '0');
-        document.getElementById('megaMins').textContent = minutes.toString().padStart(2, '0');
-        document.getElementById('megaSecs').textContent = seconds.toString().padStart(2, '0');
+        const dEl = document.getElementById('megaDays');
+        const hEl = document.getElementById('megaHours');
+        const mEl = document.getElementById('megaMins');
+        const sEl = document.getElementById('megaSecs');
+
+        if (dEl) dEl.textContent = days.toString().padStart(2, '0');
+        if (hEl) hEl.textContent = hours.toString().padStart(2, '0');
+        if (mEl) mEl.textContent = minutes.toString().padStart(2, '0');
+        if (sEl) sEl.textContent = seconds.toString().padStart(2, '0');
     }
     
     updateMegaTimer();
@@ -643,6 +586,8 @@ function closeMegaDeal() {
     const popup = document.getElementById('megaDealPopup');
     if (popup) {
         popup.style.display = 'none';
+        // Запам'ятовуємо, що користувач уже побачив і закрив вікно
+        sessionStorage.setItem('hasSeenMegaDeal', 'true');
     }
 }
 

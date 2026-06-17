@@ -668,3 +668,41 @@ window.addEventListener('languageChanged', function() {
 window.updateProductsContent = function(lang) {
     updateShopTranslations();
 };
+
+// Надійна перевірка авторизації для сторінки магазину
+document.addEventListener("DOMContentLoaded", async () => {
+    const userLink = document.getElementById("userAuthLink");
+    const token = localStorage.getItem("token");
+
+    if (!token) return;
+
+    try {
+        const response = await fetch("http://localhost:8000/auth/me", {
+            method: "GET",
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            const user = await response.json();
+            if (userLink) {
+                userLink.href = "profile.html";
+                const icon = userLink.querySelector('i');
+                if (icon) {
+                    icon.style.color = "#00c853";
+                } else {
+                    userLink.style.color = "#00c853";
+                }
+                userLink.title = `Профіль: ${user.first_name || 'Користувач'}`;
+            }
+        } else if (response.status === 401 || response.status === 403) {
+            // Видаляємо токен ТІЛЬКИ якщо сервер підтвердив, що він недійсний
+            console.warn("🔒 Токен застарів або невалідний. Скидаємо авторизацію.");
+            localStorage.removeItem("token");
+        } else {
+            console.warn(`⚠️ Тимчасова помилка сервера (${response.status}). Токен збережено.`);
+        }
+    } catch (error) {
+        // Якщо впала мережа (back-end тимчасово ліг) — токен НЕ видаляємо!
+        console.error("Помилка зв'язку з сервером під час перевірки авторизації:", error);
+    }
+});

@@ -2,7 +2,7 @@
   "en": {
     "header": {
       "shop": "Shop",
-      "on_sale": "On Sale", 
+      "on_sale": "On Sale",
       "new_arrivals": "New Arrivals",
       "brands": "Brands",
       "search_placeholder": "Search for products...",
@@ -15,7 +15,7 @@
       "shop_now": "Shop Now",
       "stats": {
         "brands": "International Brands",
-        "products": "High-Quality Products", 
+        "products": "High-Quality Products",
         "customers": "Happy Customers"
       },
       "new_arrivals": "New Arrivals",
@@ -24,7 +24,7 @@
       "dress_style": "Browse by dress style",
       "casual": "Casual",
       "formal": "Formal",
-      "party": "Party", 
+      "party": "Party",
       "gym": "Gym",
       "happy_customers": "OUR HAPPY CUSTOMERS"
     },
@@ -36,7 +36,7 @@
       "black_friday": "BLACK FRIDAY",
       "offer": "UP TO 70% OFF",
       "days": "DAYS",
-      "hours": "HOURS", 
+      "hours": "HOURS",
       "minutes": "MINS",
       "seconds": "SECS",
       "shop_now": "SHOP NOW"
@@ -70,6 +70,64 @@
       "youtube_playlist": "Youtube Playlist",
       "copyright": "Shop.co © 2000-2023, All Rights Reserved"
     },
+    "shop": {
+      "title": "Casual — Shopco",
+      "breadcrumb_home": "Home",
+      "filters_button": "Filters",
+      "showing_products": "Showing Products",
+      "sort_by": "Sort by:",
+      "sort_popular": "Most Popular",
+      "sort_price_low": "Price: Low → High",
+      "sort_price_high": "Price: High → Low",
+      "sort_rating": "Rating",
+      "sort_name": "Name A → Z",
+      "filters": "Filters",
+      "categories": "Categories",
+      "price": "Price",
+      "colors": "Colors",
+      "size": "Size",
+      "only_in_stock": "Only in stock",
+      "apply_filters": "Apply Filter",
+      "clear_filters": "Clear"
+    },
+    "product": {
+      "title": "Product",
+      "back_to_shop": "← Back to shop",
+      "tab_details": "Product Details",
+      "tab_reviews": "Rating & Reviews",
+      "tab_faqs": "FAQs",
+      "details_content": "Product details content will be here...",
+      "all_reviews": "All Reviews",
+      "filter_latest": "Latest",
+      "filter_highest": "Highest Rating",
+      "filter_lowest": "Lowest Rating",
+      "load_more_reviews": "Load More Reviews",
+      "faqs_title": "Frequently Asked Questions",
+      "faqs_content": "FAQs content will be here..."
+    },
+    "cart": {
+      "title": "Your Cart",
+      "breadcrumb_home": "Home",
+      "breadcrumb_cart": "Cart",
+      "page_title": "Your Cart",
+      "order_summary": "Order Summary",
+      "subtotal": "Subtotal",
+      "discount": "Discount (-20%)",
+      "delivery_fee": "Delivery Fee",
+      "total": "Total",
+      "promo_placeholder": "Add promo code",
+      "apply_promo": "Apply",
+      "go_to_checkout": "Go to Checkout →"
+    },
+    "cart_dynamic": {
+      "empty_cart": "Your cart is empty",
+      "add_items": "Add some items to get started",
+      "continue_shopping": "Continue Shopping",
+      "size": "Size",
+      "color": "Color",
+      "remove_item": "Remove",
+      "quantity": "Quantity"
+    },
     "auth": {
       "welcome_back": "Welcome Back",
       "sign_in_subtitle": "Sign in to your account",
@@ -96,69 +154,32 @@
       "have_account": "Already have an account?",
       "sign_in_link": "Sign In"
     },
-    "shop": {
-        "title": "Casual — Shopco",
-        "breadcrumb_home": "Home",
-        "filters_button": "Filters",
-        "showing_products": "Showing Products",
-        "sort_by": "Sort by:",
-        "sort_popular": "Most Popular",
-        "sort_price_low": "Price: Low → High", 
-        "sort_price_high": "Price: High → Low",
-        "sort_rating": "Rating",
-        "sort_name": "Name A → Z",
-        "filters": "Filters",
-        "categories": "Categories",
-        "price": "Price",
-        "colors": "Colors",
-        "size": "Size",
-        "only_in_stock": "Only in stock",
-        "apply_filters": "Apply Filter",
-        "clear_filters": "Clear"
-        },
-        "product": {
-        "title": "Product",
-        "back_to_shop": "← Back to shop",
-        "tab_details": "Product Details",
-        "tab_reviews": "Rating & Reviews",
-        "tab_faqs": "FAQs",
-        "details_content": "Product details content will be here...",
-        "all_reviews": "All Reviews",
-        "filter_latest": "Latest",
-        "filter_highest": "Highest Rating",
-        "filter_lowest": "Lowest Rating",
-        "load_more_reviews": "Load More Reviews",
-        "faqs_title": "Frequently Asked Questions",
-        "faqs_content": "FAQs content will be here..."
-        },
-        "cart": {
-        "title": "Your Cart",
-        "breadcrumb_home": "Home",
-        "breadcrumb_cart": "Cart",
-        "page_title": "Your Cart",
-        "order_summary": "Order Summary",
-        "subtotal": "Subtotal",
-        "discount": "Discount (-20%)",
-        "delivery_fee": "Delivery Fee",
-        "total": "Total",
-        "promo_placeholder": "Add promo code",
-        "apply_promo": "Apply",
-        "go_to_checkout": "Go to Checkout →"
-        },
-        "cart_dynamic": {
-        "empty_cart": "Your cart is empty",
-        "add_items": "Add some items to get started",
-        "continue_shopping": "Continue Shopping",
+    "profile": {
+      "my_account": "My Account",
+      "manage_info": "Manage your profile information",
+      "first_name": "First Name / Name",
+      "last_name": "Last Name",
+      "email_address": "Email Address",
+      "logout": "LOG OUT",
+      "back_to_shop": "← Back to Shop.co",
+      "my_orders": "My Orders",
+      "loading_orders": "Loading order history...",
+      "orders_v2": {
+        "order": "Order",
+        "total": "Total amount",
+        "pcs": "pcs.",
         "size": "Size",
         "color": "Color",
-        "remove_item": "Remove",
-        "quantity": "Quantity"
-        }
+        "processing": "Processing",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      }
+    } 
   },
   "uk": {
     "header": {
       "shop": "Магазин",
-      "on_sale": "Розпродаж", 
+      "on_sale": "Розпродаж",
       "new_arrivals": "Новинки",
       "brands": "Бренди",
       "search_placeholder": "Пошук товарів...",
@@ -171,7 +192,7 @@
       "shop_now": "Купити зараз",
       "stats": {
         "brands": "Міжнародних брендів",
-        "products": "Високоякісних товарів", 
+        "products": "Високоякісних товарів",
         "customers": "Задоволених клієнтів"
       },
       "new_arrivals": "Новинки",
@@ -180,7 +201,7 @@
       "dress_style": "Перегляд за стилем одягу",
       "casual": "Повсякденний",
       "formal": "Діловий",
-      "party": "Вечірній", 
+      "party": "Вечірній",
       "gym": "Спортивний",
       "happy_customers": "НАШІ ЗАДОВОЛЕНІ КЛІЄНТИ"
     },
@@ -192,14 +213,14 @@
       "black_friday": "ЧОРНА П'ЯТНИЦЯ",
       "offer": "ДО 70% ЗНИЖКИ",
       "days": "ДНІВ",
-      "hours": "ГОДИН", 
+      "hours": "ГОДИН",
       "minutes": "ХВИЛИН",
       "seconds": "СЕКУНД",
       "shop_now": "КУПИТИ ЗАРАЗ"
     },
     "subscribe": {
       "title": "Будьте в курсі наших останніх пропозицій",
-      "email_placeholder": "Введіть вашу електронну адресу",
+      "email_placeholder": "Введіть вашу електронную адресу",
       "button": "Підписатись на розсилку"
     },
     "footer": {
@@ -226,8 +247,66 @@
       "youtube_playlist": "Youtube плейлист",
       "copyright": "Shop.co © 2000-2023, Всі права захищені"
     },
+    "shop": {
+      "title": "Повсякденний — Shopco",
+      "breadcrumb_home": "Головна",
+      "filters_button": "Фільтри",
+      "showing_products": "Показано товарів",
+      "sort_by": "Сортувати за:",
+      "sort_popular": "Найпопулярніші",
+      "sort_price_low": "Ціна: від низької",
+      "sort_price_high": "Ціна: від високої",
+      "sort_rating": "Рейтинг",
+      "sort_name": "Назва А → Я",
+      "filters": "Фільтри",
+      "categories": "Категорії",
+      "price": "Ціна",
+      "colors": "Кольори",
+      "size": "Розмір",
+      "only_in_stock": "Тільки в наявності",
+      "apply_filters": "Застосувати фільтр",
+      "clear_filters": "Очистити"
+    },
+    "product": {
+      "title": "Товар",
+      "back_to_shop": "← Назад до магазину",
+      "tab_details": "Деталі товару",
+      "tab_reviews": "Рейтинг та відгуки",
+      "tab_faqs": "Часті питання",
+      "details_content": "Тут будуть деталі товару...",
+      "all_reviews": "Всі відгуки",
+      "filter_latest": "Найновіші",
+      "filter_highest": "Найвищий рейтинг",
+      "filter_lowest": "Найнижчий рейтинг",
+      "load_more_reviews": "Завантажити більше відгуків",
+      "faqs_title": "Часті питання",
+      "faqs_content": "Тут будуть відповіді на часті питання..."
+    },
+    "cart": {
+      "title": "Ваш кошик",
+      "breadcrumb_home": "Головна",
+      "breadcrumb_cart": "Кошик",
+      "page_title": "Ваш кошик",
+      "order_summary": "Підсумок замовлення",
+      "subtotal": "Проміжний підсумок",
+      "discount": "Знижка (-20%)",
+      "delivery_fee": "Вартість доставки",
+      "total": "Всього",
+      "promo_placeholder": "Додати промокод",
+      "apply_promo": "Застосувати",
+      "go_to_checkout": "Перейти до оформлення →"
+    },
+    "cart_dynamic": {
+      "empty_cart": "Ваш кошик порожній",
+      "add_items": "Додайте товари, щоб почати",
+      "continue_shopping": "Продовжити покупки",
+      "size": "Розмір",
+      "color": "Колір",
+      "remove_item": "Видалити",
+      "quantity": "Кількість"
+    },
     "auth": {
-      "welcome_back": "Ласкаво просимо",
+      "welcome_back": "Ласкаво просимо назад",
       "sign_in_subtitle": "Увійдіть у свій акаунт",
       "email_address": "Електронна адреса",
       "enter_email": "Введіть вашу електронну адресу",
@@ -252,63 +331,26 @@
       "have_account": "Вже маєте акаунт?",
       "sign_in_link": "Увійти"
     },
-        "shop": {
-        "title": "Повсякденний — Shopco",
-        "breadcrumb_home": "Головна",
-        "filters_button": "Фільтри",
-        "showing_products": "Показано товарів",
-        "sort_by": "Сортувати за:",
-        "sort_popular": "Найпопулярніші",
-        "sort_price_low": "Ціна: від низької", 
-        "sort_price_high": "Ціна: від високої",
-        "sort_rating": "Рейтинг",
-        "sort_name": "Назва А → Я",
-        "filters": "Фільтри",
-        "categories": "Категорії",
-        "price": "Ціна",
-        "colors": "Кольори",
-        "size": "Розмір",
-        "only_in_stock": "Тільки в наявності",
-        "apply_filters": "Застосувати фільтр",
-        "clear_filters": "Очистити"
-        },
-        "product": {
-        "title": "Товар",
-        "back_to_shop": "← Назад до магазину",
-        "tab_details": "Деталі товару",
-        "tab_reviews": "Рейтинг та відгуки",
-        "tab_faqs": "Часті питання",
-        "details_content": "Тут будуть деталі товару...",
-        "all_reviews": "Всі відгуки",
-        "filter_latest": "Найновіші",
-        "filter_highest": "Найвищий рейтинг",
-        "filter_lowest": "Найнижчий рейтинг",
-        "load_more_reviews": "Завантажити більше відгуків",
-        "faqs_title": "Часті питання",
-        "faqs_content": "Тут будуть відповіді на часті питання..."
-        },
-        "cart": {
-        "title": "Ваш кошик",
-        "breadcrumb_home": "Головна",
-        "breadcrumb_cart": "Кошик",
-        "page_title": "Ваш кошик",
-        "order_summary": "Підсумок замовлення",
-        "subtotal": "Проміжний підсумок",
-        "discount": "Знижка (-20%)",
-        "delivery_fee": "Вартість доставки",
-        "total": "Всього",
-        "promo_placeholder": "Додати промокод",
-        "apply_promo": "Застосувати",
-        "go_to_checkout": "Перейти до оформлення →"
-        },
-        "cart_dynamic": {
-        "empty_cart": "Ваш кошик порожній",
-        "add_items": "Додайте товари, щоб почати",
-        "continue_shopping": "Продовжити покупки",
+    "profile": {
+      "my_account": "Мій кабінет",
+      "manage_info": "Керування інформацією профілю",
+      "first_name": "Ім'я / Нікнейм",
+      "last_name": "Прізвище",
+      "email_address": "Електронна адреса",
+      "logout": "ВИЙТИ З АКАУНТУ",
+      "back_to_shop": "← Назад до магазину",
+      "my_orders": "Мої замовлення",
+      "loading_orders": "Завантаження історії замовлень...",
+      "orders_v2": {
+        "order": "Замовлення",
+        "total": "Загальна сума",
+        "pcs": "шт.",
         "size": "Розмір",
         "color": "Колір",
-        "remove_item": "Видалити",
-        "quantity": "Кількість"
-        }
+        "processing": "В обробці",
+        "delivered": "Доставлено",
+        "cancelled": "Скасовано"
+      }
+    }
   }
 }

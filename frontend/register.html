@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Shop.co</title>
+    <link rel="stylesheet" href="assets/styles/style.css">
+</head>
+<body>
+
+<div class="auth-page">
+    <div class="auth-page-content">
+        <div class="auth-form active">
+            <h2 data-i18n="auth.create_account">Create Account</h2>
+            <p class="auth-subtitle" data-i18n="auth.join_us">Join us and start shopping</p>
+
+            <form id="registerForm" class="auth-form-content">
+                <div class="form-group">
+                    <label data-i18n="auth.full_name">First Name</label>
+                    <input type="text" id="firstName" data-i18n="auth.enter_full_name" placeholder="Enter your first name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Last Name</label> 
+                    <input type="text" id="lastName" placeholder="Enter your last name" required>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="auth.email_address">Email Address</label>
+                    <input type="email" id="email" data-i18n="auth.enter_email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="auth.password">Password</label>
+                    <input type="password" id="password" data-i18n="auth.create_password" placeholder="Create a password" required>
+                </div>
+
+                <button type="submit" class="auth-btn" data-i18n="auth.create_account_button">Create Account</button>
+            </form>
+
+            <div class="auth-switch">
+                <p>
+                    <span data-i18n="auth.have_account">Already have an account?</span>
+                    <a href="login.html" data-i18n="auth.sign_in_link">Sign In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/language.js"></script>
+<script src="assets/js/register.js"></script>
+</body>
+</html>
