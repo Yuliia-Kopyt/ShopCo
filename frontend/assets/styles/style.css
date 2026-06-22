@@ -138,14 +138,54 @@ ul{
   margin-left: auto;
 }
 
-/* Іконка пошуку для mobile */
+/* На мобільних ховаємо весь віджет пошуку (як у тебе й було) */
+.search-wrapper {
+  display: none;
+}
+
+/* На мобільних показуємо окрему іконку пошуку/лупи */
 .search-icon {
   display: flex !important;
 }
 
-/* Приховати поле пошуку на mobile */
-.search-wrapper {
-  display: none;
+/* Стилізуємо хрестик та інпут заздалегідь, щоб не дублювати код */
+.search-wrapper .search-icon-left {
+  position: absolute;
+  left: 16px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.header-search {
+  display: block;
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+  color: #000;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.header-search::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.clear-search-icon {
+  position: absolute;
+  right: 16px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+  z-index: 2;
+}
+
+.clear-search-icon:hover {
+  color: #000;
+  transform: scale(1.1);
 }
 
 /* Приховати перемикач мов на mobile (буде в бургер меню) */
@@ -358,6 +398,7 @@ ul{
   }
 
   /* Desktop: Поле пошуку четверте */
+/* Вмикаємо капсулу пошуку на великих екранах */
   .search-wrapper {
     display: flex;
     order: 4;
@@ -371,11 +412,9 @@ ul{
     margin: 0 15px;
   }
 
-  .search-wrapper i {
-    position: absolute;
-    left: 16px;
-    color: rgba(0, 0, 0, 0.4);
-    font-size: 16px;
+  /* Ховаємо мобільну іконку пошуку, бо тепер є повноцінне поле */
+  .search-icon {
+    display: none !important;
   }
 
   .header-search {
@@ -442,7 +481,6 @@ ul{
   font-size: 14px;
   margin-bottom: 30px;
   max-width: 600px;
-  margin-left: auto;
   margin-right: auto;
 }
 
@@ -789,6 +827,8 @@ ul{
   position: relative;
   border-radius: 20px;
   overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .box-grid img {
@@ -1016,6 +1056,7 @@ input[type=email]::placeholder {
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
+  margin-top: 10px;
 }
 
 .btn2:hover {
@@ -1649,6 +1690,134 @@ footer {
   }
 }
 
+/* --- БАЗОВІ СТИЛІ (ДЛЯ МОБІЛЬНИХ ЗА ЗАМОВЧУВАННЯМ) --- */
+
+.custom-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 1. На мобільних ховаємо слово "Сортування:", бо воно займає пів екрана */
+.sort-label {
+    display: none; 
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+}
+
+.dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* 2. Кнопка за замовчуванням компактна (для телефонів) */
+.dropdown-trigger {
+    background: #ffffff;
+    border: 1px solid #e1e1e1;
+    color: rgba(0, 0, 0, 0.7);
+    font-weight: 400;
+    font-size: 14px; /* Компактний шрифт */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Менший відступ до стрілочки */
+    padding: 8px 12px; /* Компактні падінги, щоб нічого не з'їжджало */
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.dropdown-trigger:hover {
+    background-color: #f9f9f9;
+    border-color: rgba(0, 0, 0, 0.7);
+}
+
+.dropdown-trigger i {
+    font-size: 12px;
+    transition: transform 0.2s ease;
+}
+
+.dropdown-wrapper.open .dropdown-trigger i {
+    transform: rotate(180deg);
+}
+
+/* Меню на мобільних акуратне і вирівняне по правому краю */
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 6px;
+    list-style: none;
+    min-width: 160px;
+    z-index: 100;
+    
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+}
+
+.dropdown-wrapper.open .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-menu li {
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #333333;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.dropdown-menu li:hover {
+    background-color: #f5f5f5;
+    color: #000000;
+}
+
+.dropdown-menu li.active {
+    background-color: #000000;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+
+/* --- СТИЛІ ДЛЯ ВЕЛИКИХ ЕКРАНІВ (ПЛАНШЕТИ ТА КОМП'ЮТЕРИ) --- */
+@media (min-width: 768px) {
+    .custom-sort {
+        gap: 8px;
+    }
+
+    /* Показуємо напис "Сортування:" на десктопі, бо тут місця повно */
+    .sort-label {
+        display: inline-block;
+    }
+
+    /* Робимо кнопку більшою та соліднішою */
+    .dropdown-trigger {
+        font-size: 16px;
+        padding: 10px 16px;
+        gap: 12px;
+    }
+
+    /* Меню теж трохи збільшуємо */
+    .dropdown-menu {
+        min-width: 180px;
+        padding: 8px;
+    }
+
+    .dropdown-menu li {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+}
+
 /* ===== MEGADEAL POPUP ===== */
 .megadeal-popup {
     position: fixed;
@@ -2075,4 +2244,104 @@ footer {
     font-size: 0.95rem;
     padding: 10px 0;
     border-bottom: 1px solid #f0f0f0;
+}
+
+/* =========================================================================
+   СИСТЕМА КАСТОМНИХ СПОВІЩЕНЬ (TOASTS) — MOBILE FIRST
+   ========================================================================= */
+
+/* Головний контейнер (фіксований зверху по центру екрана) */
+.toast-container {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000; /* Перекриває модалки, сайдбари та навігацію */
+    width: 92%;     /* Оптимальний розмір під мобільні дисплеї */
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none; /* Контейнер не заважає клікам, коли порожній */
+}
+
+/* Базова картка сповіщення */
+.toast {
+    pointer-events: auto; /* Повертаємо клікабельність самій картці тосту */
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #1e1e24;
+    padding: 14px 18px;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    
+    /* Ліва кольорова смужка-бордер */
+    border-left: 5px solid transparent;
+    
+    /* Початковий стан анімації (приховано зверху) */
+    opacity: 0;
+    transform: translateY(-40px);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+}
+
+/* Анімація: плавний виїзд тосту */
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Анімація: плавне зникнення */
+.toast.hide {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Стилізація іконок FontAwesome */
+.toast-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+/* Контент текстової частини */
+.toast-message {
+    flex-grow: 1;
+}
+
+/* --- ТИПИ СПОВІЩЕНЬ (КОЛЬОРОВІ АКЦЕНТИ) --- */
+
+/* Успішна дія (Success) */
+.toast.success {
+    border-left-color: #00b4d8; /* Сучасний бірюзово-зелений */
+}
+.toast.success .toast-icon {
+    color: #00b4d8;
+}
+
+/* Попередження / Помилка (Warning) */
+.toast.warning {
+    border-left-color: #f77f00; /* Насичений помаранчевий */
+}
+.toast.warning .toast-icon {
+    color: #f77f00;
+}
+
+/* =========================================================================
+   АДАПТИВНІСТЬ ДЛЯ ДЕСКТОПІВ (ВЕЛИКІ ЕКРАНИ)
+   ========================================================================= */
+@media (min-width: 993px) {
+    .toast-container {
+        top: 25px; /* Трохи більший відступ від верхнього краю на десктопі */
+    }
+    .toast {
+        font-size: 15px; /* Комфортний розмір шрифту на моніторах */
+        padding: 16px 22px;
+    }
 }

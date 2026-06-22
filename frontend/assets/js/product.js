@@ -128,8 +128,12 @@ function initializeProductPage() {
         return;
     }
 
+    // 1. Малюємо картку товару
     renderProduct(product, container);
     setupProductInteractions(container, product);
+    
+    // 2. ОДРАЗУ викликаємо оновлення перекладів, щоб заповнити твої рідні таби деталями з бази даних
+    updateProductTranslations();
 }
 
 function showError(message) {
@@ -274,12 +278,27 @@ function renderSizes(sizes = []) {
     `;
 }
 
-// ---------------------------
-// BUILD PRODUCT HTML - ОНОВЛЕНА З ПЕРЕКЛАДАМИ
-// ---------------------------
+// ===============================================================
+// BUILD PRODUCT HTML - ПОВНІСТЮ З ПЕРЕКЛАДАМИ
+// ===============================================================
+let currentRenderedProduct = null;
+let currentProductContainer = null;
+
 function renderProduct(product, container) {
+    // Запам'ятовуємо поточні дані, щоб мати змогу перерендерити при зміні мови
+    currentRenderedProduct = product;
+    currentProductContainer = container;
+
     const translatedTitle = getProductTitle(product);
     const translatedDescription = getProductDescription(product);
+    const translatedDetails = getProductDetails(product);
+
+    // Отримуємо динамічні переклади
+    const selectColorText = window.languageManager ? window.languageManager.t('product.select_color') : 'Select color';
+    const chooseSizeText = window.languageManager ? window.languageManager.t('product.choose_size') : 'Choose size';
+    const addToCartText = window.languageManager ? window.languageManager.t('product.add_to_cart') : 'Add to cart';
+    const outOfStockText = window.languageManager ? window.languageManager.t('product.out_of_stock') : 'Out of stock';
+    const noDescriptionText = window.languageManager ? window.languageManager.t('product.no_description') : 'No description available.';
 
     const html = `
         <div class="product-card">
@@ -301,17 +320,17 @@ function renderProduct(product, container) {
                     ${product.discount ? `<div class="discount">-${product.discount}%</div>` : ""}
                 </div>
 
-                <p class="description" data-product-description>${escapeHtml(translatedDescription || "No description available.")}</p>
+                <p class="description" data-product-description>${escapeHtml(translatedDescription || noDescriptionText)}</p>
 
                 <div class="options-block">
                     <div class="line"></div>
 
-                    <div class="option-title">Select color</div>
+                    <div class="option-title" data-i18n="product.select_color">${selectColorText}</div>
                     ${renderColors(product.colors)}
 
                     <div class="line"></div>
 
-                    <div class="option-title">Choose size</div>
+                    <div class="option-title" data-i18n="product.choose_size">${chooseSizeText}</div>
                     ${renderSizes(product.sizes)}
 
                     <div class="line"></div>
@@ -324,8 +343,8 @@ function renderProduct(product, container) {
                         <button type="button" class="qty-plus">+</button>
                     </div>
 
-                    <button class="add-to-cart" ${!product.in_stock ? 'disabled style="opacity:0.6; cursor:not-allowed;"' : ''}>
-                        ${product.in_stock ? 'Add to cart' : 'Out of stock'}
+                    <button class="add-to-cart js-add-to-cart-btn" ${!product.in_stock ? 'disabled style="opacity:0.6; cursor:not-allowed;"' : ''}>
+                        ${product.in_stock ? addToCartText : outOfStockText}
                     </button>
                 </div>
 
@@ -335,24 +354,14 @@ function renderProduct(product, container) {
 
     container.innerHTML = html;
 
-    // Render product details markdown
-const detailsContainer = document.getElementById('product-details-container');
-
-if (detailsContainer) {
-    const translatedDetails = getProductDetails(product);
-
-    detailsContainer.innerHTML = marked.parse(translatedDetails);
-}
-    
-    // Fix hyphens in title
-    setTimeout(fixHyphensInTitle, 200);
+    container.innerHTML = html;
 }
 
-// ---------------------------
-// INTERACTIONS - ОНОВЛЕНА ФУНКЦІЯ
-// ---------------------------
+// ===============================================================
+// INTERACTIONS - ЗБЕРЕЖЕННЯ КЛІКІВ
+// ===============================================================
 function setupProductInteractions(container, product) {
-    // Color selection
+    // 1. Селектор кольорів
     const swatches = container.querySelectorAll(".color-swatch");
     if (swatches.length > 0) {
         swatches[0].classList.add("selected"); // Auto-select first color
@@ -364,7 +373,7 @@ function setupProductInteractions(container, product) {
         });
     }
 
-    // Size selection
+    // 2. Селектор розмірів
     const sizePills = container.querySelectorAll(".size-pill");
     if (sizePills.length > 0) {
         sizePills[0].classList.add("selected"); // Auto-select first size
@@ -376,56 +385,85 @@ function setupProductInteractions(container, product) {
         });
     }
 
-    // Quantity logic
+    // 3. Керування кількістю (QTY)
     let qty = 1;
     const qtyValue = container.querySelector(".qty-value");
     const qtyMinus = container.querySelector(".qty-minus");
     const qtyPlus = container.querySelector(".qty-plus");
 
-    qtyMinus.addEventListener("click", () => {
-        if (qty > 1) {
-            qty--;
+    if (qtyMinus && qtyPlus && qtyValue) {
+        qtyMinus.addEventListener("click", () => {
+            if (qty > 1) {
+                qty--;
+                qtyValue.textContent = qty;
+            }
+        });
+
+        qtyPlus.addEventListener("click", () => {
+            qty++;
             qtyValue.textContent = qty;
-        }
-    });
+        });
+    }
 
-    qtyPlus.addEventListener("click", () => {
-        qty++;
-        qtyValue.textContent = qty;
-    });
-
-    // Add to cart - З ЗАХИСТОМ ВІД ГОСТЕЙ ТА ВИКОРИСТОВУЄМО ГЛОБАЛЬНИЙ ОБ'ЄКТ cart
+    // 4. Кнопка "Додати в кошик" з перевіркою авторизації
+    // 4. Кнопка "Додати в кошик" з перевіркою авторизації
     const addBtn = container.querySelector(".add-to-cart");
-    addBtn.addEventListener("click", () => {
-        // --- НАШ БЛОКПОСТ ДЛЯ НЕАВТОРЫЗОВАНИХ КОРИСТУВАЧІВ ---
-        const token = localStorage.getItem("token");
-        if (!token) {
-            alert("Будь ласка, увійдіть в акаунт або зареєструйтеся, щоб додати цей товар у кошик!");
-            window.location.href = "login.html"; // Перенаправляємо на сторінку входу
-            return; // Зупиняємо виконання, товар НЕ додається в кошик
-        }
-        // ----------------------------------------------------
+    if (addBtn) {
+        addBtn.addEventListener("click", () => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                // 1. Спочатку показуємо твій гарний тост (текст уже береться з JSON)
+                showToast(window.languageManager.t('toast.auth_required_checkout'), 'warning');
+                
+                // 2. Робимо паузу в 2 секунди (2000 мілісекунд), щоб тост не зникав миттєво
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 2000);
+                
+                return;
+            }
 
-        const selectedColorEl = container.querySelector(".color-swatch.selected");
-        const selectedSizeEl = container.querySelector(".size-pill.selected");
+            const selectedColorEl = container.querySelector(".color-swatch.selected");
+            const selectedSizeEl = container.querySelector(".size-pill.selected");
 
-        const selectedColor = selectedColorEl ? selectedColorEl.dataset.color : "Default";
-        const selectedSize = selectedSizeEl ? selectedSizeEl.dataset.size : "One Size";
+            const selectedColor = selectedColorEl ? selectedColorEl.dataset.color : "Default";
+            const selectedSize = selectedSizeEl ? selectedSizeEl.dataset.size : "One Size";
 
-        // Перевірка обов'язкового вибору розміру
-        if (product.sizes && product.sizes.length > 0 && !selectedSizeEl) {
-            alert("Please select a size.");
-            return;
-        }
+            if (product.sizes && product.sizes.length > 0 && !selectedSizeEl) {
+                const sizeLabel = window.languageManager.t('shop.size');
+                showToast(`${sizeLabel}?`, 'warning');
+                return;
+            }
 
-        if (window.cart && typeof window.cart.addItem === 'function') {
-            window.cart.addItem(product, selectedSize, selectedColor, qty);
-            alert("Товар успішно додано до кошика!");
-        } else {
-            console.log('Cart item:', { product, size: selectedSize, color: selectedColor, quantity: qty });
-        }
-    });
-} 
+            if (window.cart && typeof window.cart.addItem === 'function') {
+                window.cart.addItem(product, selectedSize, selectedColor, qty);
+                const productTitle = getProductTitle(product);
+                const successMessage = window.localStorage.getItem('preferredLanguage') === 'uk' 
+                    ? `«${productTitle}» успішно додано до кошика!` 
+                    : `"${productTitle}" successfully added to cart!`;
+
+                showToast(successMessage, 'success');
+            } else {
+                console.log('Cart item fallback:', { product, size: selectedSize, color: selectedColor, quantity: qty });
+            }
+        });
+    }
+}
+
+// ===============================================================
+// ГЛОБАЛЬНИЙ СЛУХАЧ ЗМІНИ МОВИ ДЛЯ СТОРІНКИ ПРОДУКТУ
+// ===============================================================
+window.addEventListener('languageChanged', () => {
+    if (currentRenderedProduct && currentProductContainer) {
+        console.log('🔄 Мова змінена! Перемальовуємо HTML та переініціалізуємо кліки кошика...');
+        
+        // 1. Перемальовуємо HTML (назва кнопки зміниться автоматично!)
+        renderProduct(currentRenderedProduct, currentProductContainer);
+        
+        // 2. Одразу ж вішаємо на нову кнопку кліки, щоб вона додавала в кошик без оновлення сторінки!
+        setupProductInteractions(currentProductContainer, currentRenderedProduct);
+    }
+});
 
 // ---------------------------
 // UTILITY FUNCTIONS
@@ -524,6 +562,9 @@ function updateProductTranslations() {
 // ---------------------------
 // LOAD PRODUCT REVIEWS
 // ---------------------------
+// Зберігаємо поточні відгуки тут для швидкого сортування
+let CURRENT_REVIEWS = [];
+
 function loadProductReviews(productId) {
     const reviewsContainer = document.querySelector(".product-reviews");
     if (!reviewsContainer) return;
@@ -535,24 +576,36 @@ function loadProductReviews(productId) {
 
             if (!productData || productData.reviews.length === 0) {
                 reviewsContainer.innerHTML = `<p class="no-reviews">No reviews yet.</p>`;
+                CURRENT_REVIEWS = [];
                 return;
             }
 
-            reviewsContainer.innerHTML = productData.reviews.map(review => `
-                <div class="review-card">
-                    <div class="review-stars">
-                        ${renderStarsReview(review.rating)}
-                    </div>
-                    <h5 class="review-author">${review.name}</h5>
-                    <p class="review-text">"${review.text}"</p>
-                    <div class="review-date">Posted on ${formatDateLong(review.date)}</div>
-                </div>
-            `).join("");
+            // Запам'ятовуємо відгуки в глобальний масив
+            CURRENT_REVIEWS = productData.reviews;
 
+            // Рендеримо за замовчуванням
+            renderReviewsList(CURRENT_REVIEWS);
         })
         .catch(error => {
             reviewsContainer.innerHTML = `<p class="no-reviews">Error loading reviews.</p>`;
         });
+}
+
+// Функція, яка просто малює масив відгуків на екрані
+function renderReviewsList(reviewsArray) {
+    const reviewsContainer = document.querySelector(".product-reviews");
+    if (!reviewsContainer) return;
+
+    reviewsContainer.innerHTML = reviewsArray.map(review => `
+        <div class="review-card">
+            <div class="review-stars">
+                ${renderStarsReview(review.rating)}
+            </div>
+            <h5 class="review-author">${review.name}</h5>
+            <p class="review-text">"${review.text}"</p>
+            <div class="review-date">Posted on ${formatDateLong(review.date)}</div>
+        </div>
+    `).join("");
 }
 
 function renderStarsReview(rating) {
@@ -687,4 +740,61 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
         console.error("Помилка перевірки авторизації на сторінці продукту:", error);
     }
+});
+
+// ===============================================================
+// ПОВНЕ ЖИВЕ СОРТУВАННЯ ВІДГУКІВ НА СТОРІНЦІ ПРОДУКТУ (ОНОВЛЕНО)
+// ===============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const reviewDropdown = document.getElementById('reviewSortDropdown');
+    if (!reviewDropdown) return;
+
+    const trigger = reviewDropdown.querySelector('.dropdown-trigger');
+    const targetText = document.getElementById('currentReviewTarget');
+    const menuItems = reviewDropdown.querySelectorAll('.dropdown-menu li');
+
+    // 1. Відкрити / закрити меню відгуків
+    trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        reviewDropdown.classList.toggle('open');
+    });
+
+    // 2. Вибір елемента зі списку та СОРТУВАННЯ МАСИВУ
+    menuItems.forEach(item => {
+        item.addEventListener('click', function() {
+            if (!CURRENT_REVIEWS || CURRENT_REVIEWS.length === 0) {
+                reviewDropdown.classList.remove('open');
+                return;
+            }
+
+            menuItems.forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+
+            // Міняємо текст на кнопці
+            targetText.textContent = this.textContent;
+            const sortValue = this.getAttribute('data-value'); // "latest", "highest", "lowest"
+
+            // Створюємо копію масиву для безпечного сортування
+            let sortedReviews = [...CURRENT_REVIEWS];
+
+            if (sortValue === 'highest') {
+                sortedReviews.sort((a, b) => b.rating - a.rating); // Найвищий рейтинг першим
+            } else if (sortValue === 'lowest') {
+                sortedReviews.sort((a, b) => a.rating - b.rating); // Найнижчий рейтинг першим
+            } else if (sortValue === 'latest') {
+                sortedReviews.sort((a, b) => new Date(b.date) - new Date(a.date)); // Найновіші першими
+            }
+
+            // Перемальовуємо відгуки на сторінці відсортованим масивом!
+            renderReviewsList(sortedReviews);
+            console.log(`✅ Відгуки відсортовано за параметром: ${sortValue}`);
+
+            reviewDropdown.classList.remove('open');
+        });
+    });
+
+    // 3. Закриваємо меню, якщо клікнули повз нього
+    document.addEventListener('click', () => {
+        reviewDropdown.classList.remove('open');
+    });
 });

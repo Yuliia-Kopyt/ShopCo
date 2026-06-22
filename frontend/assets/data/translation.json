@@ -103,7 +103,12 @@
       "filter_lowest": "Lowest Rating",
       "load_more_reviews": "Load More Reviews",
       "faqs_title": "Frequently Asked Questions",
-      "faqs_content": "FAQs content will be here..."
+      "faqs_content": "FAQs content will be here...",
+      "select_color": "Select color",
+      "choose_size": "Choose size",
+      "add_to_cart": "Add to cart",
+      "out_of_stock": "Out of Stock",
+      "no_description": "No description"
     },
     "cart": {
       "title": "Your Cart",
@@ -174,6 +179,28 @@
         "delivered": "Delivered",
         "cancelled": "Cancelled"
       }
+    },
+    "toast": {
+      "promo_applied": "Promo code successfully applied!",
+      "promo_empty": "Please enter a promo code",
+      "promo_invalid": "This promo code does not exist or has expired",
+      "checkout_empty": "Your cart is empty. Add some items before checkout.",
+      "auth_required_checkout": "Please log in to place an order!",
+      "order_success": "Thank you! Your order has been successfully placed and saved.",
+      "order_error": "Checkout error",
+      "server_error": "Failed to connect to the server. Check your connection.",
+      "session_expired": "Your session has expired. Please log in again.",
+      "login_success": "Login successful!",
+      "login_error": "Login error",
+      "logout_success": "You have successfully logged out.",
+      "register_success": "Registration successful!",
+      "register_error": "Registration error",
+      "subscribe_success": "🎉 Congratulations! The email with your promo code is on its way!",
+      "subscribe_error": "Subscription error",
+      "subscribe_server_error": "Failed to connect to the server.",
+      "no_products": "No products found.",
+      "load_error": "Error loading products. Please refresh the page.",
+      "loading": "Loading products..."
     } 
   },
   "uk": {
@@ -280,7 +307,12 @@
       "filter_lowest": "Найнижчий рейтинг",
       "load_more_reviews": "Завантажити більше відгуків",
       "faqs_title": "Часті питання",
-      "faqs_content": "Тут будуть відповіді на часті питання..."
+      "faqs_content": "Тут будуть відповіді на часті питання...",
+      "select_color": "Виберіть колір",
+      "choose_size": "Виберіть розмір",
+      "add_to_cart": "Додати в кошик",
+      "out_of_stock": "Немає в наявності",
+      "no_description": "Опис товару відсутній."
     },
     "cart": {
       "title": "Ваш кошик",
@@ -351,6 +383,28 @@
         "delivered": "Доставлено",
         "cancelled": "Скасовано"
       }
+    },
+    "toast": {
+      "promo_applied": "Промокод успішно застосовано!",
+      "promo_empty": "Будь ласка, введіть промокод",
+      "promo_invalid": "Такого промокоду не існує або його термін дії закінчився",
+      "checkout_empty": "Ваш кошик порожній. Додайте товари перед оформленням.",
+      "auth_required_checkout": "Будь ласка, авторизуйтесь для оформлення замовлення!",
+      "order_success": "Дякуємо! Замовлення успішно оформлено та збережено в базі.",
+      "order_error": "Помилка оформлення",
+      "server_error": "Не вдалося зв'язатися з сервером. Перевірте з'єднання.",
+      "session_expired": "Ваша сесія застаріла. Будь ласка, увійдіть знову.",
+      "login_success": "Вхід успішний!",
+      "login_error": "Помилка входу",
+      "logout_success": "Ви успішно вийшли з акаунту.",
+      "register_success": "Реєстрація успішна!",
+      "register_error": "Помилка реєстрації",
+      "subscribe_success": "🎉 Вітаємо! Лист із промокодом уже летить на вашу пошту!",
+      "subscribe_error": "Помилка підписки",
+      "subscribe_server_error": "Сталася помилка зв'язку з сервером.",
+      "no_products": "Товари не знайдено.",
+      "load_error": "Помилка завантаження товарів. Спробуйте оновити сторінку.",
+      "loading": "Завантаження товарів..."
     }
   }
 }

@@ -72,15 +72,18 @@
     </nav>
 
     <!-- Поле пошуку для desktop -->
-    <div class="search-wrapper">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" data-i18n="header.search_placeholder" placeholder="Search for products..." class="header-search">
-    </div>
+  <div class="search-wrapper">
+    <i class="fa-solid fa-magnifying-glass search-icon-left"></i>
+    
+    <input type="text" data-i18n="header.search_placeholder" placeholder="Search for products..." class="header-search">
+    
+    <i class="fa-solid fa-xmark clear-search-icon" style="display: none;"></i>
+  </div>
 
     <!-- Іконки -->
     <div class="header-icons">
       <!-- Іконка лупи для мобільної версії -->
-      <a href="search.html" class="icon-link search-icon">
+      <a href="shop.html?focus=search" class="icon-link search-icon">
         <i class="fa-solid fa-magnifying-glass"></i>
       </a>
       
@@ -123,21 +126,35 @@
   <div class="tab-content-inner" id="product-details-container">
   </div>
 </div>
+    <div class="tab-content" id="reviews-content">
+      <div class="tab-content-inner">
+        <div class="reviews-header">
+          <h2 class="all-reviews-title" data-i18n="product.all_reviews">All Reviews (45)</h2>
+          
+          <div class="reviews-filter">
+            <div class="custom-sort">
+              <div class="dropdown-wrapper" id="reviewSortDropdown">
+                <button class="dropdown-trigger" type="button">
+                  <span id="currentReviewTarget" data-i18n="product.filter_latest">Latest</span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                
+                <ul class="dropdown-menu">
+                  <li data-value="latest" class="active" data-i18n="product.filter_latest">Latest</li>
+                  <li data-value="highest" data-i18n="product.filter_highest">Highest Rating</li>
+                  <li data-value="lowest" data-i18n="product.filter_lowest">Lowest Rating</li>
+                </ul>
+              </div>
 
-      <!-- Таб Rating & Reviews -->
-      <div class="tab-content" id="reviews-content">
-        <div class="tab-content-inner">
-          <!-- Заголовок All Reviews під сірою лінією -->
-          <div class="reviews-header">
-            <h2 class="all-reviews-title" data-i18n="product.all_reviews">All Reviews (45)</h2>
-            <div class="reviews-filter">
-              <select class="filter-select">
-                <option value="latest" data-i18n="product.filter_latest">Latest</option>
-                <option value="highest" data-i18n="product.filter_highest">Highest Rating</option>
-                <option value="lowest" data-i18n="product.filter_lowest">Lowest Rating</option>
+              <select class="filter-select" id="reviewSortSelect" style="display: none;">
+                <option value="latest">Latest</option>
+                <option value="highest">Highest Rating</option>
+                <option value="lowest">Lowest Rating</option>
               </select>
             </div>
           </div>
+
+        </div>
           <div class="product-reviews"></div>
           <!-- Кнопка Load More (ТІЛЬКИ для Reviews) -->
           <div class="load-more-container">

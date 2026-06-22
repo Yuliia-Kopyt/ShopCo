@@ -42,153 +42,263 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-//ЗАВАНТАЖУВАЧ ПРОДУКТІВ З ПІДТРИМКОЮ ПЕРЕКЛАДІВ 
-class ProductLoader {
-    constructor() {
-        this.products = [];
-        this.loaded = false;
-    }
-
-    async loadProducts() {
-        try {
-            const response = await fetch('./assets/data/product.json');
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            this.products = await response.json();
-            this.loaded = true;
-            return this.products;
-        } catch (error) {
-            this.products = this.getFallbackProducts();
-            this.loaded = true;
-            return this.products;
-        }
-    }
-
-    getAllProducts() {
-        return this.products;
-    }
-
-    generateRatingStars(rating) {
-        let stars = '';
-        const fullStars = Math.floor(rating);
-        const hasHalfStar = rating % 1 >= 0.5;
-
-        for (let i = 0; i < fullStars; i++) {
-            stars += '<i class="fa-solid fa-star"></i>';
-        }
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.querySelector('.header-search');
+    const clearSearchBtn = document.querySelector('.clear-search-icon');
+    
+    if (searchInput) {
+        const params = new URLSearchParams(window.location.search);
+        const currentQuery = params.get('search');
         
-        if (hasHalfStar) {
-            stars += '<i class="fa-solid fa-star-half-stroke"></i>';
+        // Якщо повернулися на сторінку, а в URL є запит — записуємо в інпут
+        if (currentQuery) {
+            searchInput.value = currentQuery;
         }
 
-        const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-        for (let i = 0; i < emptyStars; i++) {
-            stars += '<i class="fa-regular fa-star"></i>';
+        if (params.get('focus') === 'search') {
+            const searchWrapper = document.querySelector('.search-wrapper');
+            if (searchWrapper) {
+                searchWrapper.style.display = 'flex'; 
+                searchWrapper.style.margin = '10px 15px'; // Акуратний мобільний відступ
+                
+                // Ставимо курсор в поле (підніметься клавіатура)
+                setTimeout(() => searchInput.focus(), 100); 
+            }
         }
 
-        return stars;
-    }
-
-    // ОНОВЛЕНА ФУНКЦІЯ - з підтримкою перекладів
-    generateProductHTML(product) {
-        const discountBadge = product.discount ?
-            `<span class="discount">-${product.discount}%</span>` : '';
-
-        const oldPrice = product.oldPrice ?
-            `<p class="old-price">$${product.oldPrice}</p>` : '';
-
-        const ratingStars = this.generateRatingStars(product.rating);
-        const ratingValue = product.rating.toFixed(1);
-
-        // Отримуємо переклад назви продукту
-        const productTitle = this.getProductTitle(product);
-        const productDescription = this.getProductDescription(product);
-
-        return `
-            <div class="clothes" data-id="${product.id}" data-product-id="${product.id}">
-                <div class="image-container">
-                    <img src="${product.image}" alt="${productTitle}" onerror="this.src='assets/images/placeholder.png'">
-                </div>
-                <div class="texts">
-                    <p data-product-title>${productTitle}</p>
-                    <div class="stars">
-                        ${ratingStars}
-                        <span>${ratingValue}/5</span>
-                    </div>
-                    <div class="pricing ${!product.oldPrice ? 'no-discount' : ''}">
-                        <p class="current-price">$${product.price}</p>
-                        ${oldPrice}
-                        ${discountBadge}
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    // Функції для отримання перекладів продуктів
-    getProductTitle(product) {
-        if (!window.languageManager || !window.languageManager.isInitialized) {
-            console.log('⚠️ LanguageManager not ready, using default title');
-            return product.title;
-        }
-        
-        const translated = window.languageManager.getProductTranslation(product.id, 'title');
-        console.log(`🔍 Home page translation for product ${product.id}:`, { 
-            original: product.title, 
-            translated: translated 
-        });
-        
-        return translated || product.title;
-    }
-
-    getProductDescription(product) {
-        if (!window.languageManager || !window.languageManager.isInitialized) {
-            return product.description;
-        }
-        
-        const translated = window.languageManager.getProductTranslation(product.id, 'description');
-        return translated || product.description;
-    }
-
-    async displayProducts(containerSelector, products = null) {
-        const container = document.querySelector(containerSelector);
-        if (!container) return;
-
-        if (!this.loaded) {
-            await this.loadProducts();
+        // Функція, яка показує або ховає хрестик залежно від тексту в інпуті
+        function toggleClearButton() {
+            if (clearSearchBtn) {
+                if (searchInput.value.trim().length > 0) {
+                    clearSearchBtn.style.display = 'block';
+                } else {
+                    clearSearchBtn.style.display = 'none';
+                }
+            }
         }
 
-        let productsToShow = products || this.products;
-        if (productsToShow.length === 0) {
-            const noProductsText = window.languageManager ? 
-                window.languageManager.t('home.no_products') : 
-                'Продукти не знайдено';
-            container.innerHTML = `<p class="no-products">${noProductsText}</p>`;
-            return;
-        }
+        // Перевіряємо стан кнопки при завантаженні сторінки
+        toggleClearButton();
 
-        container.innerHTML = productsToShow.map(product =>
-            this.generateProductHTML(product)
-        ).join('');
-    }
+        // Стежимо за введенням тексту, щоб вчасно ховати/показувати хрестик
+        searchInput.addEventListener('input', toggleClearButton);
 
-    // Функція для оновлення перекладів продуктів на головній сторінці
-    updateHomePageTranslations() {
-        console.log('🔄 Updating home page product translations...');
-        
-        const productElements = document.querySelectorAll('.clothes[data-product-id]');
-        productElements.forEach(element => {
-            const productId = element.getAttribute('data-product-id');
-            const titleElement = element.querySelector('[data-product-title]');
-            
-            if (titleElement && window.languageManager) {
-                const translatedTitle = this.getProductTitle({ id: productId, title: titleElement.textContent });
-                if (translatedTitle) {
-                    titleElement.textContent = translatedTitle;
+        // Слухаємо натискання Enter для пошуку
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = searchInput.value.trim();
+                
+                if (query) {
+                    window.location.href = `shop.html?search=${encodeURIComponent(query)}`;
+                } else {
+                    window.location.href = 'shop.html';
                 }
             }
         });
+
+        // ЛОГІКА КЛІКУ НА ХРЕСТИК
+        if (clearSearchBtn) {
+            clearSearchBtn.addEventListener('click', () => {
+                searchInput.value = ''; // Очищаємо інпут
+                toggleClearButton();    // Ховаємо хрестик
+                
+                // Перевіряємо, де ми зараз перебуваємо
+                const params = new URLSearchParams(window.location.search);
+                
+                if (params.has('search')) {
+                    // Якщо ми вже на сторінці каталогу, просто прибираємо параметр пошуку з URL і перезавантажуємо товари
+                    params.delete('search');
+                    
+                    // Формуємо чисте посилання (якщо є інші фільтри, вони збережуться)
+                    const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+                    window.history.replaceState({}, '', newUrl);
+                    
+                    // Очищаємо стан у нашому shop.js та запускаємо перемальовку
+                    if (typeof state !== 'undefined') {
+                        state.query = "";
+                        state.page = 1; // Скидаємо сторінку на першу
+                        if (typeof render === 'function') render();
+                    } else {
+                        // Якщо об'єкт state з якоїсь причини недоступний напряму, просто освіжимо сторінку
+                        window.location.href = 'shop.html';
+                    }
+                }
+            });
+        }
     }
-}
+});
+
+//ЗАВАНТАЖУВАЧ ПРОДУКТІВ З ПІДТРИМКОЮ БЕКЕНДУ ТА ПЕРЕКЛАДІВ 
+if (!window.ProductLoader) {
+    window.ProductLoader = class ProductLoader { // 🌟 ОСЬ ТУТ: прибрали зайву дужку перед назвою
+        constructor() {
+            this.products = [];
+            this.loaded = false;
+        }
+
+        async loadProducts() {
+            try {
+                // 🌟 Міняємо запит зі старого JSON на твій реальний FastAPI бекенд
+                const response = await fetch('http://localhost:8000/products');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                this.products = await response.json();
+                this.loaded = true;
+                return this.products;
+            } catch (error) {
+                console.warn("⚠️ Не вдалося завантажити продукти з бекенду, вмикаємо резервні дані:", error);
+                // 🌟 Тепер функція getFallbackProducts існує і скрипт не падатиме!
+                this.products = this.getFallbackProducts();
+                this.loaded = true;
+                return this.products;
+            }
+        }
+
+        getAllProducts() {
+            return this.products;
+        }
+
+        generateRatingStars(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating || 5);
+            const hasHalfStar = (rating % 1) >= 0.5;
+
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fa-solid fa-star"></i>';
+            }
+            if (hasHalfStar) {
+                stars += '<i class="fa-solid fa-star-half-stroke"></i>';
+            }
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="fa-regular fa-star"></i>';
+            }
+            return stars;
+        }
+
+        generateProductHTML(product) {
+            // Захист на випадок, якщо якісь поля з бази прийдуть пустими
+            const currentPrice = product.price || 0;
+            const oldPriceHtml = product.old_price || product.oldPrice ? 
+                `<p class="old-price">$${product.old_price || product.oldPrice}</p>` : '';
+            
+            let discountPercent = product.discount;
+            if (!discountPercent && (product.old_price || product.oldPrice)) {
+                const old = product.old_price || product.oldPrice;
+                discountPercent = Math.round(((old - currentPrice) / old) * 100);
+            }
+            const discountBadge = discountPercent ? `<span class="discount">-${discountPercent}%</span>` : '';
+
+            const ratingVal = product.rating ? Number(product.rating) : 5.0;
+            const ratingStars = this.generateRatingStars(ratingVal);
+
+            const productTitle = this.getProductTitle(product);
+            const productImg = product.image || 'assets/images/placeholder.png';
+
+            return `
+                <div class="clothes" data-id="${product.id}" data-product-id="${product.id}">
+                    <div class="image-container">
+                        <img src="${productImg}" alt="${productTitle}" onerror="this.src='assets/images/placeholder.png'">
+                    </div>
+                    <div class="texts">
+                        <p data-product-title>${productTitle}</p>
+                        <div class="stars">
+                            ${ratingStars}
+                            <span>${ratingVal.toFixed(1)}/5</span>
+                        </div>
+                        <div class="pricing ${!(product.old_price || product.oldPrice) ? 'no-discount' : ''}">
+                            <p class="current-price">$${currentPrice}</p>
+                            ${oldPriceHtml}
+                            ${discountBadge}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        getProductTitle(product) {
+            if (!window.languageManager || !window.languageManager.isInitialized) {
+                return product.title || `Товар #${product.id}`;
+            }
+            
+            // 🌟 ВИПРАВЛЕНО: додано захист `product.translations &&`
+            if (product.translations && product.translations.length > 0) {
+                const currentLang = window.languageManager.currentLang || 'en';
+                const target = product.translations.find(t => (t.language || '').toLowerCase() === currentLang);
+                if (target && target.title) return target.title;
+            }
+
+            const translated = window.languageManager.getProductTranslation(product.id, 'title');
+            return translated || product.title || `Товар #${product.id}`;
+        }
+
+        getProductDescription(product) {
+            if (!window.languageManager || !window.languageManager.isInitialized) {
+                return product.description || '';
+            }
+            // 🌟 ВИПРАВЛЕНО: додано захист `product.translations &&`
+            if (product.translations && product.translations.length > 0) {
+                const currentLang = window.languageManager.currentLang || 'en';
+                const target = product.translations.find(t => (t.language || '').toLowerCase() === currentLang);
+                if (target && target.description) return target.description;
+            }
+            const translated = window.languageManager.getProductTranslation(product.id, 'description');
+            return translated || product.description || '';
+        }
+
+        async displayProducts(containerSelector, products = null) {
+            const container = document.querySelector(containerSelector);
+            if (!container) return;
+
+            if (!this.loaded) {
+                await this.loadProducts();
+            }
+
+            let productsToShow = products || this.products;
+            if (!productsToShow || productsToShow.length === 0) {
+                const noProductsText = window.languageManager ? 
+                    window.languageManager.t('home.no_products') : 
+                    'Продукти не знайдено';
+                container.innerHTML = `<p class="no-products">${noProductsText}</p>`;
+                return;
+            }
+
+            container.innerHTML = productsToShow.map(product =>
+                this.generateProductHTML(product)
+            ).join('');
+        }
+
+        updateHomePageTranslations() {
+            console.log('🔄 Updating home page product translations...');
+            const productElements = document.querySelectorAll('.clothes[data-product-id]');
+            productElements.forEach(element => {
+                const productId = Number(element.getAttribute('data-product-id'));
+                const titleElement = element.querySelector('[data-product-title]');
+                
+                // Шукаємо оригінальний об'єкт продукту в пам'яті, щоб знати його translations
+                const originalProduct = this.products.find(p => p.id === productId);
+                
+                if (titleElement && originalProduct) {
+                    const translatedTitle = this.getProductTitle(originalProduct);
+                    if (translatedTitle) {
+                        titleElement.textContent = translatedTitle;
+                    }
+                }
+            });
+        }
+
+        // 🌟 РЕЗЕРВНІ ПРОДУКТИ (якщо бекенд недоступний, сторінка не буде порожньою)
+        getFallbackProducts() {
+            return [
+                { id: 1, title: "Футболка з смугастими рукавами", price: 130, old_price: 150, rating: 4.5, image: "assets/images/placeholder.png" },
+                { id: 2, title: "Футболка з стрічковими деталями", price: 240, old_price: null, rating: 4.8, image: "assets/images/placeholder.png" },
+                { id: 3, title: "Бермуди вільного крою", price: 80, old_price: 100, rating: 4.2, image: "assets/images/placeholder.png" },
+                { id: 4, title: "Графічна футболка з градієнтом", price: 145, old_price: null, rating: 4.7, image: "assets/images/placeholder.png" },
+                { id: 5, title: "Сорочка в клітинку", price: 120, old_price: 160, rating: 4.6, image: "assets/images/placeholder.png" },
+                { id: 6, title: "Класичні джинси", price: 200, old_price: null, rating: 4.4, image: "assets/images/placeholder.png" }
+            ];
+        }
+    }; // 🌟 ЗАКРИВАЄМО КЛАС
+} // 🌟 ЗАКРИВАЄМО IF
 
 //  ПЕРЕХІД НА СТОРІНКУ ПРОДУКТУ 
 function setupProductClickHandlers() {
@@ -347,9 +457,62 @@ function animateCartIcon() {
     }
 }
 
-function showNotification(message, type = 'success') {
-    alert(message);
+// =========================================================================
+// СИСТЕМА КАСТОМНИХ СПОВІЩЕНЬ (TOASTS) — ЗАМІНА СТАРОГО ALERT
+// =========================================================================
+function showNotification(message, type = 'success', duration = 4000) {
+    // 1. Перевіряємо наявність контейнера у DOM. Якщо немає — створюємо один раз
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+    }
+
+    // Адаптуємо тип 'error' під наш стиль 'warning' для зворотної сумісності
+    const toastType = type === 'error' ? 'warning' : type;
+
+    // 2. Визначаємо іконку FontAwesome залежно від типу
+    let iconClass = 'fas fa-check-circle'; // за замовчуванням для success
+    if (toastType === 'warning') {
+        iconClass = 'fas fa-exclamation-triangle';
+    }
+
+    // 3. Конструюємо структуру тосту
+    const toast = document.createElement('div');
+    toast.className = `toast ${toastType}`;
+    toast.innerHTML = `
+        <i class="${iconClass} toast-icon"></i>
+        <span class="toast-message">${message}</span>
+    `;
+
+    // 4. Додаємо новий тост у контейнер
+    container.appendChild(toast);
+
+    // 5. Тригеримо запуск CSS-анімації висунення
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+
+    // 6. Таймер автоматичного закриття
+    setTimeout(() => {
+        toast.classList.remove('show');
+        toast.classList.add('hide');
+
+        // Видаляємо елемент із DOM після завершення CSS-анімації згасання
+        toast.addEventListener('transitionend', () => {
+            toast.remove();
+            
+            // Якщо контейнер порожній — прибираємо його повністю
+            if (container.children.length === 0) {
+                container.remove();
+            }
+        });
+    }, duration);
 }
+
+// Створюємо аліас showToast, щоб ти міг викликати функцію обома іменами
+window.showToast = showNotification;
 
 // ЯКОРНІ ПОСИЛАННЯ 
 function initAnchorLinks() {
@@ -434,7 +597,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else {
             console.log("Бекенд відхилив токен (можливо, він застарів). Очищаємо пам'ять.");
             localStorage.removeItem("token");
-        }
+            const sessionMsg = window.languageManager.t('toast.session_expired');
+                        showNotification(sessionMsg, "warning");        }
     } catch (error) {
         console.error("Помилка зв'язку з бекендом під час fetch:", error);
     }
@@ -592,3 +756,48 @@ function closeMegaDeal() {
 }
 
 window.closeMegaDeal = closeMegaDeal;
+
+// ======================== ЛОГІКА ПІДПИСКИ НА РОЗСИЛКУ ========================
+document.addEventListener('DOMContentLoaded', () => {
+    const newsletterForm = document.getElementById('newsletterForm');
+    const emailInput = document.getElementById('newsletterEmail');
+
+    if (newsletterForm && emailInput) {
+        newsletterForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Захист від перезавантаження сторінки
+            
+            const emailValue = emailInput.value.trim();
+            if (!emailValue) return;
+
+            try {
+                // Запит на твій FastAPI ендпоінт підписки
+                const response = await fetch('http://localhost:8000/subscribe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: emailValue })
+                });
+
+                if (response.ok) {
+                    // Успішна підписка з JSON
+                    const successMsg = window.languageManager.t('toast.subscribe_success');
+                    showNotification(successMsg, 'success');
+                    newsletterForm.reset(); // Очищуємо інпут
+                } else {
+                    const errorData = await response.json();
+                    const errorLabel = window.languageManager.t('toast.subscribe_error');
+                    
+                    // Виводимо заголовок помилки з JSON + деталь від бекенду
+                    showNotification(`${errorLabel}: ${errorData.detail || ''}`, 'error');
+                }
+            } catch (error) {
+                console.error('Помилка підписки:', error);
+                // Помилка з'єднання з сервером з JSON
+                const serverErrorMsg = window.languageManager.t('toast.subscribe_server_error');
+                showNotification(serverErrorMsg, 'error');
+            }
+        });
+    }
+});
+

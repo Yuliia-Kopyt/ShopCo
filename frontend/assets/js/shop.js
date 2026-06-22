@@ -57,77 +57,36 @@ const filtersOverlay = document.getElementById("filtersOverlay");
 // -------------------------------
 async function loadProducts() {
     try {
-
-        const response = await fetch(
-            'http://localhost:8000/products/'
-        );
+        const response = await fetch('http://localhost:8000/products/');
 
         if (!response.ok) {
-            throw new Error(
-                `HTTP error! status: ${response.status}`
-            );
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         SHOP_PRODUCTS = await response.json();
-        console.log("PRODUCTS:", SHOP_PRODUCTS);
+        console.log("PRODUCTS LOADED:", SHOP_PRODUCTS);
 
         updateFilterLists();
-        console.log("CATS:", ALL_CATS);
-        console.log("COLORS:", ALL_COLORS);
-        console.log("SIZES:", ALL_SIZES);
-        console.log("STYLES:", ALL_STYLES);
-        console.log("render()");
-        console.log("products:", SHOP_PRODUCTS.length);
-        console.log("productGrid:", productGrid);
-
         init();
 
     } catch (error) {
-
-        console.error(
-            '❌ Error loading products:',
-            error
-        );
-
-        productGrid.innerHTML = `
-            <div class='card'>
-                <em>
-                    Помилка завантаження продуктів.
-                </em>
-            </div>
-        `;
+        console.error('❌ Error loading products:', error);
+        if (productGrid) {
+            const errorText = window.languageManager ? window.languageManager.t('shop.load_error') : "Error loading products.";
+            productGrid.innerHTML = `
+                <div class='card'>
+                    <em>${errorText}</em>
+                </div>
+            `;
+        }
     }
 }
 
 function updateFilterLists() {
-
-    ALL_CATS = Array.from(
-        new Set(
-            SHOP_PRODUCTS.map(p => p.category?.name).filter(Boolean)
-        )
-    );
-
-    ALL_COLORS = Array.from(
-        new Set(
-            SHOP_PRODUCTS.flatMap(
-                p => p.colors || []
-            )
-        )
-    );
-
-    ALL_SIZES = Array.from(
-        new Set(
-            SHOP_PRODUCTS.flatMap(
-                p => p.sizes || []
-            )
-        )
-    ).filter(Boolean);
-
-    ALL_STYLES = Array.from(
-        new Set(
-            SHOP_PRODUCTS.map(p => p.style).filter(Boolean)
-        )
-    );
+    ALL_CATS = Array.from(new Set(SHOP_PRODUCTS.map(p => p.category?.name).filter(Boolean)));
+    ALL_COLORS = Array.from(new Set(SHOP_PRODUCTS.flatMap(p => p.colors || [])));
+    ALL_SIZES = Array.from(new Set(SHOP_PRODUCTS.flatMap(p => p.sizes || []))).filter(Boolean);
+    ALL_STYLES = Array.from(new Set(SHOP_PRODUCTS.map(p => p.style).filter(Boolean)));
 }
 
 // -------------------------------
@@ -154,174 +113,207 @@ function mapColor(color) {
 // -------------------------------
 // INIT
 // -------------------------------
-function init(){
-  if (SHOP_PRODUCTS.length === 0) {
-    return;
+function init() {
+  if (SHOP_PRODUCTS.length === 0) return;
+
+  // Звільняємо інпути від блокування ARIA на десктопах заздалегідь
+  if (filtersPanel && window.innerWidth > 992) {
+    filtersPanel.removeAttribute("aria-hidden");
+    filtersPanel.removeAttribute("inert");
   }
 
-  // price range bounds
-  const prices = SHOP_PRODUCTS.map(
-    p => Number(p.price) || 0
-    );
+  // Зчитуємо параметр ?search=
+  const params = new URLSearchParams(window.location.search);
+  const searchQuery = params.get('search');
+  if (searchQuery) {
+    state.query = searchQuery.trim().toLowerCase();
+  }
 
-    const maxPrice = Math.max(...prices) + 50;
+  // Налаштування ціни
+  const prices = SHOP_PRODUCTS.map(p => Number(p.price) || 0);
+  const maxPrice = prices.length > 0 ? Math.max(...prices) + 50 : 1000;
 
+if (priceRange) {
     priceRange.max = maxPrice;
     priceRange.value = maxPrice;
 
-    priceMinInput.value = 0;
-    priceMaxInput.value = maxPrice;
+    // Рухаємо бігунець -> змінюється текстовий інпут макс. ціни та оновлюється state
+    priceRange.addEventListener("input", (e) => {
+      if (priceMaxInput) priceMaxInput.value = e.target.value;
+      state.priceMax = Number(e.target.value);
+      state.page = 1; 
+      render(); // Розкоментовуємо, щоб товари фільтрувалися одразу при русі повзунка
+    });
+  }
 
-    state.priceMax = maxPrice;
+  // Слухач на ручне введення в текстовий інпут макс. ціни -> рухає бігунець назад
+  if (priceMaxInput && priceRange) {
+    priceMaxInput.addEventListener("input", (e) => {
+      const val = Number(e.target.value) || 0;
+      priceRange.value = val;
+      state.priceMax = val;
+      state.page = 1;
+      render(); // Додаємо рендер і сюди
+    });
+  }
+  if (priceMinInput) priceMinInput.value = 0;
+  if (priceMaxInput) priceMaxInput.value = maxPrice;
+  state.priceMax = maxPrice;
 
-  // categories
-  categoryList.innerHTML = '';
-  ALL_CATS.forEach(cat => {
-    const li = document.createElement("li");
-    li.textContent = getCategoryTranslation(cat);
-    li.dataset.cat = cat;
-    li.addEventListener("click", () => {
-      if(state.category === cat) state.category = "";
-      else state.category = cat;
+  // Категорії
+  if (categoryList) {
+    categoryList.innerHTML = '';
+    ALL_CATS.forEach(cat => {
+      const li = document.createElement("li");
+      li.textContent = typeof getCategoryTranslation === 'function' ? getCategoryTranslation(cat) : cat;
+      li.dataset.cat = cat;
+      
+      li.addEventListener("click", () => {
+        document.querySelectorAll("#categoryList li").forEach(n => n.classList.remove("active"));
+        if (state.category === cat) {
+          state.category = ""; 
+        } else {
+          state.category = cat;
+          li.classList.add("active");
+        }
+        state.page = 1;
+        render(); 
+      });
+      categoryList.appendChild(li);
+    });
+  }
 
-      document.querySelectorAll("#categoryList li").forEach(n => n.classList.remove("active"));
-      if(state.category) li.classList.add("active");
+  // Кольори
+  if (colorsWrap) {
+    colorsWrap.innerHTML = '';
+    ALL_COLORS.forEach(color => {
+      const span = document.createElement("span");
+      span.className = "color-swatch";
+      span.style.backgroundColor = mapColor(color);
+      span.title = typeof getColorTranslation === 'function' ? getColorTranslation(color) : color;
+      span.dataset.color = color;
 
+      span.addEventListener("click", () => {
+        span.classList.toggle("selected");
+        if (state.colors.has(color)) {
+          state.colors.delete(color);
+        } else {
+          state.colors.add(color);
+        }
+        state.page = 1;
+        render();
+      });
+      colorsWrap.appendChild(span);
+    });
+  }
+
+  // Розміри
+  if (sizesWrap) {
+    sizesWrap.innerHTML = '';
+    ALL_SIZES.forEach(size => {
+      const button = document.createElement("button");
+      button.className = "size-pill";
+      button.textContent = typeof getSizeTranslation === 'function' ? getSizeTranslation(size) : size;
+      button.dataset.size = size;
+
+      button.addEventListener("click", () => {
+        button.classList.toggle("selected");
+        if (state.sizes.has(size)) {
+          state.sizes.delete(size);
+        } else {
+          state.sizes.add(size);
+        }
+        state.page = 1;
+        render();
+      });
+      sizesWrap.appendChild(button);
+    });
+  }
+
+  // Стилі
+  if (stylesWrap) {
+    stylesWrap.innerHTML = '';
+    ALL_STYLES.forEach(style => {
+      const div = document.createElement("div");
+      div.className = "style-item";
+      div.textContent = typeof getStyleTranslation === 'function' ? getStyleTranslation(style) : style;
+      div.dataset.style = style;
+
+      div.addEventListener("click", () => {
+        div.classList.toggle("selected");
+        if (state.styles.has(style)) {
+          state.styles.delete(style);
+        } else {
+          state.styles.add(style);
+        }
+        state.page = 1;
+        render();
+      });
+      stylesWrap.appendChild(div);
+    });
+  }
+
+  // Кнопки дій
+  if (applyBtn) {
+    applyBtn.addEventListener("click", () => {
+      if (priceMinInput) state.priceMin = Number(priceMinInput.value) || 0;
+      if (priceMaxInput) {
+        const val = Number(priceMaxInput.value) || maxPrice;
+        state.priceMax = val;
+        if (priceRange) priceRange.value = val; // Синхронізуємо бігунець при застосуванні
+      }
+      if (inStockEl) state.inStockOnly = inStockEl.checked;
+      
       state.page = 1;
       render();
+      closeFilters();
     });
-    categoryList.appendChild(li);
-  });
+  }
 
-  // colors
-  colorsWrap.innerHTML = '';
-  ALL_COLORS.forEach(c => {
-    const sw = document.createElement("div");
-    sw.className = "color-swatch";
-    sw.title = getColorTranslation(c);
-    sw.style.background = mapColor(c);
-    sw.dataset.color = c;
+  if (clearBtn) {
+    clearBtn.addEventListener("click", clearFilters);
+  }
 
-    sw.addEventListener("click", () => {
-      if(state.colors.has(c)) { state.colors.delete(c); sw.classList.remove("selected"); }
-      else { state.colors.add(c); sw.classList.add("selected"); }
-      state.page = 1; 
-      render();
+  // Пагінація
+  if (prevPage) {
+    prevPage.addEventListener("click", () => {
+      if (state.page > 1) { state.page--; render(); }
     });
+  }
+  if (nextPage) {
+    nextPage.addEventListener("click", () => { state.page++; render(); });
+  }
 
-    colorsWrap.appendChild(sw);
-  });
-
-  // sizes
-  sizesWrap.innerHTML = '';
-  ALL_SIZES.forEach(s => {
-    const pill = document.createElement("div");
-    pill.className = "size-pill";
-    pill.dataset.size = s;
-    pill.textContent = getSizeTranslation(s);
-
-    pill.addEventListener("click", () => {
-      if(state.sizes.has(s)){ state.sizes.delete(s); pill.classList.remove("selected"); }
-      else { state.sizes.add(s); pill.classList.add("selected"); }
-      state.page = 1; 
-      render();
-    });
-
-    sizesWrap.appendChild(pill);
-  });
-
-  // styles
-  stylesWrap.innerHTML = '';
-  ALL_STYLES.forEach(st => {
-    const it = document.createElement("div");
-    it.className = "style-item";
-    it.dataset.style = st;
-    it.textContent = getStyleTranslation(st);
-
-    it.addEventListener("click", () => {
-      if(state.styles.has(st)){ state.styles.delete(st); it.classList.remove("selected"); }
-      else { state.styles.add(st); it.classList.add("selected"); }
-      state.page = 1; 
-      render();
-    });
-
-    stylesWrap.appendChild(it);
-  });
-
-  // events
-  priceRange.addEventListener("input", () => {
-    priceMaxInput.value = priceRange.value;
-    state.priceMax = Number(priceRange.value);
-    state.page = 1;
-    render();
-  });
-
-  priceMaxInput.addEventListener("change", () => {
-    priceRange.value = priceMaxInput.value;
-    state.priceMax = Number(priceMaxInput.value);
-    state.page = 1;
-    render();
-  });
-
-  priceMinInput.addEventListener("change", () => {
-    state.priceMin = Number(priceMinInput.value);
-    state.page = 1;
-    render();
-  });
-
-  inStockEl.addEventListener("change", () => {
-    state.inStockOnly = inStockEl.checked;
-    state.page = 1;
-    render();
-  });
-
-  applyBtn.addEventListener("click", () => { 
-    closeFilters(); 
-    render(); 
-  });
-
-  clearBtn.addEventListener("click", clearFilters);
-
-  prevPage.addEventListener("click", () => { 
-    if(state.page > 1){ state.page--; render(); } 
-  });
-
-  nextPage.addEventListener("click", () => { 
-    state.page++; render(); 
-  });
-
-  sortSelect.addEventListener("change", (e) => {
-    state.sort = e.target.value;
-    state.page = 1;
-    render();
-  });
-
-  // filter panel
-  openFiltersBtn.addEventListener("click", openFilters);
-  closeFiltersBtn.addEventListener("click", closeFilters);
-  filtersOverlay.addEventListener("click", closeFilters);
-
-  document.addEventListener("keydown", (e) => {
-    if(e.key === "Escape") closeFilters();
-  });
-
+  // Стартовий рендер товарів
   render();
 }
 
 // -------------------------------
-// ФУНКЦІЇ ФІЛЬТРІВ ТА ВІДОБРАЖЕННЯ
+// УПРАВЛІННЯ МОБІЛЬНИМИ ФІЛЬТРАМИ
 // -------------------------------
 function openFilters(){
+  if (!filtersPanel) return;
   filtersPanel.classList.add("open");
-  filtersOverlay.style.opacity = "1";
-  filtersOverlay.style.pointerEvents = "auto";
+  filtersPanel.removeAttribute("aria-hidden");
+  filtersPanel.removeAttribute("inert");
+  if (filtersOverlay) {
+    filtersOverlay.style.opacity = "1";
+    filtersOverlay.style.pointerEvents = "auto";
+  }
   setBodyScrollLocked(true);
 }
 
 function closeFilters(){
+  if (!filtersPanel) return;
   filtersPanel.classList.remove("open");
-  filtersOverlay.style.opacity = "0";
-  filtersOverlay.style.pointerEvents = "none";
+  if (window.innerWidth <= 992) {
+    filtersPanel.setAttribute("aria-hidden", "true");
+    filtersPanel.setAttribute("inert", "");
+  }
+  if (filtersOverlay) {
+    filtersOverlay.style.opacity = "0";
+    filtersOverlay.style.pointerEvents = "none";
+  }
   setBodyScrollLocked(false);
 }
 
@@ -334,7 +326,7 @@ function clearFilters(){
     styles: new Set(),
     inStockOnly: false,
     priceMin: 0,
-    priceMax: priceRange.max,
+    priceMax: priceRange ? priceRange.max : 1000,
     page: 1
   };
 
@@ -343,47 +335,35 @@ function clearFilters(){
   document.querySelectorAll(".size-pill").forEach(n => n.classList.remove("selected"));
   document.querySelectorAll(".style-item").forEach(n => n.classList.remove("selected"));
 
-  inStockEl.checked = false;
-  priceMinInput.value = 0;
-  priceMaxInput.value = priceRange.max;
-  priceRange.value = priceRange.max;
-  sortSelect.value = "popular";
+  if (inStockEl) inStockEl.checked = false;
+  if (priceMinInput) priceMinInput.value = 0;
+  if (priceMaxInput && priceRange) priceMaxInput.value = priceRange.max;
+  if (priceRange) priceRange.value = priceRange.max;
+  if (sortSelect) sortSelect.value = "popular";
 
   render();
 }
 
+// -------------------------------
+// ФІЛЬТРАЦІЯ ТА СОРТУВАННЯ
+// -------------------------------
 function applyFilters(items){
   return items.filter(p => {
+    if (state.query) {
+      const searchWord = state.query.toLowerCase();
+      const title = typeof getProductTitle === 'function' ? getProductTitle(p).toLowerCase() : (p.title || '').toLowerCase();
+      const description = typeof getProductDescription === 'function' ? getProductDescription(p).toLowerCase() : (p.description || '').toLowerCase();
+      if (!title.includes(searchWord) && !description.includes(searchWord)) return false;
+    }
 
-    if(state.category && p.category?.name !== state.category)
-      return false;
+    if(state.category && p.category?.name !== state.category) return false;
+    if(Number(p.price) < (Number(state.priceMin) || 0)) return false;
+    if(state.priceMax && Number(p.price) > Number(state.priceMax)) return false;
+    if(state.inStockOnly && !p.in_stock) return false;
 
-    if(p.price < (state.priceMin || 0))
-      return false;
-
-    if(state.priceMax && p.price > state.priceMax)
-      return false;
-
-    if(state.inStockOnly && !p.in_stock)
-      return false;
-
-    if(
-      state.colors.size > 0 &&
-      !(p.colors || []).some(c => state.colors.has(c))
-    )
-      return false;
-
-    if(
-      state.sizes.size > 0 &&
-      !(p.sizes || []).some(s => state.sizes.has(s))
-    )
-      return false;
-
-    if(
-      state.styles.size > 0 &&
-      !state.styles.has(p.style)
-    )
-      return false;
+    if(state.colors.size > 0 && !(p.colors || []).some(c => state.colors.has(c))) return false;
+    if(state.sizes.size > 0 && !(p.sizes || []).some(s => state.sizes.has(s))) return false;
+    if(state.styles.size > 0 && !state.styles.has(p.style)) return false;
 
     return true;
   });
@@ -391,15 +371,13 @@ function applyFilters(items){
 
 function applySort(items){
   const arr = [...items];
-
   if(state.sort === "price-asc") arr.sort((a, b) => a.price - b.price);
   else if(state.sort === "price-desc") arr.sort((a, b) => b.price - a.price);
   else if(state.sort === "rating-desc") arr.sort((a, b) => b.rating - a.rating);
   else if(state.sort === "name-asc") {
       arr.sort((a, b) => {
-          const titleA = getProductTitle(a) || "";
-          const titleB = getProductTitle(b) || "";
-
+          const titleA = typeof getProductTitle === 'function' ? getProductTitle(a) : (a.title || "");
+          const titleB = typeof getProductTitle === 'function' ? getProductTitle(b) : (b.title || "");
           return titleA.localeCompare(titleB);
       });
   }
@@ -408,11 +386,17 @@ function applySort(items){
 
 function formatPrice(v){ return `$${v}`; }
 
+// -------------------------------
+// ГОЛОВНИЙ РЕНДЕР КАРТОК
+// -------------------------------
 function render(){
+  if (!productGrid) return;
+
   if (SHOP_PRODUCTS.length === 0) {
-    productGrid.innerHTML = "<div class='card'><em>Завантаження продуктів...</em></div>";
-    return;
-  }
+  const loadingText = window.languageManager ? window.languageManager.t('shop.loading') : "Loading...";
+  productGrid.innerHTML = `<div class='card'><em>${loadingText}</em></div>`;
+  return;
+}
 
   let filtered = applyFilters(SHOP_PRODUCTS);
   filtered = applySort(filtered);
@@ -425,203 +409,114 @@ function render(){
   const start = (state.page - 1) * state.perPage;
   const pageItems = filtered.slice(start, start + state.perPage);
 
-  if (resultCount) {
-      resultCount.textContent = total;
-  }
-
-  if (pageInfo) {
-      pageInfo.textContent = `${state.page} / ${totalPages}`;
-  }
+  if (resultCount) resultCount.textContent = total;
+  if (pageInfo) pageInfo.textContent = `${state.page} / ${totalPages}`;
 
   productGrid.innerHTML = "";
 
-  if(pageItems.length === 0){
-    const noProductsText = window.languageManager ? 
-      window.languageManager.t('shop.no_products') : 
-      "No products found for the selected filters.";
-    productGrid.innerHTML = `<div class='card'><em>${noProductsText}</em></div>`;
+  if (pageItems.length === 0) {
+    let details = [];
+    
+    if (state.query) {
+      details.push(`"${state.query}"`);
+    }
+    if (state.category) {
+      const catName = typeof getCategoryTranslation === 'function' ? getCategoryTranslation(state.category) : state.category;
+      if (catName) details.push(catName);
+    }
+    // Якщо вибрано інші фільтри (кольори, розміри тощо), просто додамо загальну мітку
+    if (state.colors?.size > 0 || state.sizes?.size > 0 || state.styles?.size > 0) {
+      const currentLang = window.languageManager?.currentLang || localStorage.getItem('preferredLanguage') || 'en';
+      details.push(currentLang === 'uk' ? "обрані фільтри" : "selected filters");
+    }
+
+    const currentLang = window.languageManager?.currentLang || localStorage.getItem('preferredLanguage') || 'en';
+    let message = "";
+
+    if (currentLang === 'uk') {
+      message = details.length > 0 
+        ? `Немає товарів, які відповідають критеріям: <strong>${details.join(', ')}</strong>.`
+        : "Товарів не знайдено.";
+    } else {
+      message = details.length > 0 
+        ? `No products match the criteria: <strong>${details.join(', ')}</strong>.`
+        : "No products found.";
+    }
+
+    productGrid.innerHTML = `<div class='card no-results'><em>${message}</em></div>`;
     return;
   }
 
-console.log("pageItems:", pageItems);
-
-pageItems.forEach(p => {
-
+  pageItems.forEach(p => {
     const card = document.createElement("article");
     card.className = "card";
 
-    const translatedTitle =
-        getProductTitle(p);
-
-    const translatedDescription =
-        getProductDescription(p);
-
-    const rating =
-        Number(p.rating) || 0;
+    const translatedTitle = typeof getProductTitle === 'function' ? getProductTitle(p) : p.title;
+    const rating = Number(p.rating) || 0;
 
     card.innerHTML = `
       <div class="img-wrap">
-        <img
-          src="${p.image}"
-          alt="${escapeHtml(translatedTitle)}"
-          loading="lazy"
-        >
+        <img src="${p.image}" alt="${escapeHtml(translatedTitle)}" loading="lazy">
       </div>
-
       <div class="texts">
-
-        <h4>
-          ${escapeHtml(translatedTitle)}
-        </h4>
-
+        <h4>${escapeHtml(translatedTitle)}</h4>
         <div class="rating">
           ${renderStars(rating)}
-
-          <span class="muted">
-            ${rating.toFixed(1)}/5
-          </span>
+          <span class="muted">${rating.toFixed(1)}/5</span>
         </div>
-
-        ${
-          p.old_price
-            ? `
-              <div class="pricing">
-                <p class="current-price">
-                  ${formatPrice(p.price)}
-                </p>
-
-                <p class="old-price">
-                  ${formatPrice(p.old_price)}
-                </p>
-
-                <span class="discount">
-                  -${p.discount}%
-                </span>
-              </div>
-            `
-            : `
-              <div class="pricing no-discount">
-                <p class="current-price">
-                  ${formatPrice(p.price)}
-                </p>
-              </div>
-            `
-        }
-
+        ${p.old_price ? `
+          <div class="pricing">
+            <p class="current-price">${formatPrice(p.price)}</p>
+            <p class="old-price">${formatPrice(p.old_price)}</p>
+            <span class="discount">-${p.discount}%</span>
+          </div>
+        ` : `
+          <div class="pricing no-discount">
+            <p class="current-price">${formatPrice(p.price)}</p>
+          </div>
+        `}
       </div>
     `;
 
-    // open product page
-    card.querySelector(".img-wrap").addEventListener("click", () => {
-      window.location.href = `product.html?id=${p.id}`;
-    });
-    card.querySelector("h4").addEventListener("click", () => {
-      window.location.href = `product.html?id=${p.id}`;
-    });
-
+    card.querySelector(".img-wrap").addEventListener("click", () => { window.location.href = `product.html?id=${p.id}`; });
+    card.querySelector("h4").addEventListener("click", () => { window.location.href = `product.html?id=${p.id}`; });
     productGrid.appendChild(card);
   });
 }
 
 // -------------------------------
-// ФУНКЦІЇ ПЕРЕКЛАДУ ПРОДУКТІВ
+// МОВНІ ФУНКЦІЇ ТА ПЕРЕКЛАДИ
 // -------------------------------
 function getProductTitle(product) {
-
-    const currentLang =
-        localStorage.getItem('preferredLanguage') || 'en';
-
-    const translation =
-        product.translations?.find(
-            t => t.language === currentLang
-        );
-
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    const translation = product.translations?.find(t => t.language === currentLang);
     return translation?.title || product.title;
 }
 
 function getProductDescription(product) {
-
-    const currentLang =
-        localStorage.getItem('preferredLanguage') || 'en';
-
-    const translation =
-        product.translations?.find(
-            t => t.language === currentLang
-        );
-
-    return (
-        translation?.description ||
-        product.description
-    );
-}
-
-function getProductDetails(product) {
-
-    const currentLang =
-        localStorage.getItem('preferredLanguage') || 'en';
-
-    const translation =
-        product.translations?.find(
-            t => t.language === currentLang
-        );
-
-    return (
-        translation?.details ||
-        product.details
-    );
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    const translation = product.translations?.find(t => t.language === currentLang);
+    return translation?.description || product.description;
 }
 
 function getCategoryTranslation(category) {
-  return window.languageManager ? 
-    window.languageManager.getCategoryTranslation(category) : 
-    category;
+  return window.languageManager ? window.languageManager.getCategoryTranslation(category) : category;
 }
-
 function getStyleTranslation(style) {
-  return window.languageManager ? 
-    window.languageManager.getStyleTranslation(style) : 
-    style;
+  return window.languageManager ? window.languageManager.getStyleTranslation(style) : style;
 }
-
 function getColorTranslation(color) {
-  return window.languageManager ? 
-    window.languageManager.getColorTranslation(color) : 
-    color;
+  return window.languageManager ? window.languageManager.getColorTranslation(color) : color;
 }
-
 function getSizeTranslation(size) {
-  return window.languageManager ? 
-    window.languageManager.getSizeTranslation(size) : 
-    size;
+  return window.languageManager ? window.languageManager.getSizeTranslation(size) : size;
 }
 
 function updateShopTranslations() {
-  // Оновлюємо фільтри
-  document.querySelectorAll("#categoryList li").forEach(li => {
-    const originalCat = li.dataset.cat;
-    li.textContent = getCategoryTranslation(originalCat);
-  });
-
-  document.querySelectorAll(".color-swatch").forEach(sw => {
-    const originalColor = sw.dataset.color;
-    sw.title = getColorTranslation(originalColor);
-  });
-
-    document.querySelectorAll(".size-pill").forEach(pill => {
-      pill.textContent =
-          getSizeTranslation(
-              pill.dataset.size
-          );
-  });
-
-  document.querySelectorAll(".style-item").forEach(item => {
-      item.textContent =
-          getStyleTranslation(
-              item.dataset.style
-          );
-  });
-
-  // Оновлюємо продукти
+  document.querySelectorAll("#categoryList li").forEach(li => { li.textContent = getCategoryTranslation(li.dataset.cat); });
+  document.querySelectorAll(".color-swatch").forEach(sw => { sw.title = getColorTranslation(sw.dataset.color); });
+  document.querySelectorAll(".size-pill").forEach(pill => { pill.textContent = getSizeTranslation(pill.dataset.size); });
+  document.querySelectorAll(".style-item").forEach(item => { item.textContent = getStyleTranslation(item.dataset.style); });
   render();
 }
 
@@ -635,74 +530,61 @@ function renderStars(rating){
 }
 
 function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, m => ({
-    '&':'&amp;',
-    '<':'&lt;',
-    '>':'&gt;',
-    '"':'&quot;',
-    "'":"&#39;"
-  }[m]));
+  return String(s).replace(/[&<>"']/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":"&#39;" }[m]));
 }
 
 // -------------------------------
-// ПОЧАТОК ЗАВАНТАЖЕННЯ ТА ОБРОБКА МОВИ
+// СЛУХАЧІ ЗАВАНТАЖЕННЯ СТОРІНКИ
 // -------------------------------
 document.addEventListener('DOMContentLoaded', async function() {
-
-    // Чекаємо languageManager
-    while (
-        !window.languageManager ||
-        !window.languageManager.isInitialized
-    ) {
+    while (!window.languageManager || !window.languageManager.isInitialized) {
         await new Promise(resolve => setTimeout(resolve, 100));
     }
-
-    // Тільки потім вантажимо продукти
     loadProducts();
 });
-window.addEventListener('languageChanged', function() {
-    console.log('🌍 Language changed on shop page');
-    updateShopTranslations();
-});
-// Додаємо функцію для глобального доступу
-window.updateProductsContent = function(lang) {
-    updateShopTranslations();
-};
 
-// Надійна перевірка авторизації для сторінки магазину
-document.addEventListener("DOMContentLoaded", async () => {
-    const userLink = document.getElementById("userAuthLink");
-    const token = localStorage.getItem("token");
+window.addEventListener('languageChanged', () => updateShopTranslations());
+window.updateProductsContent = () => updateShopTranslations();
 
-    if (!token) return;
+// СОРТУВАННЯ ТА КЛІКИ НА КНОПКИ
+document.addEventListener('DOMContentLoaded', () => {
+    if (openFiltersBtn) openFiltersBtn.addEventListener('click', (e) => { e.stopPropagation(); openFilters(); });
+    if (closeFiltersBtn) closeFiltersBtn.addEventListener('click', closeFilters);
+    if (filtersOverlay) filtersOverlay.addEventListener('click', closeFilters);
 
-    try {
-        const response = await fetch("http://localhost:8000/auth/me", {
-            method: "GET",
-            headers: { "Authorization": `Bearer ${token}` }
+    const dropdown = document.getElementById('customSortDropdown');
+    if (!dropdown) return;
+
+    const trigger = dropdown.querySelector('.dropdown-trigger');
+    const targetText = document.getElementById('currentTarget');
+    const menuItems = dropdown.querySelectorAll('.dropdown-menu li');
+    const nativeSelect = document.getElementById('sortSelect');
+
+    if (trigger) {
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('open');
         });
-
-        if (response.ok) {
-            const user = await response.json();
-            if (userLink) {
-                userLink.href = "profile.html";
-                const icon = userLink.querySelector('i');
-                if (icon) {
-                    icon.style.color = "#00c853";
-                } else {
-                    userLink.style.color = "#00c853";
-                }
-                userLink.title = `Профіль: ${user.first_name || 'Користувач'}`;
-            }
-        } else if (response.status === 401 || response.status === 403) {
-            // Видаляємо токен ТІЛЬКИ якщо сервер підтвердив, що він недійсний
-            console.warn("🔒 Токен застарів або невалідний. Скидаємо авторизацію.");
-            localStorage.removeItem("token");
-        } else {
-            console.warn(`⚠️ Тимчасова помилка сервера (${response.status}). Токен збережено.`);
-        }
-    } catch (error) {
-        // Якщо впала мережа (back-end тимчасово ліг) — токен НЕ видаляємо!
-        console.error("Помилка зв'язку з сервером під час перевірки авторизації:", error);
     }
+
+    menuItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.stopPropagation();
+            menuItems.forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+
+            if (targetText) targetText.textContent = this.textContent;
+
+            const val = this.getAttribute('data-value');
+            if (nativeSelect) {
+                nativeSelect.value = val;
+                state.sort = val;
+                nativeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            dropdown.classList.remove('open');
+            render();
+        });
+    });
+
+    document.addEventListener('click', () => dropdown.classList.remove('open'));
 });

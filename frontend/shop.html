@@ -71,15 +71,16 @@
     </nav>
 
     <!-- Поле пошуку для desktop -->
-    <div class="search-wrapper">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" data-i18n="header.search_placeholder" placeholder="Search for products..." class="header-search">
-    </div>
+  <div class="search-wrapper">
+    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    <input type="text" data-i18n="header.search_placeholder" placeholder="Search for products..." class="header-search">
+    <i class="fa-solid fa-xmark clear-search-icon" style="display: none;"></i> 
+  </div>
 
     <!-- Іконки -->
     <div class="header-icons">
       <!-- Іконка лупи для мобільної версії -->
-      <a href="search.html" class="icon-link search-icon">
+      <a href="shop.html?focus=search" class="icon-link search-icon">
         <i class="fa-solid fa-magnifying-glass"></i>
       </a>
       
@@ -112,16 +113,32 @@
           <h1 class="page-title" data-i18n="home.casual">Casual</h1>
           <div class="meta-right">
             <div class="results-text" data-i18n="shop.showing_products">Showing <span id="resultCount">0</span> Products</div>
-            <label class="sort">
-              <span data-i18n="shop.sort_by">Sort by:</span>
-              <select id="sortSelect">
-                <option value="popular" data-i18n="shop.sort_popular">Most Popular</option>
-                <option value="price-asc" data-i18n="shop.sort_price_low">Price: Low → High</option>
-                <option value="price-desc" data-i18n="shop.sort_price_high">Price: High → Low</option>
-                <option value="rating-desc" data-i18n="shop.sort_rating">Rating</option>
-                <option value="name-asc" data-i18n="shop.sort_name">Name A → Z</option>
-              </select>
-            </label>
+            <div class="custom-sort">
+  <span class="sort-label" data-i18n="shop.sort_by">Sort by:</span>
+        
+        <div class="dropdown-wrapper" id="customSortDropdown">
+          <button class="dropdown-trigger" type="button">
+            <span id="currentTarget" data-i18n="shop.sort_popular">Most Popular</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          
+          <ul class="dropdown-menu">
+            <li data-value="popular" class="active" data-i18n="shop.sort_popular">Most Popular</li>
+            <li data-value="price-asc" data-i18n="shop.sort_price_low">Price: Low → High</li>
+            <li data-value="price-desc" data-i18n="shop.sort_price_high">Price: High → Low</li>
+            <li data-value="rating-desc" data-i18n="shop.sort_rating">Rating</li>
+            <li data-value="name-asc" data-i18n="shop.sort_name">Name A → Z</li>
+          </ul>
+        </div>
+
+        <select id="sortSelect" style="display: none;">
+          <option value="popular">Most Popular</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+          <option value="rating-desc">Rating</option>
+          <option value="name-asc">Name A → Z</option>
+        </select>
+      </div>
           </div>
         </div>
       </div>

@@ -27,15 +27,22 @@ form.addEventListener("submit", async (e) => {
 
         const data = await response.json();
 
-        if (!response.ok) {
+       if (!response.ok) {
             throw new Error(data.detail);
         }
 
-        alert("Registration successful!");
+        // Беремо переклад успішної реєстрації з JSON
+        const successMessage = window.languageManager.t('toast.register_success');
+        showToast(successMessage, 'success');
 
-        window.location.href = "login.html";
+        // Даємо користувачу 1 секунду подивитися на гарний тост перед редиректом
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 1000);
 
     } catch (error) {
-        alert(error.message);
+        // Беремо заголовок помилки з JSON і додаємо текст помилки від сервера
+        const errorLabel = window.languageManager.t('toast.register_error');
+        showToast(`${errorLabel}: ${error.message}`, 'warning');
     }
 });

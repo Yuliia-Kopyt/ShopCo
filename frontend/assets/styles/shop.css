@@ -487,6 +487,9 @@ body{
     grid-template-columns:repeat(3, 1fr);
     gap:18px
 }
+    .close-filters{
+    display:none
+}
 }
 
 @media (min-width:700px) and (max-width:999px){
@@ -495,5 +498,8 @@ body{
 }
   .mobile-filter-btn{
     display:block
+}
+    .close-filters{
+    display:none
 }
 }

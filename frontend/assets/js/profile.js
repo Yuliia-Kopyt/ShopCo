@@ -53,13 +53,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Обробник для кнопки виходу
     const logoutBtn = document.getElementById("logoutBtn");
     if (logoutBtn) {
-        logoutBtn.addEventListener("click", () => {
-            localStorage.removeItem("token");
-            alert("Ви успішно вийшли з акаунту.");
+    logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("token");
+
+        // Прямий виклик перекладу з JSON без зайвого коду
+        const successMessage = window.languageManager.t('toast.logout_success');
+        showToast(successMessage, 'success');
+
+        // Перенаправляємо на головну сторінку через 1 секунду, щоб користувач встиг побачити тост
+        setTimeout(() => {
             window.location.href = "index.html";
-        });
-    }
-});
+        }, 1000);
+    });
+}
+}
+);
 
 async function loadUserOrders(token) {
     console.log("=== Функція loadUserOrders запустилася! ==="); 

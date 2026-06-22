@@ -99,17 +99,20 @@
     </nav>
 
     <!-- Поле пошуку для desktop -->
-    <div class="search-wrapper">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" data-i18n="header.search_placeholder" placeholder="Search for products..." class="header-search">
-    </div>
+  <div class="search-wrapper">
+    <i class="fa-solid fa-magnifying-glass search-icon-left"></i>
+    
+    <input type="text" data-i18n="header.search_placeholder" placeholder="Search for products..." class="header-search">
+    
+    <i class="fa-solid fa-xmark clear-search-icon" style="display: none;"></i>
+  </div>
 
     <!-- Іконки -->
     <div class="header-icons">
       <!-- Іконка лупи для мобільної версії -->
-      <a href="search.html" class="icon-link search-icon">
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </a>
+        <a href="shop.html?focus=search" class="icon-link search-icon">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
       
       <!-- Кошик -->
       <a href="cart.html" class="icon-link cart-icon-animation">
@@ -209,30 +212,29 @@
   </div>
 </section>
 
-<!-- grid div -->
 <section class="grid-div">
   <h2 class="uppercase" data-i18n="home.dress_style">Browse by dress style</h2>
 
   <div class="grid-container">
-    <div class="box-grid">
+    <a href="shop.html?style=casual" class="box-grid" style="text-decoration: none; color: inherit;">
       <img src="assets/images/casual.png" alt="Casual style">
       <h4 data-i18n="home.casual">Casual</h4>
-    </div>
+    </a>
 
-    <div class="box-grid">
+    <a href="shop.html?style=formal" class="box-grid" style="text-decoration: none; color: inherit;">
       <img src="assets/images/formal.png" alt="Formal style">
       <h4 data-i18n="home.formal">Formal</h4>
-    </div>
+    </a>
 
-    <div class="box-grid">
+    <a href="shop.html?style=party" class="box-grid" style="text-decoration: none; color: inherit;">
       <img src="assets/images/party.png" alt="Party style">
       <h4 data-i18n="home.party">Party</h4>
-    </div>
+    </a>
 
-    <div class="box-grid">
+    <a href="shop.html?style=gym" class="box-grid" style="text-decoration: none; color: inherit;">
       <img src="assets/images/gym.png" alt="Gym style">
       <h4 data-i18n="home.gym">Gym</h4>
-    </div>
+    </a>
   </div>
 </section>
 
@@ -256,14 +258,14 @@
   </div>
   <div class="forms">
     <div class="form-container">
-      <form>
+      <form id="newsletterForm">
         <div class="input-group">
           <span class="icon"><i class="fa-regular fa-envelope"></i></span>
-          <input type="email" data-i18n="subscribe.email_placeholder" placeholder="Enter your email address" />
+          <input type="email" id="newsletterEmail" data-i18n="subscribe.email_placeholder" placeholder="Enter your email address" required />
         </div>
+        <button type="submit" class="btn2" data-i18n="subscribe.button">Subscribe to Newsletter</button>
       </form>
     </div>
-    <button class="btn2" data-i18n="subscribe.button">Subscribe to Newsletter</button>
   </div>
 </section>
 
