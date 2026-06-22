@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks 
 from fastapi.security import OAuth2PasswordRequestForm
 
 from sqlalchemy.orm import Session
@@ -15,6 +15,9 @@ from app.core.security import (
     get_current_user
 )
 
+# Імпортуємо функцію реєстраційного листа з нового чистого модуля утиліт
+from app.core.email import send_registration_welcome 
+
 router = APIRouter(
     prefix="/auth",
     tags=["Authentication"]
@@ -24,6 +27,7 @@ router = APIRouter(
 @router.post("/register")
 def register(
     user: UserCreate,
+    background_tasks: BackgroundTasks, 
     db: Session = Depends(get_db)
 ):
 
@@ -40,15 +44,23 @@ def register(
     hashed = get_password_hash(user.password)
 
     new_user = User(
-    first_name=user.first_name,
-    last_name=user.last_name,
-    email=user.email,
-    password_hash=hashed
+        first_name=user.first_name,
+        last_name=user.last_name,
+        email=user.email,
+        password_hash=hashed
     )
 
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
+    # --- БЕЗПЕЧНА ВІДПРАВКА ЛИСТА ЧЕРЕЗ BACKGROUND TASKS ---
+    try:
+        user_name = new_user.first_name if new_user.first_name else "Користувач"
+        background_tasks.add_task(send_registration_welcome, target_email=new_user.email, name=user_name)
+    except Exception as e:
+        print(f"❌ Не вдалося надіслати email: {e}")
+    # -----------------------------------------------------
 
     return {
         "id": new_user.id,
